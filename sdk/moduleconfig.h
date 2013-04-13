@@ -3,8 +3,6 @@
 #ifndef __MODULECONFIG_H__
 #define __MODULECONFIG_H__
 
-#include "svn_version.h"
-
 // Module info
 #define MODULE_NAME "Orpheu"
 #define MODULE_VERSION "2.4"
