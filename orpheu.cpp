@@ -876,13 +876,15 @@ cell MemoryReplace_(AMX* amx,cell* params,long address)
 					{
 						lastAddress = i;
 
-						unsigned long oldProtection, dummy;
+						unsigned long oldProtection;
 
 						if( Memory::ChangeMemoryProtection((void*)i,size,PAGE_EXECUTE_READWRITE,oldProtection ) )
 						{
 							typeHandler->convertFromAmxToStructure(amx,params[4],(void*)i);
 
-							if( oldProtection == PAGE_EXECUTE_READWRITE || Memory::ChangeMemoryProtection((void*)i,size,PAGE_EXECUTE_READWRITE,oldProtection ) )
+							// oldProtection = memoryStructure->memoryProtection;
+
+							if( oldProtection == PAGE_EXECUTE_READWRITE || Memory::ChangeMemoryProtection((void*)i,size,oldProtection ) )
 							{
 								if(++replacements == count)
 								{
@@ -891,19 +893,6 @@ cell MemoryReplace_(AMX* amx,cell* params,long address)
 							}
 
 						}
-
-/*						Memory::ChangeMemoryProtection((void*)i,size,PAGE_READWRITE,oldProtection);
-
-						typeHandler->convertFromAmxToStructure(amx,params[4],(void*)i);
-#if defined __linux__
-						//oldProtection = memoryStructure->memoryProtection;
-#endif
-						Memory::ChangeMemoryProtection((void*)i,size,oldProtection,dummy);
-
-						if(++replacements == count)
-						{
-							break;
-						}*/
 					}
 				}
 
@@ -1166,13 +1155,15 @@ cell MemorySet_(AMX* amx,cell* params,long address)
 							}
 						}
 
-						unsigned long oldProtection, dummy;
+						unsigned long oldProtection;
 
 						if( Memory::ChangeMemoryProtection((void*)position,size,PAGE_EXECUTE_READWRITE,oldProtection) )
 						{
 							typeHandler->convertFromAmxToStructure(amx,params[3],(void*)position);
 							
-							if( oldProtection == PAGE_EXECUTE_READWRITE || Memory::ChangeMemoryProtection((void*)position,size,PAGE_EXECUTE_READWRITE,oldProtection) )
+							//oldProtection = memoryStructure->memoryProtection;
+
+							if( oldProtection == PAGE_EXECUTE_READWRITE || Memory::ChangeMemoryProtection((void*)position,size,oldProtection) )
 							{
 								if((expectedParams+1) == paramsCount)
 								{
@@ -1181,21 +1172,6 @@ cell MemorySet_(AMX* amx,cell* params,long address)
 								}
 							}
 						}
-
-/*						Memory::ChangeMemoryProtection((void*)position,size,PAGE_READWRITE,oldProtection);
-					
-						typeHandler->convertFromAmxToStructure(amx,params[3],(void*)position);
-#if defined __linux__
-						//oldProtection = memoryStructure->memoryProtection;
-#endif
-						Memory::ChangeMemoryProtection((void*)position,size,oldProtection,dummy);
-
-						if((expectedParams+1) == paramsCount)
-						{
-							*MF_GetAmxAddr(amx,params[4]) = position;
-						}*/
-
-						
 
 						break;
 					}
@@ -1224,16 +1200,19 @@ cell MemorySet_(AMX* amx,cell* params,long address)
 									}
 								}
 
-								unsigned long oldProtection, dummy;
+								unsigned long oldProtection;
 
-								Memory::ChangeMemoryProtection((void*)position,size,PAGE_READWRITE,oldProtection);
-								typeHandler->convertFromAmxToStructure(amx,params[3],(void*)position);
+								if( Memory::ChangeMemoryProtection((void*)position,size,PAGE_EXECUTE_READWRITE,oldProtection) )
+								{
+									typeHandler->convertFromAmxToStructure(amx,params[3],(void*)position);
 
-								oldProtection = memoryStructure->memoryProtection;
+									//oldProtection = memoryStructure->memoryProtection;
 
-								Memory::ChangeMemoryProtection((void*)position,size,oldProtection,dummy);
-
-								count = 1;
+									if( oldProtection == PAGE_EXECUTE_READWRITE || Memory::ChangeMemoryProtection((void*)position,size,oldProtection) )
+									{
+										count = 1;
+									}
+								}
 							}
 						}
 						else
@@ -1255,14 +1234,20 @@ cell MemorySet_(AMX* amx,cell* params,long address)
 										}
 									}
 
-									unsigned long oldProtection, dummy;
+									unsigned long oldProtection;
 
-									Memory::ChangeMemoryProtection((void*)position,size,PAGE_READWRITE,oldProtection);
-									typeHandler->convertFromAmxToStructure(amx,params[3],(void*)position);
-#if defined __linux__
-									oldProtection = memoryStructure->memoryProtection;
-#endif
-									Memory::ChangeMemoryProtection((void*)position,size,oldProtection,dummy);
+									if( Memory::ChangeMemoryProtection((void*)position,size,PAGE_EXECUTE_READWRITE,oldProtection) )
+									{
+										typeHandler->convertFromAmxToStructure(amx,params[3],(void*)position);
+
+										//oldProtection = memoryStructure->memoryProtection;
+
+										if( oldProtection == PAGE_EXECUTE_READWRITE || Memory::ChangeMemoryProtection((void*)position,size,oldProtection) )
+										{
+											count++;
+											position += size;
+										}
+									}
 
 									count++;
 									position += size;
