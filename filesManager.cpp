@@ -14,7 +14,7 @@ namespace FilesManager
 			{
 				if(is_directory(*iter))
 				{
-					folders->push_back(iter->path().filename().c_str());
+					folders->push_back( iter->path().filename().string() );
 				}
 			}
 		}
@@ -32,7 +32,7 @@ namespace FilesManager
 			{
 				if(is_regular_file(*iter))
 				{
-					files->push_back(iter->path().filename().c_str());
+					files->push_back( iter->path().filename().string() );
 				}
 			}
 
