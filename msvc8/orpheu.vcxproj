@@ -1,0 +1,265 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{43B95C78-8D1A-4D12-B668-2520B38E1DA3}</ProjectGuid>
+    <RootNamespace>fun_amx</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v100</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v90</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>11.0.50727.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>.\Release\</OutDir>
+    <IntDir>.\Release\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>.\Debug\</OutDir>
+    <IntDir>.\Debug\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>.\Release/fun.tlb</TypeLibraryName>
+      <HeaderFileName />
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <AdditionalIncludeDirectories>..\;..\include;..\sdk;$(METAMOD);$(HLSDK)\common;$(HLSDK)\engine;$(HLSDK)\dlls;$(HLSDK)\pm_shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;ORPHEU_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <PrecompiledHeader />
+      <PrecompiledHeaderOutputFile>.\Release/orpheu.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
+      <ObjectFileName>.\Release/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Release/</ProgramDataBaseFileName>
+      <BrowseInformation>true</BrowseInformation>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat />
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x041d</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalOptions>psapi.lib %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>.\Release/orpheu_amxx.dll</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <AdditionalLibraryDirectories>$(BOOST)/bin.v2/libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ModuleDefinitionFile />
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <ProgramDatabaseFile>.\Release/orpheu.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary>.\Release/orpheu.lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>.\Debug/fun.tlb</TypeLibraryName>
+      <HeaderFileName />
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\;..\include;..\sdk;$(METAMOD);$(HLSDK)\common;$(HLSDK)\engine;$(HLSDK)\dlls;$(HLSDK)\pm_shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;ORPHEU_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <PrecompiledHeader />
+      <PrecompiledHeaderOutputFile>.\Debug/fun.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
+      <ObjectFileName>.\Debug/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
+      <BrowseInformation>true</BrowseInformation>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x041d</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalOptions>psapi.lib %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>Debug/orpheu_amxx.dll</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <AdditionalLibraryDirectories>$(BOOST)/bin.v2/libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ModuleDefinitionFile />
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>.\Debug/orpheu_debug.pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary>.\Debug/orpheu_debug.lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\CDetourDis.cpp" />
+    <ClCompile Include="..\configManager.cpp" />
+    <ClCompile Include="..\filesManager.cpp" />
+    <ClCompile Include="..\function.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Disabled</Optimization>
+    </ClCompile>
+    <ClCompile Include="..\functionManager.cpp" />
+    <ClCompile Include="..\functionStructuresManager.cpp" />
+    <ClCompile Include="..\functionVirtualManager.cpp" />
+    <ClCompile Include="..\global.cpp" />
+    <ClCompile Include="..\hooker.cpp" />
+    <ClCompile Include="..\librariesManager.cpp" />
+    <ClCompile Include="..\memory.cpp" />
+    <ClCompile Include="..\memoryStructureManager.cpp" />
+    <ClCompile Include="..\orpheu.cpp" />
+    <ClCompile Include="..\structHandler.cpp" />
+    <ClCompile Include="..\typeHandlerManager.cpp" />
+    <ClCompile Include="..\typeHandlerImplementations\boolHandler.cpp" />
+    <ClCompile Include="..\typeHandlerImplementations\byteHandler.cpp" />
+    <ClCompile Include="..\typeHandlerImplementations\CBaseEntityHandler.cpp" />
+    <ClCompile Include="..\typeHandlerImplementations\charArrHandler.cpp" />
+    <ClCompile Include="..\typeHandlerImplementations\charHandler.cpp" />
+    <ClCompile Include="..\typeHandlerImplementations\charPtrHandler.cpp" />
+    <ClCompile Include="..\typeHandlerImplementations\CMBaseMonsterHandler.cpp" />
+    <ClCompile Include="..\typeHandlerImplementations\edict_sPtrHandler.cpp" />
+    <ClCompile Include="..\typeHandlerImplementations\entvarHandler.cpp" />
+    <ClCompile Include="..\typeHandlerImplementations\floatHandler.cpp" />
+    <ClCompile Include="..\typeHandlerImplementations\longHandler.cpp" />
+    <ClCompile Include="..\typeHandlerImplementations\short.cpp" />
+    <ClCompile Include="..\typeHandlerImplementations\VectorHandler.cpp" />
+    <ClCompile Include="..\typeHandlerImplementations\VectorPointerHandler.cpp" />
+    <ClCompile Include="..\json\json_reader.cpp" />
+    <ClCompile Include="..\json\json_value.cpp" />
+    <ClCompile Include="..\sdk\amxxmodule.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\CDetourDis.h" />
+    <ClInclude Include="..\include\configManager.h" />
+    <ClInclude Include="..\include\CString.h" />
+    <ClInclude Include="..\include\CVector.h" />
+    <ClInclude Include="..\include\filesManager.h" />
+    <ClInclude Include="..\include\function.h" />
+    <ClInclude Include="..\include\functionManager.h" />
+    <ClInclude Include="..\include\functionMethodHooks.h" />
+    <ClInclude Include="..\include\functionStructure.h" />
+    <ClInclude Include="..\include\functionStructuresManager.h" />
+    <ClInclude Include="..\include\functionVirtualManager.h" />
+    <ClInclude Include="..\include\global.h" />
+    <ClInclude Include="..\include\hooker.h" />
+    <ClInclude Include="..\include\librariesManager.h" />
+    <ClInclude Include="..\include\memory.h" />
+    <ClInclude Include="..\include\memoryStructure.h" />
+    <ClInclude Include="..\include\memoryStructureManager.h" />
+    <ClInclude Include="..\include\orpheu.h" />
+    <ClInclude Include="..\include\signatureEntry.h" />
+    <ClInclude Include="..\include\sm_trie_tpl.h" />
+    <ClInclude Include="..\include\structData.h" />
+    <ClInclude Include="..\include\structHandler.h" />
+    <ClInclude Include="..\include\structHandlerDirect.h" />
+    <ClInclude Include="..\include\structInfo.h" />
+    <ClInclude Include="..\include\structManager.h" />
+    <ClInclude Include="..\svn_version.h" />
+    <ClInclude Include="..\include\typeHandler.h" />
+    <ClInclude Include="..\include\typeHandlerManager.h" />
+    <ClInclude Include="..\include\typeHandlerImplementations\boolHandler.h" />
+    <ClInclude Include="..\include\typeHandlerImplementations\byteHandler.h" />
+    <ClInclude Include="..\include\typeHandlerImplementations\CBaseEntityHandler.h" />
+    <ClInclude Include="..\include\typeHandlerImplementations\CGameRulesHandler.h" />
+    <ClInclude Include="..\include\typeHandlerImplementations\charArrHandler.h" />
+    <ClInclude Include="..\include\typeHandlerImplementations\charHandler.h" />
+    <ClInclude Include="..\include\typeHandlerImplementations\charPtrHandler.h" />
+    <ClInclude Include="..\include\typeHandlerImplementations\CMBaseMonsterHandler.h" />
+    <ClInclude Include="..\include\typeHandlerImplementations\edict_sPtrHandler.h" />
+    <ClInclude Include="..\include\typeHandlerImplementations\entvarsHandler.h" />
+    <ClInclude Include="..\include\typeHandlerImplementations\floatHandler.h" />
+    <ClInclude Include="..\include\typeHandlerImplementations\longHandler.h" />
+    <ClInclude Include="..\include\typeHandlerImplementations\shortHandler.h" />
+    <ClInclude Include="..\include\typeHandlerImplementations\VectorHandler.h" />
+    <ClInclude Include="..\include\typeHandlerImplementations\VectorPointerByRefHandler.h" />
+    <ClInclude Include="..\include\typeHandlerImplementations\VectorPointerHandler.h" />
+    <ClInclude Include="..\include\json\autolink.h" />
+    <ClInclude Include="..\include\json\config.h" />
+    <ClInclude Include="..\include\json\features.h" />
+    <ClInclude Include="..\include\json\forwards.h" />
+    <ClInclude Include="..\include\json\json.h" />
+    <ClInclude Include="..\include\json\reader.h" />
+    <ClInclude Include="..\include\json\value.h" />
+    <ClInclude Include="..\include\json\writer.h" />
+    <ClInclude Include="..\include\structures\ammoInfo.h" />
+    <ClInclude Include="..\include\structures\cvar.h" />
+    <ClInclude Include="..\include\structures\DLL_FUNCTIONS.h" />
+    <ClInclude Include="..\include\structures\enginefuncs.h" />
+    <ClInclude Include="..\include\structures\itemInfo.h" />
+    <ClInclude Include="..\include\structures\KeyValueData.h" />
+    <ClInclude Include="..\include\structures\MonsterEvent.h" />
+    <ClInclude Include="..\include\structures\movevars.h" />
+    <ClInclude Include="..\include\structures\physent.h" />
+    <ClInclude Include="..\include\structures\playermove.h" />
+    <ClInclude Include="..\include\structures\pmplane.h" />
+    <ClInclude Include="..\include\structures\pmtraceStruct.h" />
+    <ClInclude Include="..\include\structures\schedule.h" />
+    <ClInclude Include="..\include\structures\task.h" />
+    <ClInclude Include="..\include\structures\traceResult.h" />
+    <ClInclude Include="..\include\structures\usercmdStruct.h" />
+    <ClInclude Include="..\include\structures\weapon_data.h" />
+    <ClInclude Include="..\include\structuresDump\monsterevent.h" />
+    <ClInclude Include="..\sdk\moduleconfig.h" />
+    <ClInclude Include="..\sdk\amxxmodule.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,353 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{6446d812-d586-4c01-b6f8-90816be47c33}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Source Files\typeHandlerImplementations">
+      <UniqueIdentifier>{8210a605-edee-44c2-b036-a600a7d31e09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\json">
+      <UniqueIdentifier>{c45ad260-8375-42fd-afe3-fc3dbb61bcae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{8a16189a-d918-471b-b8b7-f8362a6c141b}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+    <Filter Include="Header Files\typeHandlerImplementations">
+      <UniqueIdentifier>{05afe7bd-3f21-42f7-ad4e-045f451a67d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\json">
+      <UniqueIdentifier>{f299e195-f357-4d7a-9dd8-51efc42a848f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\structures">
+      <UniqueIdentifier>{de4f7a9e-8769-43a1-830e-3d83159bc3cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\structuresDump">
+      <UniqueIdentifier>{ff6e6a52-4060-4e52-8af8-8ab011ed7e53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module SDK">
+      <UniqueIdentifier>{d6a09943-66e2-4758-ad69-86c2ce916da1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module SDK\SDK Base">
+      <UniqueIdentifier>{ff0e634a-3314-4777-bf3f-b2d581fe9560}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\CDetourDis.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\configManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\filesManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\function.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\functionManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\functionStructuresManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\functionVirtualManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\global.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hooker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\librariesManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\memory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\memoryStructureManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\orpheu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\structHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\typeHandlerManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\typeHandlerImplementations\boolHandler.cpp">
+      <Filter>Source Files\typeHandlerImplementations</Filter>
+    </ClCompile>
+    <ClCompile Include="..\typeHandlerImplementations\byteHandler.cpp">
+      <Filter>Source Files\typeHandlerImplementations</Filter>
+    </ClCompile>
+    <ClCompile Include="..\typeHandlerImplementations\CBaseEntityHandler.cpp">
+      <Filter>Source Files\typeHandlerImplementations</Filter>
+    </ClCompile>
+    <ClCompile Include="..\typeHandlerImplementations\charArrHandler.cpp">
+      <Filter>Source Files\typeHandlerImplementations</Filter>
+    </ClCompile>
+    <ClCompile Include="..\typeHandlerImplementations\charHandler.cpp">
+      <Filter>Source Files\typeHandlerImplementations</Filter>
+    </ClCompile>
+    <ClCompile Include="..\typeHandlerImplementations\charPtrHandler.cpp">
+      <Filter>Source Files\typeHandlerImplementations</Filter>
+    </ClCompile>
+    <ClCompile Include="..\typeHandlerImplementations\CMBaseMonsterHandler.cpp">
+      <Filter>Source Files\typeHandlerImplementations</Filter>
+    </ClCompile>
+    <ClCompile Include="..\typeHandlerImplementations\edict_sPtrHandler.cpp">
+      <Filter>Source Files\typeHandlerImplementations</Filter>
+    </ClCompile>
+    <ClCompile Include="..\typeHandlerImplementations\entvarHandler.cpp">
+      <Filter>Source Files\typeHandlerImplementations</Filter>
+    </ClCompile>
+    <ClCompile Include="..\typeHandlerImplementations\floatHandler.cpp">
+      <Filter>Source Files\typeHandlerImplementations</Filter>
+    </ClCompile>
+    <ClCompile Include="..\typeHandlerImplementations\longHandler.cpp">
+      <Filter>Source Files\typeHandlerImplementations</Filter>
+    </ClCompile>
+    <ClCompile Include="..\typeHandlerImplementations\short.cpp">
+      <Filter>Source Files\typeHandlerImplementations</Filter>
+    </ClCompile>
+    <ClCompile Include="..\typeHandlerImplementations\VectorHandler.cpp">
+      <Filter>Source Files\typeHandlerImplementations</Filter>
+    </ClCompile>
+    <ClCompile Include="..\typeHandlerImplementations\VectorPointerHandler.cpp">
+      <Filter>Source Files\typeHandlerImplementations</Filter>
+    </ClCompile>
+    <ClCompile Include="..\json\json_reader.cpp">
+      <Filter>Source Files\json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\json\json_value.cpp">
+      <Filter>Source Files\json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sdk\amxxmodule.cpp">
+      <Filter>Module SDK\SDK Base</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\CDetourDis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\configManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CVector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\filesManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\function.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\functionManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\functionMethodHooks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\functionStructure.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\functionStructuresManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\functionVirtualManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\global.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\hooker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\librariesManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\memory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\memoryStructure.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\memoryStructureManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\orpheu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\signatureEntry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\sm_trie_tpl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\structData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\structHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\structHandlerDirect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\structInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\structManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\svn_version.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\typeHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\typeHandlerManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\typeHandlerImplementations\boolHandler.h">
+      <Filter>Header Files\typeHandlerImplementations</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\typeHandlerImplementations\byteHandler.h">
+      <Filter>Header Files\typeHandlerImplementations</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\typeHandlerImplementations\CBaseEntityHandler.h">
+      <Filter>Header Files\typeHandlerImplementations</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\typeHandlerImplementations\CGameRulesHandler.h">
+      <Filter>Header Files\typeHandlerImplementations</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\typeHandlerImplementations\charArrHandler.h">
+      <Filter>Header Files\typeHandlerImplementations</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\typeHandlerImplementations\charHandler.h">
+      <Filter>Header Files\typeHandlerImplementations</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\typeHandlerImplementations\charPtrHandler.h">
+      <Filter>Header Files\typeHandlerImplementations</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\typeHandlerImplementations\CMBaseMonsterHandler.h">
+      <Filter>Header Files\typeHandlerImplementations</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\typeHandlerImplementations\edict_sPtrHandler.h">
+      <Filter>Header Files\typeHandlerImplementations</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\typeHandlerImplementations\entvarsHandler.h">
+      <Filter>Header Files\typeHandlerImplementations</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\typeHandlerImplementations\floatHandler.h">
+      <Filter>Header Files\typeHandlerImplementations</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\typeHandlerImplementations\longHandler.h">
+      <Filter>Header Files\typeHandlerImplementations</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\typeHandlerImplementations\shortHandler.h">
+      <Filter>Header Files\typeHandlerImplementations</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\typeHandlerImplementations\VectorHandler.h">
+      <Filter>Header Files\typeHandlerImplementations</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\typeHandlerImplementations\VectorPointerByRefHandler.h">
+      <Filter>Header Files\typeHandlerImplementations</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\typeHandlerImplementations\VectorPointerHandler.h">
+      <Filter>Header Files\typeHandlerImplementations</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\json\autolink.h">
+      <Filter>Header Files\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\json\config.h">
+      <Filter>Header Files\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\json\features.h">
+      <Filter>Header Files\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\json\forwards.h">
+      <Filter>Header Files\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\json\json.h">
+      <Filter>Header Files\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\json\reader.h">
+      <Filter>Header Files\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\json\value.h">
+      <Filter>Header Files\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\json\writer.h">
+      <Filter>Header Files\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\structures\ammoInfo.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\structures\cvar.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\structures\DLL_FUNCTIONS.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\structures\enginefuncs.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\structures\itemInfo.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\structures\KeyValueData.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\structures\MonsterEvent.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\structures\movevars.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\structures\physent.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\structures\playermove.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\structures\pmplane.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\structures\pmtraceStruct.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\structures\schedule.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\structures\task.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\structures\traceResult.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\structures\usercmdStruct.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\structures\weapon_data.h">
+      <Filter>Header Files\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\structuresDump\monsterevent.h">
+      <Filter>Header Files\structuresDump</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\moduleconfig.h">
+      <Filter>Module SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sdk\amxxmodule.h">
+      <Filter>Module SDK\SDK Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CString.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
