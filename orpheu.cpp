@@ -884,7 +884,7 @@ cell MemoryReplace_(AMX* amx,cell* params,long address)
 
 							// oldProtection = memoryStructure->memoryProtection;
 
-							if( oldProtection == PAGE_EXECUTE_READWRITE || Memory::ChangeMemoryProtection((void*)i,size,oldProtection ) )
+							if( oldProtection == (unsigned long)PAGE_EXECUTE_READWRITE || Memory::ChangeMemoryProtection((void*)i,size,oldProtection ) )
 							{
 								if(++replacements == count)
 								{
@@ -1163,7 +1163,7 @@ cell MemorySet_(AMX* amx,cell* params,long address)
 							
 							//oldProtection = memoryStructure->memoryProtection;
 
-							if( oldProtection == PAGE_EXECUTE_READWRITE || Memory::ChangeMemoryProtection((void*)position,size,oldProtection) )
+							if( oldProtection == (unsigned long)PAGE_EXECUTE_READWRITE || Memory::ChangeMemoryProtection((void*)position,size,oldProtection) )
 							{
 								if((expectedParams+1) == paramsCount)
 								{
@@ -1208,7 +1208,7 @@ cell MemorySet_(AMX* amx,cell* params,long address)
 
 									//oldProtection = memoryStructure->memoryProtection;
 
-									if( oldProtection == PAGE_EXECUTE_READWRITE || Memory::ChangeMemoryProtection((void*)position,size,oldProtection) )
+									if( oldProtection == (unsigned long)PAGE_EXECUTE_READWRITE || Memory::ChangeMemoryProtection((void*)position,size,oldProtection) )
 									{
 										count = 1;
 									}
@@ -1242,7 +1242,7 @@ cell MemorySet_(AMX* amx,cell* params,long address)
 
 										//oldProtection = memoryStructure->memoryProtection;
 
-										if( oldProtection == PAGE_EXECUTE_READWRITE || Memory::ChangeMemoryProtection((void*)position,size,oldProtection) )
+										if( oldProtection == (unsigned long)PAGE_EXECUTE_READWRITE || Memory::ChangeMemoryProtection((void*)position,size,oldProtection) )
 										{
 											count++;
 											position += size;
