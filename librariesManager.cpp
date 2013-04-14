@@ -32,6 +32,8 @@
 	#ifndef PAGESIZE
 		#define PAGESIZE sysconf(_SC_PAGESIZE)
 	#endif
+
+	typedef int BOOL;
 #else
 	#include <windows.h>
 	#include <psapi.h>
