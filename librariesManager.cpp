@@ -26,81 +26,78 @@ namespace LibrariesManager
 	}
 
 #if defined __linux__
+	
+	char* BaseAddress;
+	char* EndAddress;
+	char* LibraryName;
 
-	// Code derived from code from David Anderson
-	long getLength(void *baseAddress)
+	inline uint32 IAlign( uint32 address )
 	{
-			pid_t pid = getpid();
-			char file[255];
-			char buffer[2048];
-			snprintf(file, sizeof(file)-1, "/proc/%d/maps", pid);
-			FILE *fp = fopen(file, "rt");
-			if (fp)
+		return ( address & ~( PAGESIZE - 1 ) );
+	}
+
+	inline uint32 IAlign2( uint32 address )
+	{
+		return ( IAlign( address ) + PAGESIZE );
+	}
+
+	static int dl_callback( struct dl_phdr_info *info, size_t size, void *data )
+	{
+		char* libraryName = ( char* )data;
+
+		if( ( !libraryName ) || strstr( info->dlpi_name, libraryName ) > 0 )
+		{
+			int i;
+			BOOL ismain = FALSE;
+
+			if( info->dlpi_addr == 0x00 )
+				ismain = TRUE;
+			else
+				BaseAddress = ( char * )info->dlpi_addr;
+
+			for( i = 0; i < info->dlpi_phnum; i++)
 			{
-				long length = 0;
-
-        		unsigned long *start = NULL;
-        		unsigned long *end = NULL;
-
-        		while (!feof(fp))
+				if( info->dlpi_phdr[i].p_memsz && IAlign( info->dlpi_phdr[i].p_vaddr ) )
 				{
-					fgets(buffer, sizeof(buffer)-1, fp);			
-#if defined AMD64
-					sscanf(buffer, "%Lx-%Lx", (unsigned long *)&start, (unsigned long *)&end);
-#else
-					sscanf(buffer, "%lx-%lx", (unsigned long *)&start, (unsigned long *)&end);
-#endif
-					if(start == baseAddress)
-					{
-						length = (unsigned long)end  - (unsigned long)start;
+					if( ismain && ( uint32 )BaseAddress > IAlign( info->dlpi_phdr[i].p_vaddr ) )
+						BaseAddress = ( char* )IAlign( info->dlpi_phdr[i].p_vaddr );
 
-						char ignore[100];
-						int value;
+					if( ( uint32 )EndAddress < ( info->dlpi_phdr[i].p_vaddr + info->dlpi_phdr[i].p_memsz ) )
+						EndAddress = ( char* )IAlign2( ( info->dlpi_phdr[i].p_vaddr + info->dlpi_phdr[i].p_memsz ) );
+				}
+			}
 
-						while(!feof(fp))
-						{
-							fgets(buffer, sizeof(buffer)-1, fp);
-#if defined AMD64
-							sscanf(buffer, "%Lx-%Lx %s %s %s %d", (unsigned long *)&start, (unsigned long *)&end, ignore, ignore, ignore, &value);
-#else
-	        					sscanf(buffer, "%lx-%lx %s %s %s %d", (unsigned long *)&start, (unsigned long *)&end, ignore, ignore ,ignore, &value);
-#endif
-							if(!value)
-							{		
-								break;
-							}
-							else
-							{
-								length += end  - start;
-							}
-						}
-						
-						break;
-					}
-        		}
+			EndAddress += info->dlpi_addr;
 
-				fclose(fp);
-
-			return length;
+			return ( int )BaseAddress;
 		}
 
 		return 0;
 	}
+
 	bool addLibrary(const char* libraryName,void* addressContained)
 	{
 		Dl_info info;
 
-		if(dladdr(addressContained,&info))
+		if( addressContained && dladdr( addressContained, &info ) )
 		{
-			LibraryInfo* libraryInfo = new LibraryInfo;
+			LibraryName = ( char* )info.dli_fname;
 
-			libraryInfo->baseAddress = (void*) info.dli_fbase;
-			libraryInfo->length = getLength((void*) info.dli_fbase);
-			libraryInfo->handle = dlopen(info.dli_fname, RTLD_NOW);
+			BaseAddress = ( char * )0xffffffff;
+			EndAddress = 0;
 
-			LibraryNameToLibraryInfo->insert(libraryName,libraryInfo);
-			
-			return true;
+			if( ( BaseAddress = dl_iterate_phdr( dl_callback, LibraryName ) ) )
+			{
+				LibraryInfo* libraryInfo = new LibraryInfo;
+
+				libraryInfo->baseAddress = ( void* )BaseAddress;
+				libraryInfo->length = ( long )EndAddress - ( long )BaseAddress;
+				libraryInfo->handle = dlopen( LibraryName, RTLD_NOW );
+
+				LibraryNameToLibraryInfo->insert( libraryName, libraryInfo );
+
+				return true;
+			}
 		}
 
 		return false;
