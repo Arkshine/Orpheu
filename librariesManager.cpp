@@ -4,16 +4,37 @@
 #include <sm_trie_tpl.h>
 
 #if defined __linux__
-#include <dlfcn.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
+	#include <dlfcn.h>
+	#include <sys/types.h>
+	#include <sys/stat.h>
+	#include <unistd.h>
+	#include <string.h>
+	#include <stdio.h>
+	#include <stdlib.h>
+
+	#include <sys/mman.h>
+	#include <link.h>
+	#include <limits.h>
+	#include <errno.h>
+
+	#ifndef uint32
+		#define uint32	unsigned int
+	#endif
+
+	#ifndef FALSE
+		#define FALSE	0
+	#endif
+
+	#ifndef TRUE
+		#define TRUE	1
+	#endif
+
+	#ifndef PAGESIZE
+		#define PAGESIZE sysconf(_SC_PAGESIZE)
+	#endif
 #else
-#include <windows.h>
-#include <psapi.h>
+	#include <windows.h>
+	#include <psapi.h>
 #endif
 
 namespace LibrariesManager
@@ -86,7 +107,7 @@ namespace LibrariesManager
 			BaseAddress = ( char * )0xffffffff;
 			EndAddress = 0;
 
-			if( ( BaseAddress = dl_iterate_phdr( dl_callback, LibraryName ) ) )
+			if( dl_iterate_phdr( dl_callback, LibraryName ) )
 			{
 				LibraryInfo* libraryInfo = new LibraryInfo;
 
