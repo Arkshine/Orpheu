@@ -80,11 +80,14 @@ void ConfigManager::parseModsInfo()
 
 	CVector<string>* files = FilesManager::getFiles(orpheuPaths.mods);	
 
+	sprintf(msg,"\t\tCurrent mod : \"%s\"\n\n", Global::Modname.c_str() );
+	Global::ConfigManagerObj->ModuleConfig.append(msg);
+
 	for(unsigned i=0;i<files->size();i++)
 	{
 		string path = orpheuPaths.mods + files->at(i);
 
-		sprintf(msg,"\tParsing mod file \"%s\"\n",files->at(i).c_str());
+		sprintf(msg,"\t\tParsing mod file \"%s\"\n",files->at(i).c_str());
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
 
 		std::ifstream file(path.c_str());
@@ -92,6 +95,7 @@ void ConfigManager::parseModsInfo()
 		Json::Value root;
 		Json::Reader reader;
 
+		bool foundMod = false;
 		bool parsingSuccessful = reader.parse(file,root);
 
 		if(parsingSuccessful)
@@ -121,7 +125,10 @@ void ConfigManager::parseModsInfo()
 							}
 							if(Global::Modname == aliases[j].asString())
 							{
+								sprintf(msg,"\t\t\tFound an alias.\n");
+								Global::ConfigManagerObj->ModuleConfig.append(msg);
 								Global::Modname = name.asString();
+								foundMod = true;
 								break;
 							}
 						}
@@ -134,25 +141,34 @@ void ConfigManager::parseModsInfo()
 				}
 				else
 				{
+					sprintf(msg,"\t\t\tFound.\n");
+					Global::ConfigManagerObj->ModuleConfig.append(msg);
+
+					foundMod = true;
 					Global::Modname = name.asString();
 				}
 
-				Json::Value pev = root["pev"];
-
-				if(pev.isObject())
+				if( foundMod )
 				{
-					Json::Value value = pev[OperativeSystem];
+					Json::Value pev = root["pev"];
 
-					if(value.isNumeric())
+					if(pev.isObject())
 					{
-						Global::pev = value.asInt();
+						Json::Value value = pev[OperativeSystem];
+
+						if(value.isNumeric())
+						{
+							Global::pev = value.asInt();
+						}
 					}
+
+					break;
 				}
 			}
 		}
 		else
 		{
-			sprintf(msg,"\t\tFile incorrectly formatted\"%s\"\n",files->at(i).c_str());
+			sprintf(msg,"\t\t\tFile incorrectly formatted\"%s\"\n",files->at(i).c_str());
 			Global::ConfigManagerObj->ModuleConfig.append(msg);
 		}
 	}
@@ -162,11 +178,11 @@ void ConfigManager::loadBaseData()
 {
 	Global::ConfigManagerObj->ModuleConfig.append("\nOrpheu configuration started.\n");
 
-	Global::ConfigManagerObj->ModuleConfig.append("\n\tParsing mods configuration started.\n");
+	Global::ConfigManagerObj->ModuleConfig.append("\n\tParsing mods configuration started.\n\n");
 
 	parseModsInfo();
 
-	Global::ConfigManagerObj->ModuleConfig.append("\tParsing mods configuration ended.\n");
+	Global::ConfigManagerObj->ModuleConfig.append("\n\tParsing mods configuration ended.\n");
 
 	Global::ConfigManagerObj->ModuleConfig.append("\n\tParsing libraries configuration started.\n\n");
 
