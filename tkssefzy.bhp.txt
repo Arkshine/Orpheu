@@ -1,6 +1,0 @@
-﻿Bump version to 2.5.2.
-#
-# Write a tag message
-# Lines starting with '#' will be ignored.
-#
-
