@@ -116,3 +116,5 @@ pip-log.txt
 *.bak
 
 boost/
+
+*.so
