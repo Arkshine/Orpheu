@@ -10,7 +10,7 @@ void* BoolHandler::convertFromAmx(AMX* amx,cell param)
 
 void BoolHandler::convertToAmx(cell& value,long standardReturn,ConvertMode convertMode)
 {
-	value = (cell)(bool) standardReturn;
+	value = (cell)(char)standardReturn;
 }
 
 void BoolHandler::convertFromAmxToStructure(AMX* amx,cell param,void* address)
