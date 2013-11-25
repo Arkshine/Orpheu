@@ -1399,6 +1399,7 @@ void addLibraries() // IM THE KING OF EXAMPLE COPYPASTING!
 			if (GetModuleFileNameEx( hProcess, hMods[i], szModName, sizeof(szModName)/sizeof(TCHAR)))
 			{
 				string modname;
+				string AMXXModule;
 				_MODULEINFO info;
 
 				GetModuleInformation(hProcess, hMods[i], &info, sizeof(info));
@@ -1409,23 +1410,34 @@ void addLibraries() // IM THE KING OF EXAMPLE COPYPASTING!
 					unsigned int pos = modname.rfind("\\");
 					if(pos != string::npos) modname.erase(0, pos+1);
 
-					pos = modname.rfind("_");
-					if(pos != string::npos) modname.erase( pos );
-
 					pos = modname.rfind(".");
 					if(pos != string::npos) modname.erase( pos );
 
-					//printf("Found module %s (address: 0x%x)\n", modname.c_str(), info.lpBaseOfDll);
-					if(!LibrariesManager::addLibrary((char*)modname.c_str(), info.lpBaseOfDll))
+					pos = modname.rfind("_");
+					if(pos != string::npos)
 					{
-						sprintf(msg, "\tERROR adding library %s (0x%x)\n", (char*)modname.c_str(), info.lpBaseOfDll);
+						if(modname.rfind("_amxx") != string::npos)
+							AMXXModule.append(modname.c_str());
+
+						modname.erase( pos );
+					}
+
+					//printf("Found module %s (address: 0x%x)\n", modname.c_str(), info.lpBaseOfDll);
+
+					if(!LibrariesManager::addLibrary((char*)modname.c_str(), info.lpBaseOfDll) || (AMXXModule.size() && 
+					   !LibrariesManager::addLibrary((char*)AMXXModule.c_str(), info.lpBaseOfDll)))
+					{
+						sprintf(msg, "\tERROR adding library %s%s (0x%x)\n", (char*)modname.c_str(), AMXXModule.size() ? "[_amxx]" : "", info.lpBaseOfDll);
 						Global::ConfigManagerObj->ModuleConfig.append(msg);
 					}
 					else
 					{
-						sprintf(msg, "\tAdding library %s (0x%x)\n", (char*)modname.c_str(), info.lpBaseOfDll);
+						sprintf(msg, "\tAdding library %s%s (0x%x)\n", (char*)modname.c_str(), AMXXModule.size() ? "[_amxx]" : "", info.lpBaseOfDll);
 						Global::ConfigManagerObj->ModuleConfig.append(msg);
 					}
+
+					modname.clear();
+					AMXXModule.clear();
 				}
 			}
 		}
