@@ -12,10 +12,11 @@
 #include <iostream>
 #include <fstream>
 #include <json/reader.h>
+#include "jansson.h"
 
 #include <memory.h>
 
-using namespace std;
+
 
 class ConfigManager
 {
@@ -26,7 +27,7 @@ public:
 	void loadFunctions();
 	void loadVirtualFunctions();
 	void loadMemoryStructures();
-	void parseMemoryObject(Json::Value root);
+	void parseMemoryObject(json_t *root);
 
 	String ModuleConfig;
 

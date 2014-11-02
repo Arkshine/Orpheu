@@ -71,7 +71,7 @@
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>..\;..\include;..\boost;..\sdk;..\public\amtl;..\public;$(METAMOD)\metamod;$(HLSDK)\common;$(HLSDK)\engine;$(HLSDK)\dlls;$(HLSDK)\pm_shared;$(HLSDK)\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\;..\include;..\jansson;..\sdk;..\public\amtl;..\public;$(METAMOD)\metamod;$(HLSDK)\common;$(HLSDK)\engine;$(HLSDK)\dlls;$(HLSDK)\pm_shared;$(HLSDK)\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;ORPHEU_EXPORTS;HAVE_STDINT_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
@@ -167,8 +167,19 @@
     <ClCompile Include="..\functionVirtualManager.cpp" />
     <ClCompile Include="..\global.cpp" />
     <ClCompile Include="..\hooker.cpp" />
+    <ClCompile Include="..\jansson\dump.c" />
+    <ClCompile Include="..\jansson\error.c" />
+    <ClCompile Include="..\jansson\hashtable.c" />
+    <ClCompile Include="..\jansson\hashtable_seed.c" />
+    <ClCompile Include="..\jansson\load.c" />
+    <ClCompile Include="..\jansson\memory.c" />
+    <ClCompile Include="..\jansson\pack_unpack.c" />
+    <ClCompile Include="..\jansson\strbuffer.c" />
+    <ClCompile Include="..\jansson\strconv.c" />
+    <ClCompile Include="..\jansson\utf.c" />
+    <ClCompile Include="..\jansson\value.c" />
     <ClCompile Include="..\librariesManager.cpp" />
-    <ClCompile Include="..\memory.cpp" />
+    <ClCompile Include="..\memoryUtil.cpp" />
     <ClCompile Include="..\memoryStructureManager.cpp" />
     <ClCompile Include="..\orpheu.cpp" />
     <ClCompile Include="..\structHandler.cpp" />
@@ -206,7 +217,7 @@
     <ClInclude Include="..\include\global.h" />
     <ClInclude Include="..\include\hooker.h" />
     <ClInclude Include="..\include\librariesManager.h" />
-    <ClInclude Include="..\include\memory.h" />
+    <ClInclude Include="..\include\memoryUtil.h" />
     <ClInclude Include="..\include\memoryStructure.h" />
     <ClInclude Include="..\include\memoryStructureManager.h" />
     <ClInclude Include="..\include\orpheu.h" />
@@ -217,6 +228,13 @@
     <ClInclude Include="..\include\structHandlerDirect.h" />
     <ClInclude Include="..\include\structInfo.h" />
     <ClInclude Include="..\include\structManager.h" />
+    <ClInclude Include="..\jansson\hashtable.h" />
+    <ClInclude Include="..\jansson\jansson.h" />
+    <ClInclude Include="..\jansson\jansson_config.h" />
+    <ClInclude Include="..\jansson\jansson_private.h" />
+    <ClInclude Include="..\jansson\lookup3.h" />
+    <ClInclude Include="..\jansson\strbuffer.h" />
+    <ClInclude Include="..\jansson\utf.h" />
     <ClInclude Include="..\svn_version.h" />
     <ClInclude Include="..\include\typeHandler.h" />
     <ClInclude Include="..\include\typeHandlerManager.h" />

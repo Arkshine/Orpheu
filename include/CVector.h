@@ -286,7 +286,7 @@ public:
 	{
 		m_Size = 0;
 		m_CurrentUsedSize = 0;
-		m_Data = NULL;
+		m_Data = nullptr;
 	}
 
 	CVector<T>(const CVector<T> & other)

@@ -12,7 +12,7 @@
 #include <am-string.h>
 #include <am-vector.h>
 
-using namespace std;
+
 
 #include <eiface.h>
 

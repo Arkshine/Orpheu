@@ -13,8 +13,6 @@
 #include <Psapi.h>
 #endif
 
-using namespace std;
-
 #undef close
 
 struct Folders

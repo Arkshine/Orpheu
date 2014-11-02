@@ -1,5 +1,6 @@
 
 #include <filesManager.h>
+#include "amxxmodule.h"
 
 #if defined(WIN32)
 #include <Windows.h>
@@ -43,7 +44,7 @@ namespace FilesManager
 		{
 #if defined WIN32 || defined _WIN32
 			char path[256];
-			UTIL_Format(path, sizeof(path) - 1, "%s\\*", directory);
+			UTIL_Format(path, sizeof(path) - 1, "%s*", directory);
 
 			WIN32_FIND_DATA fd;
 			HANDLE hFile = FindFirstFile(path, &fd);
@@ -52,7 +53,7 @@ namespace FilesManager
 			{
 				do
 				{
-					UTIL_Format(path, sizeof(path) - 1, "%s\\%s", directory, fd.cFileName);
+					UTIL_Format(path, sizeof(path) - 1, "%s%s", directory, fd.cFileName);
 
 					if (dirExists(path))
 					{
@@ -74,7 +75,7 @@ namespace FilesManager
 
 				while ((ep = readdir(dp))
 				{
-					UTIL_Format(path, sizeof(path) - 1, "%s/%s", directory, ep->d_name);
+					UTIL_Format(path, sizeof(path) - 1, "%s%s", directory, ep->d_name);
 
 					if (dirExists(path))
 					{
@@ -97,7 +98,7 @@ namespace FilesManager
 		{
 #if defined WIN32 || defined _WIN32
 			char path[256];
-			UTIL_Format(path, sizeof(path) - 1, "%s\\*", directory);
+			UTIL_Format(path, sizeof(path) - 1, "%s*", directory);
 
 			WIN32_FIND_DATA fd;
 			HANDLE hFile = FindFirstFile(path, &fd);
@@ -106,7 +107,7 @@ namespace FilesManager
 			{
 				do
 				{
-					UTIL_Format(path, sizeof(path) - 1, "%s\\%s", directory, fd.cFileName);
+					UTIL_Format(path, sizeof(path) - 1, "%s%s", directory, fd.cFileName);
 
 					if (!dirExists(path))
 					{
@@ -128,7 +129,7 @@ namespace FilesManager
 
 				while ((ep = readdir(dp))
 				{
-					UTIL_Format(path, sizeof(path) - 1, "%s/%s", directory, ep->d_name);
+					UTIL_Format(path, sizeof(path) - 1, "%s%s", directory, ep->d_name);
 
 					if (!dirExists(path))
 					{

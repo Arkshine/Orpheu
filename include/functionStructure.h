@@ -11,7 +11,7 @@
 #include <am-string.h>
 #include <CVector.h>
 
-using namespace std;
+
 
 struct FunctionStructure
 {

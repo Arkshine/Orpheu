@@ -3,11 +3,11 @@
 #include <configManager.h>
 #include <cbase.h>
 #include <am-string.h>
-using namespace std;
 
 #include <global.h>
 
 #include <functionMethodHooks.h>
+#include "memoryUtil.h"
 
 unsigned char PreJumpBase[] ={ 0x66, 0xc7, 0x5, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0, 0xe9, 0x00, 0x00, 0x00, 0x00 };
 unsigned int PreJumpSize = sizeof PreJumpBase;

@@ -5,7 +5,7 @@
 #include <typeHandler.h>
 
 #include <am-string.h>
-using namespace std;
+
 
 #include <CVector.h>
 
