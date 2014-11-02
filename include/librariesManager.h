@@ -13,16 +13,16 @@ struct LibraryInfo
 
 namespace LibrariesManager
 {
-	bool addLibrary(const char *libraryName,void *addressContained);
+	bool addLibrary(const char *libraryName, void *addressContained);
 	bool hasLibrary(const char *libraryName);
-	void* findFunction(const char* libraryName,const char* functionName);
-	void* findFunction(const char* libraryName,unsigned char* signature,SignatureEntryType* signatureData,unsigned int);
-	bool libraryContainsAddress(const char* libraryName,long address);
-	long getAddressOffset(long address,const char* libraryName);
-	long getAddressWithOffset(long offset,const char* libraryName);
+	void* findFunction(const char* libraryName, const char* functionName);
+	void* findFunction(const char* libraryName, unsigned char* signature, SignatureEntryType* signatureData, unsigned int);
+	bool libraryContainsAddress(const char* libraryName, long address);
+	long getAddressOffset(long address, const char* libraryName);
+	long getAddressWithOffset(long offset, const char* libraryName);
 	long getLibraryAddress(const char* libraryName);
 	LibraryInfo* getLibrary(const char* libraryName);
-	void* findMemory(const char* libraryName,unsigned char* signature,SignatureEntryType* signatureData,unsigned int length,long start);
+	void* findMemory(const char* libraryName, unsigned char* signature, SignatureEntryType* signatureData, unsigned int length, long start);
 }
 
 #endif

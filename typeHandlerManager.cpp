@@ -7,19 +7,19 @@ TypeHandlerManager::TypeHandlerManager(KTrie<CVector<char*>*>* typeAliases)
 	this->typeAliases = typeAliases;
 }
 
-void TypeHandlerManager::registerTypeHandler(const char* label,TypeHandler* handler)
+void TypeHandlerManager::registerTypeHandler(const char* label, TypeHandler* handler)
 {
-	registeredTypeHandlers->insert(label,handler);
+	registeredTypeHandlers->insert(label, handler);
 
 	CVector<char*>** aliasesPointer = typeAliases->retrieve(label);
 
-	if(aliasesPointer)
+	if (aliasesPointer)
 	{
 		CVector<char*>* aliases = *aliasesPointer;
 
-		for(unsigned int i=0;i<aliases->size();i++)
+		for (unsigned int i=0; i < aliases->size(); i++)
 		{
-			registeredTypeHandlers->insert(aliases->at(i),handler);
+			registeredTypeHandlers->insert(aliases->at(i), handler);
 		}
 	}
 }
@@ -30,10 +30,9 @@ bool TypeHandlerManager::typeHandlerExists(char* label)
 TypeHandler* TypeHandlerManager::getTypeHandler(char* label)
 {
 	TypeHandler** handlerPointer = registeredTypeHandlers->retrieve(label);
-	
-	if(handlerPointer)
+
+	if (handlerPointer)
 		return *handlerPointer;
-	
+
 	return NULL;
 }
-

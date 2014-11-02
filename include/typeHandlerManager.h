@@ -9,17 +9,17 @@
 
 class TypeHandlerManager
 {
-	public:
+public:
 
-		TypeHandlerManager(KTrie<CVector<char*>*>* typeAliases);
-		void registerTypeHandler(const char* label,TypeHandler* handler);
-		bool typeHandlerExists(char* label);
-		TypeHandler* getTypeHandler(char *label);
-	
-	private:
-	
-		KTrie<TypeHandler*>* registeredTypeHandlers;
-		KTrie<CVector<char*>*>* typeAliases;
+	TypeHandlerManager(KTrie<CVector<char*>*>* typeAliases);
+	void registerTypeHandler(const char* label, TypeHandler* handler);
+	bool typeHandlerExists(char* label);
+	TypeHandler* getTypeHandler(char *label);
+
+private:
+
+	KTrie<TypeHandler*>* registeredTypeHandlers;
+	KTrie<CVector<char*>*>* typeAliases;
 };
 
 #endif

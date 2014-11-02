@@ -5,45 +5,45 @@
 #undef max
 
 #include <map>
- 
+
 using namespace std;
 
 class StructManager
 {
-	map<long,StructHandler*> structAddressToHandler;
+	map<long, StructHandler*> structAddressToHandler;
 
-	public:
+public:
 
-		void add(long structureAddress,StructHandler* structureHandler)
+	void add(long structureAddress, StructHandler* structureHandler)
+	{
+		structAddressToHandler[structureAddress] = structureHandler;
+	}
+	long clone(long structureAddress, StructHandler* structureHandler)
+	{
+		long newStructureAddress = createStructure(structureHandler);
+
+		add(newStructureAddress, structureHandler);
+
+		memcpy((void*)newStructureAddress, (void*)structureAddress, structureHandler->getSize());
+
+		return newStructureAddress;
+	}
+	StructHandler* getHandler(long structureAddress)
+	{
+		map<long, StructHandler*>::iterator iterator = structAddressToHandler.find(structureAddress);
+
+		if (iterator != structAddressToHandler.end())
 		{
-			structAddressToHandler[structureAddress] = structureHandler;
+			return (*iterator).second;
 		}
-		long clone(long structureAddress,StructHandler* structureHandler)
-		{
-			long newStructureAddress = createStructure(structureHandler);
 
-			add(newStructureAddress,structureHandler);
-
-			memcpy((void*)newStructureAddress,(void*)structureAddress,structureHandler->getSize());
-
-			return newStructureAddress;
-		}
-		StructHandler* getHandler(long structureAddress)
-		{
-			map<long,StructHandler*>::iterator iterator = structAddressToHandler.find(structureAddress);
-
-			if(iterator != structAddressToHandler.end())
-			{
-				return (*iterator).second;
-			}
-
-			return NULL;
-		}
-		long createStructure(StructHandler* structureHandler)
-		{
-			long structureAddress = structureHandler->allocate();
-			add(structureAddress,structureHandler);
-			return structureAddress;
-		}
+		return NULL;
+	}
+	long createStructure(StructHandler* structureHandler)
+	{
+		long structureAddress = structureHandler->allocate();
+		add(structureAddress, structureHandler);
+		return structureAddress;
+	}
 };
 

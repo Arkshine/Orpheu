@@ -2,20 +2,19 @@
 #include <structData.h>
 #include <structuresDump/schedule.h>
 
-class Task : public StructData<Task_t>
+class Task : public StructData < Task_t >
 {
-	public:
+public:
 
-		Task()
-		{	
-			addMember("iTask",&structure->iTask,Types[TypeLong]);
-			addMember("flData",&structure->flData,Types[TypeFloat]);
-		}
+	Task()
+	{
+		addMember("iTask", &structure->iTask, Types[TypeLong]);
+		addMember("flData", &structure->flData, Types[TypeFloat]);
+	}
 
-		const char *getName() 
-		{
-			return "Task_t *";
-		};
+	const char *getName()
+	{
+		return "Task_t *";
+	};
 };
-
 

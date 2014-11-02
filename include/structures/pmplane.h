@@ -1,20 +1,19 @@
 
 #include <structData.h>
 
-class PmplaneStructData : public StructData<pmplane_t>
+class PmplaneStructData : public StructData < pmplane_t >
 {
-	public:
+public:
 
-		PmplaneStructData()
-		{
-			addMember("normal",&structure->normal,Types[TypeVector]);
-			addMember("dist",&structure->dist,Types[TypeFloat]);
-		}
+	PmplaneStructData()
+	{
+		addMember("normal", &structure->normal, Types[TypeVector]);
+		addMember("dist", &structure->dist, Types[TypeFloat]);
+	}
 
-		const char *getName() 
-		{
-			return "pmplane_s *";
-		};
+	const char *getName()
+	{
+		return "pmplane_s *";
+	};
 };
-
 

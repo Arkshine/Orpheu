@@ -8,7 +8,7 @@
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, version 3.0, as published by the
  * Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
@@ -48,7 +48,7 @@ enum NodeType
  * @brief Trie class for storing key/value pairs, based on double array tries.
  * @file sm_trie_tpl.h
  *
- * For full works cited and implementation overview, there is a big comment 
+ * For full works cited and implementation overview, there is a big comment
  * block at the bottom of this file.
  */
 
@@ -134,7 +134,7 @@ public:
 	 *
 	 * @param key		Key to insert at.
 	 * @param obj		Object to store at the key.
-	 * @return			True on success, false if the key is already set or 
+	 * @return			True on success, false if the key is already set or
 	 *					insertion otherwise failed.
 	 */
 	bool insert(const char *key, const K & obj)
@@ -148,7 +148,7 @@ public:
 		unsigned int curoffs;			/* current offset */
 
 		/**
-		 * Empty strings are a special case, since there are no productions.  We could 
+		 * Empty strings are a special case, since there are no productions.  We could
 		 * probably rework it to use BASE[0] but this hack is easier.
 		 */
 		if (*key == '\0')
@@ -185,7 +185,7 @@ public:
 			/* Check if this slot is supposed to be empty.  If so, we need to handle CASES 1/2:
 			 * Insertion without collisions
 			 */
-			if ( (curidx > m_baseSize) || (node->mode == Node_Unused) )
+			if ((curidx > m_baseSize) || (node->mode == Node_Unused))
 			{
 				if (curidx > m_baseSize)
 				{
@@ -219,7 +219,7 @@ public:
 				 * NOTE: This is the hardest case to handle.  All below examples are based on:
 				 * BACHELOR, BADGE, inserting BABY.
 				 * The problematic production here is A -> B, where B is already being used.
-			     *
+				 *
 				 * This process has to rotate one half of the 'A' arc.  We generate two lists:
 				 *  Outgoing Arcs - Anything leaving this 'A'
 				 *  Incoming Arcs - Anything going to this 'A'
@@ -244,7 +244,7 @@ public:
 					outgoing_limit = m_baseSize - outgoing_base;
 				}
 
-				for (unsigned int i=1; i<=outgoing_limit; i++,cur++)
+				for (unsigned int i=1; i <= outgoing_limit; i++, cur++)
 				{
 					if (cur->mode == Node_Unused || cur->parent != lastidx)
 					{
@@ -255,7 +255,7 @@ public:
 				outgoing_list[outgoing_count++] = curidx - outgoing_base;
 
 				/* Now we need to find all the arcs leaving our parent...
-				 * Note: the inconsistency is the base of our parent.  
+				 * Note: the inconsistency is the base of our parent.
 				 */
 				assert(m_base[node->parent].mode == Node_Arc);
 				unsigned int incoming_list[256];
@@ -271,7 +271,7 @@ public:
 
 				assert(incoming_limit > 0 && incoming_limit <= 255);
 
-				for (unsigned int i=1; i<=incoming_limit; i++,cur++)
+				for (unsigned int i=1; i <= incoming_limit; i++, cur++)
 				{
 					if (cur->mode == Node_Arc || cur->mode == Node_Term)
 					{
@@ -295,7 +295,7 @@ public:
 					 * Relocate the node's info to the new position.
 					 */
 					unsigned int idx, newidx, oldidx;
-					for (unsigned int i=0; i<incoming_count; i++)
+					for (unsigned int i=0; i < incoming_count; i++)
 					{
 						idx = incoming_list[i];
 						newidx = q + idx;
@@ -324,7 +324,7 @@ public:
 							{
 								outgoing_limit = 255;
 							}
-							for (unsigned int j=1; j<=outgoing_limit; j++, check_base++)
+							for (unsigned int j=1; j <= outgoing_limit; j++, check_base++)
 							{
 								if (check_base->parent == oldidx)
 								{
@@ -344,7 +344,7 @@ public:
 					m_base[lastidx].idx = q;
 
 					/* Take the last index (curidx) out of the list.  Technically we are not moving this,
-					 * since it's already being used by something else.  
+					 * since it's already being used by something else.
 					 */
 					outgoing_count--;
 
@@ -352,7 +352,7 @@ public:
 					 * Relocate the node's info to the new position.
 					 */
 					unsigned int idx, newidx, oldidx;
-					for (unsigned int i=0; i<outgoing_count; i++)
+					for (unsigned int i=0; i < outgoing_count; i++)
 					{
 						idx = outgoing_list[i];
 						newidx = q + idx;
@@ -381,7 +381,7 @@ public:
 							{
 								outgoing_limit = 255;
 							}
-							for (unsigned int j=1; j<=outgoing_limit; j++, check_base++)
+							for (unsigned int j=1; j <= outgoing_limit; j++, check_base++)
 							{
 								if (check_base->parent == oldidx)
 								{
@@ -485,7 +485,7 @@ public:
 					/* We're done inserting new pairs.  If one of them is exhausted,
 					 * we take special shortcuts.
 					 */
-					if (*term == '\0')				//EX: BADGERHOUSE added over B -> ADGER.  
+					if (*term == '\0')				//EX: BADGERHOUSE added over B -> ADGER.
 					{
 						/* First backpatch the current node - it ends the newly split terminator.
 						 * In the example, this would mean the node is the production from R -> ?
@@ -633,7 +633,7 @@ public:
 		 * the production rule already existed.  Make sure it's valid to set first.
 		 */
 
-		/* We have to be an Arc.  If the last result was anything else, we would have returned a new 
+		/* We have to be an Arc.  If the last result was anything else, we would have returned a new
 		 * production earlier.
 		 */
 		assert(node->mode == Node_Arc);
@@ -649,11 +649,11 @@ public:
 		return false;
 	}
 
-	/** 
-	 * @brief Iterates over the trie returning all known values.  
-	 * 
-	 * Note: This function is for debugging.  Do not use it as a 
-	 * production iterator since it's inefficient.  Iteration is 
+	/**
+	 * @brief Iterates over the trie returning all known values.
+	 *
+	 * Note: This function is for debugging.  Do not use it as a
+	 * production iterator since it's inefficient.  Iteration is
 	 * guaranteed to be sorted ascendingly.
 	 *
 	 * The callback function takes:
@@ -667,20 +667,20 @@ public:
 	 * @param data				User pointer for passing to the iterator.
 	 * @param func				Iterator callback function.
 	 */
-	void bad_iterator(char *buffer, 
-		size_t maxlength, 
+	void bad_iterator(char *buffer,
+		size_t maxlength,
 		void *data,
-		void (*func)(KTrie *, const char *, K & obj, void *data))
+		void(*func)(KTrie *, const char *, K & obj, void *data))
 	{
 		bad_iterator_r(buffer, maxlength, 0, data, func, 1);
 	}
 
 private:
-	void bad_iterator_r(char *buffer, 
-		size_t maxlength, 
+	void bad_iterator_r(char *buffer,
+		size_t maxlength,
 		size_t buf_pos,
 		void *data,
-		void (*func)(KTrie *, const char *, K & obj, void *data),
+		void(*func)(KTrie *, const char *, K & obj, void *data),
 		unsigned int root)
 	{
 		char *term;
@@ -727,8 +727,8 @@ private:
 
 				buf_pos--;
 			}
-			else if (m_base[idx].mode == Node_Term 
-					 && m_base[idx].valset == true)
+			else if (m_base[idx].mode == Node_Term
+				&& m_base[idx].valset == true)
 			{
 				size_t save_buf_pos;
 
@@ -743,9 +743,9 @@ private:
 
 					term = &m_stringtab[m_base[idx].idx];
 					destlen = strlen(term);
-					for (j = 0; 
-						 j < destlen && j + buf_pos < maxlength - 1;
-						 j++)
+					for (j = 0;
+						j < destlen && j + buf_pos < maxlength - 1;
+						j++)
 					{
 						buffer[buf_pos + j] = term[j];
 					}
@@ -754,7 +754,7 @@ private:
 				buffer[buf_pos] = '\0';
 
 				func(this, buffer, m_base[idx].value, data);
-				
+
 				buf_pos = save_buf_pos;
 			}
 		}
@@ -783,7 +783,7 @@ public:
 		free(m_base);
 		free(m_stringtab);
 	}
-	void run_destructor(void (*dtor)(K * ptr))
+	void run_destructor(void(*dtor)(K * ptr))
 	{
 		for (size_t i = 0; i <= m_baseSize; i++)
 		{
@@ -804,7 +804,7 @@ private:
 		 *   I.e. to jump from this arc to character C, it will be at base[idx+C].
 		 * For Node_Term, this is an index into the string table.
 		 */
-		unsigned int idx;	
+		unsigned int idx;
 
 		/**
 		 * This contains the prior arc that we must have come from.
@@ -924,12 +924,12 @@ private:
 		size_t len = strlen(ptr) + 1;
 
 		if (m_tail + len >= m_stSize)
-		{		
+		{
 			while (m_tail + len >= m_stSize)
 			{
 				m_stSize *= 2;
 			}
-			m_stringtab = (char *)realloc(m_stringtab,m_stSize);
+			m_stringtab = (char *)realloc(m_stringtab, m_stSize);
 		}
 
 		unsigned int tail = m_tail;
@@ -942,9 +942,9 @@ private:
 	{
 		unsigned char _c = charval(c);
 		unsigned int to_check = m_baseSize - _c;
-		for (unsigned int i=start; i<=to_check; i++)
+		for (unsigned int i=start; i <= to_check; i++)
 		{
-			if (m_base[i+_c].mode == Node_Unused)
+			if (m_base[i + _c].mode == Node_Unused)
 			{
 				return i;
 			}
@@ -952,17 +952,17 @@ private:
 
 		grow();
 
-		return x_check(c, to_check+1);
+		return x_check(c, to_check + 1);
 	}
 	unsigned int x_check2(char c1, char c2, unsigned int start=1)
 	{
 		unsigned char _c1 = charval(c1);
 		unsigned char _c2 = charval(c2);
 		unsigned int to_check = m_baseSize - (_c1 > _c2 ? _c1 : _c2);
-		for (unsigned int i=start; i<=to_check; i++)
+		for (unsigned int i=start; i <= to_check; i++)
 		{
-			if (m_base[i+_c1].mode == Node_Unused
-				&& m_base[i+_c2].mode == Node_Unused)
+			if (m_base[i + _c1].mode == Node_Unused
+				&& m_base[i + _c2].mode == Node_Unused)
 			{
 				return i;
 			}
@@ -970,10 +970,10 @@ private:
 
 		grow();
 
-		return x_check2(c1, c2, to_check+1);
+		return x_check2(c1, c2, to_check + 1);
 	}
 	unsigned int x_check_multi(
-		unsigned int offsets[], 
+		unsigned int offsets[],
 		unsigned int count,
 		unsigned int start=1)
 	{
@@ -981,7 +981,7 @@ private:
 		unsigned int to_check = m_baseSize;
 		unsigned int highest = 0;
 
-		for (unsigned int i=0; i<count; i++)
+		for (unsigned int i=0; i < count; i++)
 		{
 			if (offsets[i] > highest)
 			{
@@ -991,12 +991,12 @@ private:
 
 		to_check -= highest;
 
-		for (unsigned int i=start; i<=to_check; i++)
+		for (unsigned int i=start; i <= to_check; i++)
 		{
 			bool okay = true;
-			for (unsigned int j=0; j<count; j++)
+			for (unsigned int j=0; j < count; j++)
 			{
-				cur = &m_base[i+offsets[j]];
+				cur = &m_base[i + offsets[j]];
 				if (cur->mode != Node_Unused)
 				{
 					okay = false;
@@ -1011,7 +1011,7 @@ private:
 
 		grow();
 
-		return x_check_multi(offsets, count, to_check+1);
+		return x_check_multi(offsets, count, to_check + 1);
 	}
 public:
 	size_t mem_usage()
@@ -1040,7 +1040,7 @@ private:
  *  Jun-ichi Aoe and Katsushi Maromoto, and Takashi Sato
  * from Software - Practice and Experience, Vol. 22(9), 695-721 (September 1992)
  *
- *  A Trie is a simple data structure which stores strings as DFAs, with each 
+ *  A Trie is a simple data structure which stores strings as DFAs, with each
  * transition state being a string entry.  For example, observe the following strings:
  *
  * BAILOPAN, BAT, BACON, BACK
@@ -1058,14 +1058,14 @@ private:
  *  The standard implementation for this - using lists - gives a slow linear lookup, somewhere between
  * O(N+M) or O(log n).  A faster implementation is proposed in the paper above, which is based on compacting
  * the transition states into two arrays.  In the paper's implementation, two arrays are used, and thus it is
- * called the "Double Array" algorithm.  However, the CHECK array's size is maintained the same as BASE, 
+ * called the "Double Array" algorithm.  However, the CHECK array's size is maintained the same as BASE,
  * so they can be combined into one structure.  The array seems complex at first, but is very simple: it is a
  * tree structure flattened out into a single vector.  I am calling this implementation the Flat Array Trie.
  *
  *  BASE[] is an array where each member is a node in the Trie.  The node can either be UNUSED (empty), an ARC
  * (containing an offset to the next set of ARCs), or a TERMINATOR (contains the rest of a string).
  * Each node has an index which must be interpreted based on the node type.  If the node is a TERMINATOR, then the
- * index is an index into a string table, to find the rest of the string.  
+ * index is an index into a string table, to find the rest of the string.
  *  If the node is an ARC, the index is another index into BASE.  For each possible token that can follow the
  * current token, the value of those tokens can be added to the index given in the ARC.  Thus, given a current
  * position and the next desired token, the current arc will jump to another arc which can contain either:
@@ -1073,29 +1073,29 @@ private:
  *   2) An empty production (no entry exists)
  *   3) Another arc label (the string ends here or continues into more productions)
  *   4) A TERMINATOR (the string ends here and contains an unused set of productions)
- * 
+ *
  *  So, given current offset N (starting at N=1), jumping to token C means the next offset will be:
  *      offs = BASE[n] + C
  *  Thus, the next node will be at:
  *      BASE[BASE[n] + C]
- * 
+ *
  *  This allows each ARC to specify the base offset for any of its ARC children, like a tree.  Each node specifies
- * its parent ARC -- so if an invalid offset is specified, the parent will not match, and thus no such derived 
+ * its parent ARC -- so if an invalid offset is specified, the parent will not match, and thus no such derived
  * string exists.
  *
  *  This means that arrays can be laid out "sparsely," maximizing their usage.  Note that N need not be related to
  * the range of tokens (1-256).  I.e., a base index does not have to be at 1, 256, 512, et cetera.  This is because
- * insertion comes with a small deal of complexity.  To insert a new set of tokens T, the algorithm finds a new 
- * BASE index N such that BASE[N+T[i]] is unused for each T[i].  Thus, indirection is not necessarily linear; 
+ * insertion comes with a small deal of complexity.  To insert a new set of tokens T, the algorithm finds a new
+ * BASE index N such that BASE[N+T[i]] is unused for each T[i].  Thus, indirection is not necessarily linear;
  * traversing a chain of ARC nodes can _and will_ jump around BASE.
  *
- *  Of course, given this level of flexibility in the array organization, there are collisions.  This is largely 
- * where insertions become slow, as the old chain must be relocated before the new one is used.  Relocation means 
- * finding one or more new base indexes, and this means traversing BASE until an acceptable index is found, such 
+ *  Of course, given this level of flexibility in the array organization, there are collisions.  This is largely
+ * where insertions become slow, as the old chain must be relocated before the new one is used.  Relocation means
+ * finding one or more new base indexes, and this means traversing BASE until an acceptable index is found, such
  * that each offset is unused (see description in previous paragraph).
  *
  *  However, it is not insertion time we are concerned about.  The "trie" name comes from reTRIEval.  We are only
- * concerned with lookup and deletion.  Both lookup and deletion are O(k), where k is relative to the length of the 
+ * concerned with lookup and deletion.  Both lookup and deletion are O(k), where k is relative to the length of the
  * input string.  Note that it is best case O(1) and worst case O(k).  Deleting the entire trie is always O(1).
  */
 

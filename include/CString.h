@@ -39,7 +39,7 @@
 class String
 {
 public:
-	String() 
+	String()
 	{
 		v = NULL;
 		a_size = 0;
@@ -47,35 +47,35 @@ public:
 	}
 
 	~String()
-	{ 
-		if (v) 
-			delete [] v; 
-	}
-
-	String(const char *src) 
 	{
-		v = NULL; 
-		a_size = 0;
-		assign(src); 
+		if (v)
+			delete[] v;
 	}
 
-	const char * _fread(FILE *fp) 	 
-	{ 	 
-		Grow(512, false); 	 
-		char *ret = fgets(v, 511, fp); 	 
-		return ret; 	 
-	}
-
-	String(const String &src) 
+	String(const char *src)
 	{
 		v = NULL;
 		a_size = 0;
-		assign(src.c_str()); 
+		assign(src);
 	}
 
-	const char *c_str() { return v?v:""; }
+	const char * _fread(FILE *fp)
+	{
+		Grow(512, false);
+		char *ret = fgets(v, 511, fp);
+		return ret;
+	}
 
-	const char *c_str() const { return v?v:""; }
+	String(const String &src)
+	{
+		v = NULL;
+		a_size = 0;
+		assign(src.c_str());
+	}
+
+	const char *c_str() { return v ? v : ""; }
+
+	const char *c_str() const { return v ? v : ""; }
 
 	void append(const char *t)
 	{
@@ -106,7 +106,8 @@ public:
 		if (!d)
 		{
 			clear();
-		} else {
+		}
+		else {
 			size_t len = strlen(d);
 			Grow(len + 1, false);
 			memcpy(v, d, len);
@@ -120,7 +121,7 @@ public:
 			v[0] = '\0';
 	}
 
-	int compare (const char *d) const
+	int compare(const char *d) const
 	{
 		if (!v)
 			return strcmp("", d);
@@ -157,7 +158,7 @@ public:
 			return npos;
 
 		int i = 0;
-		for (i=index; i<len; i++)
+		for (i=index; i < len; i++)
 		{
 			if (v[i] == c)
 			{
@@ -187,10 +188,10 @@ public:
 		char c;
 		if (!len)
 			return;
-		for (size_t i=0; i<len; i++)
+		for (size_t i=0; i < len; i++)
 		{
 			c = v[i];
-			if (c == '^' && (i != len-1))
+			if (c == '^' && (i != len - 1))
 			{
 				c = v[++i];
 				if (c == 'n')
@@ -199,11 +200,11 @@ public:
 					c = '\t';
 				offs++;
 			}
-			v[i-offs] = c;
+			v[i - offs] = c;
 		}
-		v[len-offs] = '\0';
+		v[len - offs] = '\0';
 	}
-	
+
 	void trim()
 	{
 		if (!v)
@@ -219,16 +220,16 @@ public:
 			{
 				clear();
 				return;
-			} 
+			}
 		}
 
 		unsigned char c0 = v[0];
 
 		if (is_space(c0))
 		{
-			for (i=0; i<len; i++)
+			for (i=0; i < len; i++)
 			{
-				if (!is_space(v[i]) || (is_space(v[i]) && ((unsigned char)i==len-1)))
+				if (!is_space(v[i]) || (is_space(v[i]) && ((unsigned char)i == len - 1)))
 				{
 					erase(0, i);
 					break;
@@ -243,14 +244,14 @@ public:
 			return;
 		}
 
-		if (is_space(v[len-1]))
+		if (is_space(v[len - 1]))
 		{
-			for (i=len-1; i>=0; i--)
+			for (i=len - 1; i >= 0; i--)
 			{
 				if (!is_space(v[i])
-					|| (is_space(v[i]) && i==0))
+					|| (is_space(v[i]) && i == 0))
 				{
-					erase(i+1, j);
+					erase(i + 1, j);
 					break;
 				}
 				j++;
@@ -274,26 +275,29 @@ public:
 		unsigned int i = 0;
 		size_t len = size();
 		//check for bounds
-		if (num == npos || start+num > len-start)
+		if (num == npos || start + num > len - start)
 			num = len - start;
 		//do the erasing
 		bool copyflag = false;
-		for (i=0; i<len; i++)
+		for (i=0; i < len; i++)
 		{
-			if (i>=start && i<start+num)
+			if (i >= start && i < start + num)
 			{
-				if (i+num < len)
-				{	
-					v[i] = v[i+num];
-				} else {
+				if (i + num < len)
+				{
+					v[i] = v[i + num];
+				}
+				else {
 					v[i] = 0;
 				}
 				copyflag = true;
-			} else if (copyflag) {
-				if (i+num < len)
+			}
+			else if (copyflag) {
+				if (i + num < len)
 				{
-					v[i] = v[i+num];
-				} else {
+					v[i] = v[i + num];
+				}
+				else {
 					v[i] = 0;
 				}
 			}
@@ -316,11 +320,12 @@ public:
 
 		if (index >= len || !v)
 			return ns;
-		
+
 		if (num == npos)
 		{
 			num = len - index;
-		} else if (index+num >= len) {
+		}
+		else if (index + num >= len) {
 			num = len - index;
 		}
 
@@ -329,7 +334,7 @@ public:
 
 		ns.Grow(nslen);
 
-		for (i=index; i<index+num; i++)
+		for (i=index; i < index + num; i++)
 			ns.append(v[i]);
 
 		return ns;
@@ -341,10 +346,10 @@ public:
 			return;
 		unsigned int i = 0;
 		size_t len = strlen(v);
-		for (i=0; i<len; i++)
+		for (i=0; i < len; i++)
 		{
 			if (v[i] >= 65 && v[i] <= 90)
-				v[i] &= ~(1<<5);
+				v[i] &= ~(1 << 5);
 		}
 	}
 
@@ -358,7 +363,6 @@ public:
 	{
 		assign(src);
 		return *this;
-
 	}
 
 	char operator [] (unsigned int index)
@@ -366,7 +370,8 @@ public:
 		if (index > size() || !v)
 		{
 			return -1;
-		} else {
+		}
+		else {
 			return v[index];
 		}
 	}
@@ -398,9 +403,9 @@ private:
 		if (copy && v)
 			strcpy(n, v);
 		if (v)
-			delete [] v;
+			delete[] v;
 		else
-			strcpy(n, "");			
+			strcpy(n, "");
 		v = n;
 		a_size = d + 1;
 	}

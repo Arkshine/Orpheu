@@ -5,8 +5,7 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/fstream.hpp>
 
-using namespace boost::filesystem; 
-
+using namespace boost::filesystem;
 
 #include <CVector.h>
 

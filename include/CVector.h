@@ -56,9 +56,9 @@ template <class T> class CVector
 			return false;
 		if (m_Data)
 		{
-			for (size_t i=0; i<m_CurrentUsedSize; i++)
+			for (size_t i=0; i < m_CurrentUsedSize; i++)
 				newData[i] = m_Data[i];
-			delete [] m_Data;
+			delete[] m_Data;
 		}
 		m_Data = newData;
 		m_Size = newSize;
@@ -87,7 +87,7 @@ template <class T> class CVector
 		{
 			if (m_Data)
 			{
-				delete [] m_Data;
+				delete[] m_Data;
 				m_Data = NULL;
 				m_Size = 0;
 			}
@@ -100,9 +100,9 @@ template <class T> class CVector
 		if (m_Data)
 		{
 			size_t end = (m_CurrentUsedSize < size) ? (m_CurrentUsedSize) : size;
-			for (size_t i=0; i<end; i++)
+			for (size_t i=0; i < end; i++)
 				newData[i] = m_Data[i];
-			delete [] m_Data;
+			delete[] m_Data;
 		}
 		m_Data = newData;
 		m_Size = size;
@@ -292,10 +292,10 @@ public:
 	CVector<T>(const CVector<T> & other)
 	{
 		// copy data
-		m_Data = new T [other.m_CurrentUsedSize];
+		m_Data = new T[other.m_CurrentUsedSize];
 		m_Size = other.m_CurrentUsedSize;
 		m_CurrentUsedSize = other.m_CurrentUsedSize;
-		for (size_t i=0; i<other.m_CurrentUsedSize; i++)
+		for (size_t i=0; i < other.m_CurrentUsedSize; i++)
 			m_Data[i] = other.m_Data[i];
 	}
 
@@ -440,7 +440,7 @@ public:
 	iterator insert(iterator where, const T & value)
 	{
 		// validate iter
-		if (where < m_Data || where > (m_Data + m_CurrentUsedSize))
+		if (where < m_Data || where >(m_Data + m_CurrentUsedSize))
 			return iterator(0);
 
 		size_t ofs = where - begin();
@@ -492,12 +492,11 @@ public:
 		m_CurrentUsedSize = 0;
 		if (m_Data)
 		{
-			delete [] m_Data;
+			delete[] m_Data;
 			m_Data = NULL;
 		}
 	}
 };
 
 #endif // __CVECTOR_H__
-
 

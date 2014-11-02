@@ -5,7 +5,7 @@ MemoryStructure* MemoryStructManager::get(char* name)
 {
 	unsigned int* idPointer = this->memoryStructureNameToMemoryStructureID.retrieve(name);
 
-	if(idPointer)
+	if (idPointer)
 	{
 		return this->memoryStructures.at(*idPointer);
 	}
@@ -14,13 +14,13 @@ MemoryStructure* MemoryStructManager::get(char* name)
 }
 void MemoryStructManager::add(MemoryStructure* memoryStructure)
 {
-	char* memoryStructureName = (char*) memoryStructure->name.chars();
+	char* memoryStructureName = (char*)memoryStructure->name.chars();
 
 	unsigned int* idPointer = this->memoryStructureNameToMemoryStructureID.retrieve(memoryStructureName);
 
 	unsigned int id;
 
-	if(idPointer)
+	if (idPointer)
 	{
 		id = *idPointer;
 		//delete memoryStructures->at(id);
@@ -32,7 +32,6 @@ void MemoryStructManager::add(MemoryStructure* memoryStructure)
 		memoryStructures.push_back(memoryStructure);
 	}
 
-	this->memoryStructureNameToMemoryStructureID.replace(memoryStructureName,id);
+	this->memoryStructureNameToMemoryStructureID.replace(memoryStructureName, id);
 }
-
 

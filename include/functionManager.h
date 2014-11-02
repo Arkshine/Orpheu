@@ -5,15 +5,15 @@
 #include <sm_trie_tpl.h>
 #include <CVector.h>
 
-#include <ctime> 
+#include <ctime>
 #include <function.h>
 
 #include <map>
- 
+
 using namespace std;
 
-typedef struct 
-{  
+typedef struct
+{
 	Function* function;
 	OrpheuHookPhase phase;
 	long hookFunctionPhaseID;
@@ -21,25 +21,25 @@ typedef struct
 
 class FunctionManager
 {
-	private:
-			
-		map<long,HookReferenceData*> hookReferences;
-		KTrie<time_t>* functionNameToTimestamp;
-		KTrie<unsigned short int>* functionNameToFunctionID;
-		long currentHookID;
-		CVector<Function*>* functions;
-		
-	public:
+private:
 
-		FunctionManager();
-		time_t getTimestamp(const char* functionName);
-		unsigned short int  addFunction(const char* functionName,Function* function,time_t timestamp);
-		Function* getFunction(unsigned short int functionID);
-		unsigned short int getFunctionID(const char* functionName);
-		long addHook(AMX* amx,const char* functionName,Function* function,OrpheuHookPhase phase);
-		bool removeHook(long hookID);
-		void removeAllHooks();
-		void tryToRemove(const char* functionName);
+	map<long, HookReferenceData*> hookReferences;
+	KTrie<time_t>* functionNameToTimestamp;
+	KTrie<unsigned short int>* functionNameToFunctionID;
+	long currentHookID;
+	CVector<Function*>* functions;
+
+public:
+
+	FunctionManager();
+	time_t getTimestamp(const char* functionName);
+	unsigned short int  addFunction(const char* functionName, Function* function, time_t timestamp);
+	Function* getFunction(unsigned short int functionID);
+	unsigned short int getFunctionID(const char* functionName);
+	long addHook(AMX* amx, const char* functionName, Function* function, OrpheuHookPhase phase);
+	bool removeHook(long hookID);
+	void removeAllHooks();
+	void tryToRemove(const char* functionName);
 };
 
 #endif

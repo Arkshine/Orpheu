@@ -6,7 +6,7 @@
 #include <signatureEntry.h>
 
 #undef min
-#undef max 
+#undef max
 
 #include <am-string.h>
 #include <CVector.h>

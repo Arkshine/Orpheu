@@ -6,7 +6,7 @@
 #include <function.h>
 
 #undef min
-#undef max 
+#undef max
 
 #include <am-string.h>
 #include <CVector.h>
@@ -23,7 +23,7 @@ struct FunctionStructure
 	ke::AString library;
 	ke::AString name;
 	unsigned int virtualTableIndex;
-	map<void*,Function*> virtualFunctionsCreated;
+	map<void*, Function*> virtualFunctionsCreated;
 };
 
 #endif

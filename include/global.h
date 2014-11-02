@@ -77,6 +77,5 @@ namespace Global
 	extern Function* FunctionBeingHooked;
 };
 
-
 #endif
 

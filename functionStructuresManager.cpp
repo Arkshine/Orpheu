@@ -10,15 +10,15 @@ time_t FunctionStructuresManager::getTimestamp(char* functionName)
 	return timestamp;
 }
 
-void FunctionStructuresManager::addFunctionStructure(FunctionStructure* functionStructure,time_t timestamp)
+void FunctionStructuresManager::addFunctionStructure(FunctionStructure* functionStructure, time_t timestamp)
 {
-	char* functionName = (char*) functionStructure->name.chars();
+	char* functionName = (char*)functionStructure->name.chars();
 
 	unsigned int* idPointer = functionStructureNameToFunctionStructureID.retrieve(functionName);
 
 	unsigned int id;
 
-	if(idPointer)
+	if (idPointer)
 	{
 		id = *idPointer;
 		//delete functionsStructures->at(id);
@@ -32,22 +32,22 @@ void FunctionStructuresManager::addFunctionStructure(FunctionStructure* function
 		functionStructures.push_back(functionStructure);
 	}
 
-	functionStructureNameToFunctionStructureID.replace(functionName,id);
-	functionStructureNameToTimestamp.replace(functionName,timestamp);
+	functionStructureNameToFunctionStructureID.replace(functionName, id);
+	functionStructureNameToTimestamp.replace(functionName, timestamp);
 }
 
-unsigned short int FunctionStructuresManager::makeFunction(FunctionStructure* functionStructure,void* address)
+unsigned short int FunctionStructuresManager::makeFunction(FunctionStructure* functionStructure, void* address)
 {
-	Function* function = new Function(address,functionStructure->argumentsHandlers,functionStructure->argumentsCount,functionStructure->returnHandler,functionStructure->library,functionStructure->isMethod);
+	Function* function = new Function(address, functionStructure->argumentsHandlers, functionStructure->argumentsCount, functionStructure->returnHandler, functionStructure->library, functionStructure->isMethod);
 
-	return Global::FunctionManagerObj->addFunction((char*)functionStructure->name.chars(),function,0);
+	return Global::FunctionManagerObj->addFunction((char*)functionStructure->name.chars(), function, 0);
 }
 
 FunctionStructure* FunctionStructuresManager::getFunctionStructure(char* functionName)
 {
 	unsigned int* idPointer = functionStructureNameToFunctionStructureID.retrieve(functionName);
 
-	if(idPointer)
+	if (idPointer)
 	{
 		unsigned int id = *idPointer;
 		return functionStructures.at(id);

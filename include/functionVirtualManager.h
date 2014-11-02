@@ -5,25 +5,25 @@
 #include <sm_trie_tpl.h>
 #include <CVector.h>
 
-#include <ctime> 
+#include <ctime>
 #include <functionStructure.h>
 #include <function.h>
 
 class FunctionVirtualManager
 {
-	private:
+private:
 
-		KTrie<time_t> functionVirtualNameToTimestamp;
-		KTrie<unsigned int> functionVirtualNameToFunctionStructureID;
-		CVector<FunctionStructure*> functionStructures;
+	KTrie<time_t> functionVirtualNameToTimestamp;
+	KTrie<unsigned int> functionVirtualNameToFunctionStructureID;
+	CVector<FunctionStructure*> functionStructures;
 
-	public:
+public:
 
-		time_t getTimestamp(char* functionVirtualName);
+	time_t getTimestamp(char* functionVirtualName);
 
-		FunctionStructure* get(char* functionVirtualName);
-		void add(FunctionStructure* functionStructure,time_t timestamp);
-		unsigned short int makeFunction(FunctionStructure* functionStructure,long object);
+	FunctionStructure* get(char* functionVirtualName);
+	void add(FunctionStructure* functionStructure, time_t timestamp);
+	unsigned short int makeFunction(FunctionStructure* functionStructure, long object);
 };
 
 #endif

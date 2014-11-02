@@ -56,7 +56,7 @@ typedef int BOOL;
 class CDetourDis {
 public:
 	CDetourDis(PBYTE* ppbTarget, LONG* plExtra);
-	
+
 	PBYTE CopyInstruction(PBYTE pbDst, PBYTE pbSrc);
 	PBYTE CopyInstructionEx(PBYTE pbDst, PBYTE pbSrc, PBYTE pbDstOverride);
 	PBYTE CopyInstructionZero(PBYTE pbDst, PBYTE pbSrc);
@@ -68,7 +68,7 @@ public:
 	struct COPYENTRY;
 	typedef const COPYENTRY* REFCOPYENTRY;
 
-	typedef PBYTE (CDetourDis::* COPYFUNC)(REFCOPYENTRY pEntry, PBYTE pbDst, PBYTE pbSrc);
+	typedef PBYTE(CDetourDis::* COPYFUNC)(REFCOPYENTRY pEntry, PBYTE pbDst, PBYTE pbSrc);
 
 	enum {
 		DYNAMIC 	= 0x1u,
@@ -80,12 +80,12 @@ public:
 	};
 
 	struct COPYENTRY {
-		ULONG 		nOpcode 		: 8;				// Opcode
-		ULONG		nFixedSize 		: 3;				// Fixed size of opcode
-		ULONG		nFixedSize16 	: 3;				// Fixed size when 16 bit operand
-		ULONG		nModOffset 		: 3;				// Offset to mod/rm byte (0=none)
-		LONG		nRelOffset 		: 3;				// Offset to relative target.
-		ULONG		nFlagBits		: 4;				// Flags for DYNAMIC, etc.
+		ULONG 		nOpcode : 8;				// Opcode
+		ULONG		nFixedSize : 3;				// Fixed size of opcode
+		ULONG		nFixedSize16 : 3;				// Fixed size when 16 bit operand
+		ULONG		nModOffset : 3;				// Offset to mod/rm byte (0=none)
+		LONG		nRelOffset : 3;				// Offset to relative target.
+		ULONG		nFlagBits : 4;				// Flags for DYNAMIC, etc.
 		COPYFUNC	pfCopy;								// Function pointer.
 	};
 
@@ -118,19 +118,19 @@ protected:
 #define ENTRY_CopyFF				0, 0, 0, 0, 0,			&CDetourDis::CopyFF
 #define ENTRY_Invalid				1, 1, 0, 0, 0,			&CDetourDis::Invalid
 #define ENTRY_End					0, 0, 0, 0, 0,			NULL
-	
+
 	PBYTE CopyBytes(REFCOPYENTRY pEntry, PBYTE pbDst, PBYTE pbSrc);
 	PBYTE CopyBytesPrefix(REFCOPYENTRY pEntry, PBYTE pbDst, PBYTE pbSrc);
-	
+
 	PBYTE Invalid(REFCOPYENTRY pEntry, PBYTE pbDst, PBYTE pbSrc);
 
 	PBYTE AdjustTarget(PBYTE pbDst, PBYTE pbSrc, LONG cbOp, LONG cbTargetOffset);
-	
+
 	VOID Set16BitOperand();
 	VOID Set32BitOperand();
 	VOID Set16BitAddress();
 	VOID Set32BitAddress();
-	
+
 protected:
 	PBYTE Copy0F(REFCOPYENTRY pEntry, PBYTE pbDst, PBYTE pbSrc);
 	PBYTE Copy66(REFCOPYENTRY pEntry, PBYTE pbDst, PBYTE pbSrc);
@@ -139,7 +139,7 @@ protected:
 	PBYTE CopyF7(REFCOPYENTRY pEntry, PBYTE pbDst, PBYTE pbSrc);
 	PBYTE CopyFF(REFCOPYENTRY pEntry, PBYTE pbDst, PBYTE pbSrc);
 
-protected:	
+protected:
 	static const COPYENTRY s_rceCopyTable[257];
 	static const COPYENTRY s_rceCopyTable0F[257];
 	static const BYTE s_rbModRm[256];
@@ -150,7 +150,7 @@ protected:
 
 	PBYTE* m_ppbTarget;
 	LONG* m_plExtra;
-	
+
 	LONG m_lScratchExtra;
 	PBYTE m_pbScratchTarget;
 	BYTE m_rbScratchDst[64];
@@ -169,7 +169,7 @@ enum {
 	OP_PRE_FS       = 0x64,
 	OP_PRE_GS       = 0x65,
 	OP_JMP_SEG      = 0x25,
-    
+
 	OP_JA           = 0x77,
 	OP_NOP          = 0x90,
 	OP_CALL         = 0xe8,
@@ -255,7 +255,7 @@ inline PBYTE DetourGenPopad(PBYTE pbCode){
 }
 
 inline PBYTE DetourGenJmp(PBYTE pbCode, PBYTE pbJmpDst, PBYTE pbJmpSrc = 0){
-	if(pbJmpSrc == 0)
+	if (pbJmpSrc == 0)
 		pbJmpSrc = pbCode;
 	*pbCode++ = 0xE9;
 	*((INT32*&)pbCode)++ = pbJmpDst - (pbJmpSrc + 5);
@@ -263,7 +263,7 @@ inline PBYTE DetourGenJmp(PBYTE pbCode, PBYTE pbJmpDst, PBYTE pbJmpSrc = 0){
 }
 
 inline PBYTE DetourGenCall(PBYTE pbCode, PBYTE pbJmpDst, PBYTE pbJmpSrc = 0){
-	if(pbJmpSrc == 0)
+	if (pbJmpSrc == 0)
 		pbJmpSrc = pbCode;
 	*pbCode++ = 0xE8;
 	*((INT32*&)pbCode)++ = pbJmpDst - (pbJmpSrc + 5);

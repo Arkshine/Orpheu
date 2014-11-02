@@ -6,7 +6,7 @@
 #include <filesManager.h>
 
 #include <iostream>
-#include <ctime> 
+#include <ctime>
 
 using namespace std;
 
@@ -17,7 +17,7 @@ using namespace std;
 
 #include <memoryStructure.h>
 
-const char *OperativeSystems[] = { "linux", "windows" };
+const char *OperativeSystems[] ={ "linux", "windows" };
 
 #if defined __linux__
 const char *OperativeSystem = OperativeSystems[0];
@@ -93,33 +93,33 @@ void ConfigManager::parseModsInfo()
 	char msg[100];
 	char filepath[255];
 
-	CVector<ke::AString>* files = FilesManager::getFiles(orpheuPaths.mods);	
+	CVector<ke::AString>* files = FilesManager::getFiles(orpheuPaths.mods);
 
-	sprintf(msg,"\t\tCurrent mod : \"%s\"\n\n", Global::Modname.chars() );
+	sprintf(msg, "\t\tCurrent mod : \"%s\"\n\n", Global::Modname.chars());
 	Global::ConfigManagerObj->ModuleConfig.append(msg);
 
-	for(unsigned i=0;i<files->size();i++)
+	for (unsigned i=0; i < files->size(); i++)
 	{
 		UTIL_Format(filepath, sizeof(filepath) - 1, "%s/%s", orpheuPaths.mods.chars(), files->at(i).chars());
 
-		sprintf(msg,"\t\tParsing mod file \"%s\"\n",files->at(i).chars());
+		sprintf(msg, "\t\tParsing mod file \"%s\"\n", files->at(i).chars());
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
 
 		std::ifstream file(filepath);
-		
+
 		Json::Value root;
 		Json::Reader reader;
 
 		bool foundMod = false;
-		bool parsingSuccessful = reader.parse(file,root);
+		bool parsingSuccessful = reader.parse(file, root);
 
-		if(parsingSuccessful)
+		if (parsingSuccessful)
 		{
 			Json::Value name = root["name"];
 
-			if(!name.isString())
+			if (!name.isString())
 			{
-				sprintf(msg,"\t\tFile must have a \"name\" field");
+				sprintf(msg, "\t\tFile must have a \"name\" field");
 				Global::ConfigManagerObj->ModuleConfig.append(msg);
 			}
 			else
@@ -128,19 +128,19 @@ void ConfigManager::parseModsInfo()
 				{
 					Json::Value aliases = root["aliases"];
 
-					if(aliases.isArray())
+					if (aliases.isArray())
 					{
-						for(unsigned int j=0;j<aliases.size();j++)
+						for (unsigned int j=0; j < aliases.size(); j++)
 						{
-							if(!aliases[j].isString())
+							if (!aliases[j].isString())
 							{
-								sprintf(msg,"\t\tAll aliases must be strings");
+								sprintf(msg, "\t\tAll aliases must be strings");
 								Global::ConfigManagerObj->ModuleConfig.append(msg);
 								break;
 							}
-							if(Global::Modname.compare(aliases[j].asCString()) == 0)
+							if (Global::Modname.compare(aliases[j].asCString()) == 0)
 							{
-								sprintf(msg,"\t\t\tFound an alias.\n");
+								sprintf(msg, "\t\t\tFound an alias.\n");
 								Global::ConfigManagerObj->ModuleConfig.append(msg);
 								Global::Modname = name.asCString();
 								foundMod = true;
@@ -150,28 +150,28 @@ void ConfigManager::parseModsInfo()
 					}
 					else
 					{
-						sprintf(msg,"\t\tAliases must be an array");
+						sprintf(msg, "\t\tAliases must be an array");
 						Global::ConfigManagerObj->ModuleConfig.append(msg);
 					}
 				}
 				else
 				{
-					sprintf(msg,"\t\t\tFound.\n");
+					sprintf(msg, "\t\t\tFound.\n");
 					Global::ConfigManagerObj->ModuleConfig.append(msg);
 
 					foundMod = true;
 					Global::Modname = name.asCString();
 				}
 
-				if( foundMod )
+				if (foundMod)
 				{
 					Json::Value pev = root["pev"];
 
-					if(pev.isObject())
+					if (pev.isObject())
 					{
 						Json::Value value = pev[OperativeSystem];
 
-						if(value.isNumeric())
+						if (value.isNumeric())
 						{
 							Global::pev = value.asInt();
 						}
@@ -183,7 +183,7 @@ void ConfigManager::parseModsInfo()
 		}
 		else
 		{
-			sprintf(msg,"\t\t\tFile incorrectly formatted\"%s\"\n",files->at(i).chars());
+			sprintf(msg, "\t\t\tFile incorrectly formatted\"%s\"\n", files->at(i).chars());
 			Global::ConfigManagerObj->ModuleConfig.append(msg);
 		}
 	}
@@ -214,284 +214,284 @@ void ConfigManager::loadBaseData()
 
 	Global::TypeHandlerManagerObj = new TypeHandlerManager(typeAliasesInfo);
 
-	for(unsigned int i=0;i<Global::TypesCount;i++)
+	for (unsigned int i=0; i < Global::TypesCount; i++)
 	{
-		Global::TypeHandlerManagerObj->registerTypeHandler(Global::Types[i]->getName(),Global::Types[i]);
-		
+		Global::TypeHandlerManagerObj->registerTypeHandler(Global::Types[i]->getName(), Global::Types[i]);
+
 		long* virtualTableOffsetPointer = typeNameToVirtualTableOffset.retrieve(Global::Types[i]->getName());
 
-		if(virtualTableOffsetPointer)
+		if (virtualTableOffsetPointer)
 		{
 			long virtualTableOffset = *virtualTableOffsetPointer;
 			Global::Types[i]->setVirtualTableOffset(virtualTableOffset);
 		}
 	}
 
-	for(unsigned int i=0;i<Global::StructuresCount;i++)
-		Global::TypeHandlerManagerObj->registerTypeHandler(Global::Structures[i]->getName(),Global::Structures[i]);
+	for (unsigned int i=0; i < Global::StructuresCount; i++)
+		Global::TypeHandlerManagerObj->registerTypeHandler(Global::Structures[i]->getName(), Global::Structures[i]);
 
 	Global::ConfigManagerObj->ModuleConfig.append("\nOrpheu configuration ended.\n");
 }
 
-bool validateFile(ke::AString folder,ke::AString filename,ke::AString classname,Json::Value& root)
+bool validateFile(ke::AString folder, ke::AString filename, ke::AString classname, Json::Value& root)
 {
-		static char msg[100];
-		char path[255];
+	static char msg[100];
+	char path[255];
 
-		UTIL_Format(path, sizeof(path) - 1, "%s%s", folder, filename.chars());
+	UTIL_Format(path, sizeof(path) - 1, "%s%s", folder, filename.chars());
 
-		std::ifstream file(path);
-	
-		Json::Reader reader;
-	    
-		bool parsingSuccessful = reader.parse(file,root);
+	std::ifstream file(path);
 
-		file.close();
+	Json::Reader reader;
 
-		if (parsingSuccessful)
+	bool parsingSuccessful = reader.parse(file, root);
+
+	file.close();
+
+	if (parsingSuccessful)
+	{
+		Json::Value name = root["name"];
+		Json::Value classname_ = root["class"];
+
+		if (name.isString())
 		{
-			Json::Value name = root["name"];
-			Json::Value classname_ = root["class"];
-
-			if (name.isString())
+			if (name == filename.chars())
 			{
-				if (name == filename.chars())
+				if (classname.length())
 				{
-					if (classname.length())
+					if (classname_.isString() && (classname_.asString() == classname.chars()))
 					{
-						if (classname_.isString() && (classname_.asString() == classname.chars()))
+						char classtype[32];
+						UTIL_Format(classtype, sizeof(classtype) - 1, "%s *", classname.chars());
+
+						if (!Global::TypeHandlerManagerObj->typeHandlerExists(classtype))
 						{
-							char classtype[32];
-							UTIL_Format(classtype, sizeof(classtype) - 1, "%s *", classname.chars());
-				
-							if (!Global::TypeHandlerManagerObj->typeHandlerExists(classtype))
-							{
-								Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tClass type not registered\n");
-								return false;
-							}
-						}
-						else
-						{
-							Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tClass name must be equal to the folder name\n");
+							Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tClass type not registered\n");
 							return false;
-						}						
+						}
 					}
-					
-					Json::Value library = root["library"];
-
-					if (library.isString())
+					else
 					{
-						if (LibrariesManager::hasLibrary((char*)library.asCString()))
+						Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tClass name must be equal to the folder name\n");
+						return false;
+					}
+				}
+
+				Json::Value library = root["library"];
+
+				if (library.isString())
+				{
+					if (LibrariesManager::hasLibrary((char*)library.asCString()))
+					{
+						Json::Value arguments = root["arguments"];
+
+						if (!arguments.empty())
 						{
-							Json::Value arguments = root["arguments"];
-
-							if(!arguments.empty())
+							if (arguments.isArray())
 							{
-								if(arguments.isArray())
+								for (unsigned int i=0; i < arguments.size(); i++)
 								{
-									for(unsigned int i=0;i<arguments.size();i++)
-									{
-										Json::Value argument = arguments[i];
-										Json::Value type = argument["type"];
+									Json::Value argument = arguments[i];
+									Json::Value type = argument["type"];
 
-										if(type.isString())
+									if (type.isString())
+									{
+										if (!Global::TypeHandlerManagerObj->typeHandlerExists((char*)type.asCString()))
 										{
-											if(!Global::TypeHandlerManagerObj->typeHandlerExists((char*)type.asCString()))
-											{
-												sprintf(msg,"\t\t\t\tArgument has invalid type \"%s\"\n",type.asCString());
-												Global::ConfigManagerObj->ModuleConfig.append(msg);
-												return false;
-											}
-#ifndef _ERRORS_ONLY_
-											else
-											{
-												sprintf(msg,"\t\t\t\tArgument type \"%s\" validated\n",type.asCString());
-												Global::ConfigManagerObj->ModuleConfig.append(msg);
-											}
-#endif
-										}
-										else
-										{
-											Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tArguments must have a type and it must be a ke::AString\n");
+											sprintf(msg, "\t\t\t\tArgument has invalid type \"%s\"\n", type.asCString());
+											Global::ConfigManagerObj->ModuleConfig.append(msg);
 											return false;
 										}
-									}
-								}
-								else
-								{
-									Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tArguments must be an array\n");
-									return false;
-								}
-							}
-
-							Json::Value return_ = root["return"];
-
-							if(!return_.empty())
-							{
-								Json::Value type = return_["type"];
-
-								if(type.isString())
-								{
-									if(!Global::TypeHandlerManagerObj->typeHandlerExists((char*)type.asCString()))
-									{
-										sprintf(msg,"\t\t\t\tReturn has invalid type \"%s\"\n",type.asCString());
-										Global::ConfigManagerObj->ModuleConfig.append(msg);
-										return false;
-									}
 #ifndef _ERRORS_ONLY_
+										else
+										{
+											sprintf(msg, "\t\t\t\tArgument type \"%s\" validated\n", type.asCString());
+											Global::ConfigManagerObj->ModuleConfig.append(msg);
+										}
+#endif
+									}
 									else
 									{
-										sprintf(msg,"\t\t\t\tReturn type \"%s\" validated\n",type.asCString());
-										Global::ConfigManagerObj->ModuleConfig.append(msg);
-									}
-#endif
-								}
-								else
-								{
-									Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tReturn must have a type and it must be a ke::AString\n");
-									return false;
-								}
-							}
-
-							Json::Value identifiers = root["identifiers"];
-
-							if(identifiers.isArray() && !identifiers.empty())
-							{
-								for(unsigned int i=0;i<identifiers.size();i++)
-								{
-									Json::Value identifier = identifiers[i];
-									Json::Value os = identifier["os"];
-
-									if(!os.isString() || ((os != OperativeSystems[0]) && (os != OperativeSystems[1])))
-									{
-										sprintf(msg, "\t\t\t\tIdentifier empty or containing an invalid operative system\n");
-										Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tIdentifier empty or containing an invalid operative system\n");
-										return false;
-									}
-
-									if(library.asCString() == "mod")
-									{
-										Json::Value mod = identifier["mod"];
-
-										if(!mod.isString())
-										{
-											Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tMod must be a ke::AString\n");
-											return false;
-										}
-										else
-										{
-											Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tMods field must be an array\n");
-											return false;
-										}
-									}
-									
-									Json::Value value = identifier["value"];
-
-									bool validValue = true;
-
-									if(!value.isString())
-									{
-										if(value.isArray())
-										{
-											for(unsigned int j=0;j<value.size();j++)
-											{
-												if(value[j].isInt()) 
-												{
-													if((value[j].asInt() > 0xFF) || (value[j].asInt() < 0x0))
-													{
-														validValue = false;
-														break;
-													}
-												}
-												else if(value[j].isString())
-												{
-													if((value[j].asString() != "?") && (value[j].asString() != "*"))
-													{
-														validValue = false;
-														break;
-													}
-												}
-											}
-										}
-									}
-
-									if(!validValue)
-									{
-										Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tThe value of the identifier must be a ke::AString or an array with bytes or question marks or asterisks, or an number\n");
+										Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tArguments must have a type and it must be a ke::AString\n");
 										return false;
 									}
 								}
-
-								return true;
 							}
 							else
 							{
-								Json::Value indexes = root["indexes"];
+								Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tArguments must be an array\n");
+								return false;
+							}
+						}
 
-								if(!indexes.isNull() && indexes.isArray())
+						Json::Value return_ = root["return"];
+
+						if (!return_.empty())
+						{
+							Json::Value type = return_["type"];
+
+							if (type.isString())
+							{
+								if (!Global::TypeHandlerManagerObj->typeHandlerExists((char*)type.asCString()))
 								{
-									bool libraryIsMod = library.asString() == "mod";
+									sprintf(msg, "\t\t\t\tReturn has invalid type \"%s\"\n", type.asCString());
+									Global::ConfigManagerObj->ModuleConfig.append(msg);
+									return false;
+								}
+#ifndef _ERRORS_ONLY_
+								else
+								{
+									sprintf(msg, "\t\t\t\tReturn type \"%s\" validated\n", type.asCString());
+									Global::ConfigManagerObj->ModuleConfig.append(msg);
+								}
+#endif
+							}
+							else
+							{
+								Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tReturn must have a type and it must be a ke::AString\n");
+								return false;
+							}
+						}
 
-									for(unsigned int indexID=0; indexID < indexes.size(); indexID++)
+						Json::Value identifiers = root["identifiers"];
+
+						if (identifiers.isArray() && !identifiers.empty())
+						{
+							for (unsigned int i=0; i < identifiers.size(); i++)
+							{
+								Json::Value identifier = identifiers[i];
+								Json::Value os = identifier["os"];
+
+								if (!os.isString() || ((os != OperativeSystems[0]) && (os != OperativeSystems[1])))
+								{
+									sprintf(msg, "\t\t\t\tIdentifier empty or containing an invalid operative system\n");
+									Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tIdentifier empty or containing an invalid operative system\n");
+									return false;
+								}
+
+								if (library.asCString() == "mod")
+								{
+									Json::Value mod = identifier["mod"];
+
+									if (!mod.isString())
 									{
-										Json::Value index = indexes[indexID];
+										Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tMod must be a ke::AString\n");
+										return false;
+									}
+									else
+									{
+										Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tMods field must be an array\n");
+										return false;
+									}
+								}
 
-										if(index.isObject())
+								Json::Value value = identifier["value"];
+
+								bool validValue = true;
+
+								if (!value.isString())
+								{
+									if (value.isArray())
+									{
+										for (unsigned int j=0; j < value.size(); j++)
 										{
-											Json::Value os = index["os"];
-											Json::Value mod = index["mod"];
-											Json::Value value = index["value"];
-
-											if(os.isString() && ((os.asString() == OperativeSystems[0]) || (os.asString() == OperativeSystems[1])))
+											if (value[j].isInt())
 											{
-												if(!((!libraryIsMod || mod.isString()) && value.isNumeric()))
+												if ((value[j].asInt() > 0xFF) || (value[j].asInt() < 0x0))
 												{
-													Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tInvalid index data\n");
-													return false;
+													validValue = false;
+													break;
 												}
 											}
-											else
+											else if (value[j].isString())
+											{
+												if ((value[j].asString() != "?") && (value[j].asString() != "*"))
+												{
+													validValue = false;
+													break;
+												}
+											}
+										}
+									}
+								}
+
+								if (!validValue)
+								{
+									Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tThe value of the identifier must be a ke::AString or an array with bytes or question marks or asterisks, or an number\n");
+									return false;
+								}
+							}
+
+							return true;
+						}
+						else
+						{
+							Json::Value indexes = root["indexes"];
+
+							if (!indexes.isNull() && indexes.isArray())
+							{
+								bool libraryIsMod = library.asString() == "mod";
+
+								for (unsigned int indexID=0; indexID < indexes.size(); indexID++)
+								{
+									Json::Value index = indexes[indexID];
+
+									if (index.isObject())
+									{
+										Json::Value os = index["os"];
+										Json::Value mod = index["mod"];
+										Json::Value value = index["value"];
+
+										if (os.isString() && ((os.asString() == OperativeSystems[0]) || (os.asString() == OperativeSystems[1])))
+										{
+											if (!((!libraryIsMod || mod.isString()) && value.isNumeric()))
 											{
 												Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tInvalid index data\n");
 												return false;
 											}
 										}
+										else
+										{
+											Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tInvalid index data\n");
+											return false;
+										}
 									}
 								}
-								
-								return true;
 							}
-						}
-						else
-						{
-							sprintf(msg,"\t\t\t\tLibrary \"%s\" is not registered\n",library.asCString());	
-							Global::ConfigManagerObj->ModuleConfig.append(msg);
+
+							return true;
 						}
 					}
 					else
 					{
-						Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tThe function must have a \"library\"\n");	
+						sprintf(msg, "\t\t\t\tLibrary \"%s\" is not registered\n", library.asCString());
+						Global::ConfigManagerObj->ModuleConfig.append(msg);
 					}
 				}
 				else
 				{
-					Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tFunction name must be equal to the filename\n");	
+					Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tThe function must have a \"library\"\n");
 				}
 			}
 			else
 			{
-				Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tFunction name must be a ke::AString\n");	
+				Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tFunction name must be equal to the filename\n");
 			}
 		}
 		else
 		{
-			Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tFile incorrectly formatted\n");	
+			Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tFunction name must be a ke::AString\n");
 		}
+	}
+	else
+	{
+		Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tFile incorrectly formatted\n");
+	}
 
-		return false;
+	return false;
 }
 
-void parseFile(ke::AString folder,ke::AString filename, ke::AString classname = ke::AString(""))
+void parseFile(ke::AString folder, ke::AString filename, ke::AString classname = ke::AString(""))
 {
 	char name[64];
 
@@ -514,16 +514,16 @@ void parseFile(ke::AString folder,ke::AString filename, ke::AString classname = 
 	std::time_t newTimestamp = boost::filesystem::last_write_time(path);
 
 	time_t timestamp = Global::FunctionStructuresManagerObj->getTimestamp(name);
-		
-	if(timestamp == newTimestamp)
+
+	if (timestamp == newTimestamp)
 	{
 		Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tFunction structure is updated\n");
 		return;
 	}
-	
+
 	timestamp = Global::FunctionManagerObj->getTimestamp(name);
-		
-	if(timestamp == newTimestamp)
+
+	if (timestamp == newTimestamp)
 	{
 		Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tFunction is updated\n");
 		return;
@@ -531,44 +531,44 @@ void parseFile(ke::AString folder,ke::AString filename, ke::AString classname = 
 
 	timestamp = Global::FunctionVirtualManagerObj->getTimestamp(name);
 
-	if(timestamp == newTimestamp)
+	if (timestamp == newTimestamp)
 	{
 		Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tVirtual function is updated\n");
 		return;
 	}
 
-	if(validateFile(folder,filename,classname,root))
+	if (validateFile(folder, filename, classname, root))
 	{
 		Json::Value library = root["library"];
 
 		Json::Value identifiers = root["identifiers"];
 
-		if(identifiers.isNull())
+		if (identifiers.isNull())
 		{
 			Json::Value argumentsJson = root["arguments"];
 			Json::Value returnJson = root["return"];
 
 			bool isMethod = classname.length() > 0;
 
-			unsigned int size = argumentsJson.size() + (int) isMethod;
+			unsigned int size = argumentsJson.size() + (int)isMethod;
 
-			TypeHandler** arguments = (TypeHandler**) malloc(sizeof(TypeHandler*) * (size));
+			TypeHandler** arguments = (TypeHandler**)malloc(sizeof(TypeHandler*) * (size));
 
-			if(isMethod)
+			if (isMethod)
 			{
 				char classtype[32];
 				UTIL_Format(classtype, sizeof(classtype) - 1, "%s *", classname.chars());
 				arguments[0] = Global::TypeHandlerManagerObj->getTypeHandler(classtype);
 			}
 
-			for(unsigned int argN=(int)isMethod; argN<size; argN++)
+			for (unsigned int argN=(int)isMethod; argN < size; argN++)
 			{
-				arguments[argN] = Global::TypeHandlerManagerObj->getTypeHandler((char*)argumentsJson[argN-((int)isMethod)]["type"].asCString());
+				arguments[argN] = Global::TypeHandlerManagerObj->getTypeHandler((char*)argumentsJson[argN - ((int)isMethod)]["type"].asCString());
 			}
 
 			TypeHandler* returnValue = NULL;
-			
-			if(!returnJson.empty())
+
+			if (!returnJson.empty())
 			{
 				returnValue = Global::TypeHandlerManagerObj->getTypeHandler((char*)returnJson["type"].asCString());
 			}
@@ -585,20 +585,20 @@ void parseFile(ke::AString folder,ke::AString filename, ke::AString classname = 
 
 			Json::Value indexes = root["indexes"];
 
-			if(!indexes.isNull() && indexes.isArray())
+			if (!indexes.isNull() && indexes.isArray())
 			{
 				bool libraryIsMod = library.asString() == "mod";
 
-				for(unsigned int indexID = 0; indexID < indexes.size() ; indexID++)
+				for (unsigned int indexID = 0; indexID < indexes.size(); indexID++)
 				{
 					Json::Value index = indexes[indexID];
 
-					if(index["os"].asString() == OperativeSystem)
+					if (index["os"].asString() == OperativeSystem)
 					{
 						if (!libraryIsMod || Global::Modname.compare(index["mod"].asCString()) == 0)
 						{
 							functionStructure->virtualTableIndex = index["value"].asUInt();
-							Global::FunctionVirtualManagerObj->add(functionStructure,newTimestamp);
+							Global::FunctionVirtualManagerObj->add(functionStructure, newTimestamp);
 							return;
 						}
 					}
@@ -606,23 +606,23 @@ void parseFile(ke::AString folder,ke::AString filename, ke::AString classname = 
 			}
 			else
 			{
-				Global::FunctionStructuresManagerObj->addFunctionStructure(functionStructure,newTimestamp);
+				Global::FunctionStructuresManagerObj->addFunctionStructure(functionStructure, newTimestamp);
 			}
 		}
 		else
 		{
-//			void* functionAddress = NULL;
+			//			void* functionAddress = NULL;
 
 			bool libraryIsMod = library.asString() == "mod";
 
-			for(unsigned int i=0;i<identifiers.size();i++)
+			for (unsigned int i=0; i < identifiers.size(); i++)
 			{
 				Json::Value identifier = identifiers[i];
 				Json::Value os = identifier["os"];
 
-				if(os.asString() == OperativeSystem)
-				{		
-					if(libraryIsMod)
+				if (os.asString() == OperativeSystem)
+				{
+					if (libraryIsMod)
 					{
 						Json::Value mod = identifier["mod"];
 
@@ -631,33 +631,33 @@ void parseFile(ke::AString folder,ke::AString filename, ke::AString classname = 
 					}
 
 					void* functionAddress = NULL;
-						
+
 					Json::Value value = identifier["value"];
 
-					if(value.isString())
+					if (value.isString())
 					{
-						sprintf(msg,"\t\t\t\tSearching for name \"%s\"... ",(char*)value.asCString());
+						sprintf(msg, "\t\t\t\tSearching for name \"%s\"... ", (char*)value.asCString());
 						Global::ConfigManagerObj->ModuleConfig.append(msg);
 
-						functionAddress = LibrariesManager::findFunction((char*)library.asCString(),(char*)value.asCString());					
+						functionAddress = LibrariesManager::findFunction((char*)library.asCString(), (char*)value.asCString());
 					}
-					else if(value.isArray())
+					else if (value.isArray())
 					{
 						byte* signature = new byte[value.size()];
 						SignatureEntryType* signatureData = new SignatureEntryType[value.size()];
 
-						for(unsigned int j=0;j<value.size();j++)
+						for (unsigned int j=0; j < value.size(); j++)
 						{
 							Json::Value cell = value[j];
 
-							if(cell.isInt())
+							if (cell.isInt())
 							{
-								signature[j] = (byte) cell.asInt();
+								signature[j] = (byte)cell.asInt();
 								signatureData[j] = SpecificByte;
 							}
 							else
 							{
-								if(cell.asString() == "?")
+								if (cell.asString() == "?")
 								{
 									signatureData[j] = AnyByte;
 								}
@@ -670,38 +670,38 @@ void parseFile(ke::AString folder,ke::AString filename, ke::AString classname = 
 
 						unsigned int min = value.size();
 
-						if(min > 5)
+						if (min > 5)
 							min = 5;
 
-						sprintf(msg,"\t\t\t\tSearching for signature \"");
+						sprintf(msg, "\t\t\t\tSearching for signature \"");
 						Global::ConfigManagerObj->ModuleConfig.append(msg);
 
-						for(unsigned int j=0;j<min;j++)
+						for (unsigned int j=0; j<min; j++)
 						{
-							if(signatureData[j] == AnyByte)
+							if (signatureData[j] == AnyByte)
 							{
-								sprintf(msg,"[?]");
+								sprintf(msg, "[?]");
 							}
-							else if(signatureData[j] == AnyByteOrNothing)
+							else if (signatureData[j] == AnyByteOrNothing)
 							{
-								sprintf(msg,"[*]");
+								sprintf(msg, "[*]");
 							}
 							else
 							{
-								sprintf(msg,"[0x%.2x]",signature[j]);
+								sprintf(msg, "[0x%.2x]", signature[j]);
 							}
 
 							Global::ConfigManagerObj->ModuleConfig.append(msg);
 						}
 
-						if(value.size() > min)
+						if (value.size() > min)
 						{
 							Global::ConfigManagerObj->ModuleConfig.append("(...)");
 						}
 
 						Global::ConfigManagerObj->ModuleConfig.append("\" ... ");
 
-						functionAddress = LibrariesManager::findFunction((char*)library.asCString(),signature,signatureData,value.size());
+						functionAddress = LibrariesManager::findFunction((char*)library.asCString(), signature, signatureData, value.size());
 
 						//sprintf(msg,"[0x%x]", functionAddress );
 						//Global::ConfigManagerObj->ModuleConfig.append( msg );
@@ -709,13 +709,13 @@ void parseFile(ke::AString folder,ke::AString filename, ke::AString classname = 
 						delete[] signature;
 						delete[] signatureData;
 					}
-					else if(value.isInt())
+					else if (value.isInt())
 					{
 						long offset = value.asUInt();
 
-						functionAddress = (void*) LibrariesManager::getAddressWithOffset(offset,(char*)library.asCString());
+						functionAddress = (void*)LibrariesManager::getAddressWithOffset(offset, (char*)library.asCString());
 
-						if(!functionAddress)
+						if (!functionAddress)
 						{
 							sprintf(msg, "\t\t\t\t Offset not contained within the library %s (0x%lx)\n", (char*)library.asCString(), offset);
 							Global::ConfigManagerObj->ModuleConfig.append(msg);
@@ -723,41 +723,41 @@ void parseFile(ke::AString folder,ke::AString filename, ke::AString classname = 
 						}
 					}
 
-					if(functionAddress)
+					if (functionAddress)
 					{
 						Json::Value argumentsJson = root["arguments"];
 						Json::Value returnJson = root["return"];
 
 						bool isMethod = classname.length() > 0;
 
-						unsigned int size = argumentsJson.size() + (int) isMethod;
+						unsigned int size = argumentsJson.size() + (int)isMethod;
 
-						TypeHandler** arguments = (TypeHandler**) malloc(sizeof(TypeHandler*) * (size));
+						TypeHandler** arguments = (TypeHandler**)malloc(sizeof(TypeHandler*) * (size));
 
-						if(isMethod)
+						if (isMethod)
 						{
 							char classtype[32];
 							UTIL_Format(classtype, sizeof(classtype) - 1, "%s *", classname.chars());
 							arguments[0] = Global::TypeHandlerManagerObj->getTypeHandler(classtype);
 						}
 
-						for(unsigned int argN=(int)isMethod; argN<size; argN++)
+						for (unsigned int argN=(int)isMethod; argN < size; argN++)
 						{
-							arguments[argN] = Global::TypeHandlerManagerObj->getTypeHandler((char*)argumentsJson[argN-((int)isMethod)]["type"].asCString());
+							arguments[argN] = Global::TypeHandlerManagerObj->getTypeHandler((char*)argumentsJson[argN - ((int)isMethod)]["type"].asCString());
 						}
 
 						TypeHandler* returnValue = NULL;
-						
-						if(!returnJson.empty())
+
+						if (!returnJson.empty())
 						{
 							returnValue = Global::TypeHandlerManagerObj->getTypeHandler((char*)returnJson["type"].asCString());
 						}
-						
-						Function* function = new Function(functionAddress,arguments,size,returnValue,ke::AString(library.asCString()),isMethod);
+
+						Function* function = new Function(functionAddress, arguments, size, returnValue, ke::AString(library.asCString()), isMethod);
 
 						Global::ConfigManagerObj->ModuleConfig.append("FOUND\n");
 
-						Global::FunctionManagerObj->addFunction(name,function,newTimestamp);
+						Global::FunctionManagerObj->addFunction(name, function, newTimestamp);
 
 						break;
 					}
@@ -765,7 +765,7 @@ void parseFile(ke::AString folder,ke::AString filename, ke::AString classname = 
 					{
 						Global::ConfigManagerObj->ModuleConfig.append("NOT FOUND\n");
 					}
-				}			
+				}
 			}
 		}
 	}
@@ -783,38 +783,38 @@ void ConfigManager::parseFunctionsInfo()
 	static char msg[100];
 	char path[256];
 
-	for(unsigned int i=0;i<files->size();i++)
-	{	
-		sprintf(msg,"\t\tParsing file \"%s\" started\n",files->at(i).chars());
+	for (unsigned int i=0; i < files->size(); i++)
+	{
+		sprintf(msg, "\t\tParsing file \"%s\" started\n", files->at(i).chars());
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
 
-		parseFile(orpheuPaths.functions,files->at(i));
+		parseFile(orpheuPaths.functions, files->at(i));
 
-		sprintf(msg,"\t\tParsing file \"%s\" ended\n",files->at(i).chars());
+		sprintf(msg, "\t\tParsing file \"%s\" ended\n", files->at(i).chars());
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
 	}
-	for(unsigned int i=0;i<folders->size();i++)
+	for (unsigned int i=0; i < folders->size(); i++)
 	{
 		ke::AString classname = folders->at(i);
 		UTIL_Format(path, sizeof(path) - 1, "%s%s/", orpheuPaths.functions.chars(), classname.chars());
 
-		sprintf(msg,"\t\tParsing folder \"%s\" started\n",folders->at(i).chars());
+		sprintf(msg, "\t\tParsing folder \"%s\" started\n", folders->at(i).chars());
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
 
 		CVector<ke::AString>* filesInFolder = FilesManager::getFiles(ke::AString(path));
 
-		for(unsigned int j=0;j<filesInFolder->size();j++)
+		for (unsigned int j=0; j < filesInFolder->size(); j++)
 		{
-			sprintf(msg,"\t\t\tParsing file \"%s\" started\n",filesInFolder->at(j).chars());
+			sprintf(msg, "\t\t\tParsing file \"%s\" started\n", filesInFolder->at(j).chars());
 			Global::ConfigManagerObj->ModuleConfig.append(msg);
 
-			parseFile(ke::AString(path),filesInFolder->at(j),classname);
+			parseFile(ke::AString(path), filesInFolder->at(j), classname);
 
-			sprintf(msg,"\t\t\tParsing file \"%s\" ended\n",filesInFolder->at(j).chars());
+			sprintf(msg, "\t\t\tParsing file \"%s\" ended\n", filesInFolder->at(j).chars());
 			Global::ConfigManagerObj->ModuleConfig.append(msg);
 		}
 
-		sprintf(msg,"\t\tParsing folder \"%s\" ended\n",folders->at(i).chars());
+		sprintf(msg, "\t\tParsing folder \"%s\" ended\n", folders->at(i).chars());
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
 	}
 }
@@ -828,43 +828,43 @@ KTrie<CVector<char*>*>* ConfigManager::parseTypeAliasesInfo(KTrie<long>& typeNam
 
 	CVector<ke::AString>* folders = FilesManager::getFolders(orpheuPaths.typeAliases);
 
-	for(unsigned int i=0;i<folders->size();i++)
+	for (unsigned int i=0; i < folders->size(); i++)
 	{
-		sprintf(msg,"\t\tParsing folder \"%s\"\n",folders->at(i).chars());
+		sprintf(msg, "\t\tParsing folder \"%s\"\n", folders->at(i).chars());
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
 
 		UTIL_Format(path, sizeof(path) - 1, "%s%s/data", orpheuPaths.typeAliases.chars(), folders->at(i).chars());
 		std::ifstream file(path);
-	
+
 		Json::Reader reader;
-		Json::Value root;  
-	    
-		bool parsingSuccessful = reader.parse(file,root);
+		Json::Value root;
+
+		bool parsingSuccessful = reader.parse(file, root);
 
 		file.close();
 
 		bool correctlyFormated = false;
 
-		if(parsingSuccessful)
+		if (parsingSuccessful)
 		{
-			if(root.isObject())
+			if (root.isObject())
 			{
 				Json::Value name = root["name"];
 				Json::Value aliases = root["aliases"];
 
-				if(name.isString())
+				if (name.isString())
 				{
 					Json::Value virtualTableOffsets = root["vtableOffsets"];
 
 					correctlyFormated = true;
 
-					if(!virtualTableOffsets.isNull() && virtualTableOffsets.isObject())
+					if (!virtualTableOffsets.isNull() && virtualTableOffsets.isObject())
 					{
 						Json::Value value = virtualTableOffsets[OperativeSystem];
 
-						if(value.isNumeric())
+						if (value.isNumeric())
 						{
-							typeNameToVirtualTableOffset.insert((char*)name.asCString(),value.asUInt());
+							typeNameToVirtualTableOffset.insert((char*)name.asCString(), value.asUInt());
 						}
 						else
 						{
@@ -874,65 +874,65 @@ KTrie<CVector<char*>*>* ConfigManager::parseTypeAliasesInfo(KTrie<long>& typeNam
 
 					char modsDataPath[256];
 					UTIL_Format(modsDataPath, sizeof(modsDataPath) - 1, "%s%s/modsData/", orpheuPaths.typeAliases.chars(), folders->at(i).chars());
-	
+
 					CVector<ke::AString>* files = FilesManager::getFiles(ke::AString(modsDataPath));
 
-					for(unsigned int fileID=0;fileID < files->size();fileID++)
+					for (unsigned int fileID=0; fileID < files->size(); fileID++)
 					{
 						UTIL_Format(path, sizeof(path) - 1, "%s%s", modsDataPath, files->at(fileID).chars());
 						std::ifstream file(path);
 
 						Json::Reader reader;
-						Json::Value root;  
-					    
-						bool parsingSuccessful = reader.parse(file,root);
+						Json::Value root;
+
+						bool parsingSuccessful = reader.parse(file, root);
 
 						file.close();
 
-						if(parsingSuccessful)
+						if (parsingSuccessful)
 						{
-							if(root.isObject())
+							if (root.isObject())
 							{
 								Json::Value modName = root["name"];
 
-								if(modName.isString())
+								if (modName.isString())
 								{
 									if (Global::Modname.compare(modName.asCString()) == 0)
 									{
 										Json::Value vtableOffsets = root["vtableOffsets"];
 
-										if(vtableOffsets.isObject())
+										if (vtableOffsets.isObject())
 										{
 											Json::Value value = vtableOffsets[OperativeSystem];
 
-											if(value.isNumeric())
+											if (value.isNumeric())
 											{
-												typeNameToVirtualTableOffset.insert((char*)name.asCString(),value.asUInt());
+												typeNameToVirtualTableOffset.insert((char*)name.asCString(), value.asUInt());
 												break;
 											}
 										}
 										else
 										{
-											sprintf(msg,"File \"%s\" must have a \"vtableOffsets\" entry and it must be an object\n",files->at(fileID).chars());
+											sprintf(msg, "File \"%s\" must have a \"vtableOffsets\" entry and it must be an object\n", files->at(fileID).chars());
 											Global::ConfigManagerObj->ModuleConfig.append(msg);
 										}
 									}
 								}
 								else
 								{
-									sprintf(msg,"File \"%s\" must have a \"name\" entry\n",files->at(fileID).chars());
+									sprintf(msg, "File \"%s\" must have a \"name\" entry\n", files->at(fileID).chars());
 									Global::ConfigManagerObj->ModuleConfig.append(msg);
 								}
 							}
 							else
 							{
-								sprintf(msg,"File \"%s\" incorrectly formatted\n", files->at(fileID).chars());
+								sprintf(msg, "File \"%s\" incorrectly formatted\n", files->at(fileID).chars());
 								Global::ConfigManagerObj->ModuleConfig.append(msg);
 							}
 						}
 						else
-						{	
-							sprintf(msg,"File \"%s\" incorrectly formatted\n", files->at(fileID).chars());
+						{
+							sprintf(msg, "File \"%s\" incorrectly formatted\n", files->at(fileID).chars());
 							Global::ConfigManagerObj->ModuleConfig.append(msg);
 						}
 					}
@@ -944,55 +944,55 @@ KTrie<CVector<char*>*>* ConfigManager::parseTypeAliasesInfo(KTrie<long>& typeNam
 
 					CVector<char*>* aliasesForName = new CVector<char*>();
 
-					for(unsigned int fileID=0;fileID < files->size();fileID++)
+					for (unsigned int fileID=0; fileID < files->size(); fileID++)
 					{
 						UTIL_Format(path, sizeof(path) - 1, "%s%s", aliasesPath, files->at(fileID).chars());
 						std::ifstream file(path);
 
 						Json::Reader reader;
-						Json::Value root;  
-					    
-						bool parsingSuccessful = reader.parse(file,root);
+						Json::Value root;
+
+						bool parsingSuccessful = reader.parse(file, root);
 
 						file.close();
 
-						if(parsingSuccessful)
+						if (parsingSuccessful)
 						{
-							if(root.isArray())
+							if (root.isArray())
 							{
 								Json::Value alias = root[(unsigned int)0];
 
-								if(alias.isString())
+								if (alias.isString())
 								{
 									char* aliasAloc = new char[alias.asString().length() + 1];
-									strcpy(aliasAloc,alias.asCString());
+									strcpy(aliasAloc, alias.asCString());
 									aliasesForName->push_back(aliasAloc);
 								}
 								else
 								{
-									sprintf(msg,"File \"%s\" incorrectly formatted\n",files->at(fileID).chars());
+									sprintf(msg, "File \"%s\" incorrectly formatted\n", files->at(fileID).chars());
 									Global::ConfigManagerObj->ModuleConfig.append(msg);
 								}
 							}
 							else
 							{
-								sprintf(msg,"File \"%s\" incorrectly formatted\n",files->at(fileID).chars());
+								sprintf(msg, "File \"%s\" incorrectly formatted\n", files->at(fileID).chars());
 								Global::ConfigManagerObj->ModuleConfig.append(msg);
 							}
 						}
 						else
-						{	
-							sprintf(msg,"File \"%s\" incorrectly formatted\n",files->at(fileID).chars());
+						{
+							sprintf(msg, "File \"%s\" incorrectly formatted\n", files->at(fileID).chars());
 							Global::ConfigManagerObj->ModuleConfig.append(msg);
-						}	
+						}
 					}
 
-					if(aliasesForName->size())
+					if (aliasesForName->size())
 					{
-						sprintf(msg,"\t\t\tAdding alias\"%s\"\n",name.asCString());
+						sprintf(msg, "\t\t\tAdding alias\"%s\"\n", name.asCString());
 						Global::ConfigManagerObj->ModuleConfig.append(msg);
 
-						typeAliasesInfo->insert(name.asCString(),aliasesForName);
+						typeAliasesInfo->insert(name.asCString(), aliasesForName);
 					}
 					else
 					{
@@ -1001,9 +1001,8 @@ KTrie<CVector<char*>*>* ConfigManager::parseTypeAliasesInfo(KTrie<long>& typeNam
 				}
 			}
 		}
-		
-		
-		if(!correctlyFormated)
+
+		if (!correctlyFormated)
 			Global::ConfigManagerObj->ModuleConfig.append("\t\t\tFailed. File is incorrectly formated.\n");
 	}
 
@@ -1019,53 +1018,53 @@ KTrie<char*>* ConfigManager::parseExternalLibrariesInfo()
 
 	char path[256];
 
-	for(unsigned int i=0;i<files->size();i++)
+	for (unsigned int i=0; i < files->size(); i++)
 	{
 		UTIL_Format(path, sizeof(path) - 1, "%s%s", orpheuPaths.libraries.chars(), files->at(i).chars());
 		std::ifstream file(path);
-	
+
 		Json::Reader reader;
-		Json::Value root;  
-	    
-		bool parsingSuccessful = reader.parse(file,root);
+		Json::Value root;
+
+		bool parsingSuccessful = reader.parse(file, root);
 
 		file.close();
 
 		char* msg = new char[100];
-		sprintf(msg,"\t\tParsing file \"%s\"\n",files->at(i).chars());
+		sprintf(msg, "\t\tParsing file \"%s\"\n", files->at(i).chars());
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
 
 		bool correctlyFormated = false;
 
-		if(parsingSuccessful)
+		if (parsingSuccessful)
 		{
-			if(root.isArray())
+			if (root.isArray())
 			{
-				if(root.size() == 2)
+				if (root.size() == 2)
 				{
 					Json::Value name = root[(unsigned int)0];
 					Json::Value cvar = root[(unsigned int)1];
 
-					if(name.isString() && cvar.isString())
+					if (name.isString() && cvar.isString())
 					{
 						correctlyFormated = true;
 
-						char* cvarString = new char[cvar.asString().length()+1];
-						char* nameString = new char[name.asString().length()+1];
+						char* cvarString = new char[cvar.asString().length() + 1];
+						char* nameString = new char[name.asString().length() + 1];
 
-						strcpy(cvarString,cvar.asCString());
-						strcpy(nameString,name.asCString());
+						strcpy(cvarString, cvar.asCString());
+						strcpy(nameString, name.asCString());
 
-						externalLibrariesInfo->insert(cvarString,nameString);
+						externalLibrariesInfo->insert(cvarString, nameString);
 
-						sprintf(msg,"\t\t\tAdded library %s identified by cvar %s\n",name.asCString(),cvar.asCString());
-						Global::ConfigManagerObj->ModuleConfig.append(msg);					
+						sprintf(msg, "\t\t\tAdded library %s identified by cvar %s\n", name.asCString(), cvar.asCString());
+						Global::ConfigManagerObj->ModuleConfig.append(msg);
 					}
 				}
 			}
 		}
-		
-		if(!correctlyFormated)
+
+		if (!correctlyFormated)
 			Global::ConfigManagerObj->ModuleConfig.append("\t\t\tFailed. File is incorrectly formated.\n");
 	}
 
@@ -1079,28 +1078,28 @@ void ConfigManager::parseVirtualFunctionsInfo()
 	static char msg[100];
 	char path[256];
 
-	for (unsigned int i=0;i<folders->size();i++)
+	for (unsigned int i=0; i < folders->size(); i++)
 	{
 		ke::AString classname = folders->at(i);
 		UTIL_Format(path, sizeof(path) - 1, "%s%s/", orpheuPaths.virtualFunctions.chars(), classname.chars());
 
-		sprintf(msg,"\t\tParsing folder \"%s\" started\n",folders->at(i).chars());
+		sprintf(msg, "\t\tParsing folder \"%s\" started\n", folders->at(i).chars());
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
 
 		CVector<ke::AString>* filesInFolder = FilesManager::getFiles(ke::AString(path));
 
-		for (unsigned int j=0;j<filesInFolder->size();j++)
+		for (unsigned int j=0; j < filesInFolder->size(); j++)
 		{
-			sprintf(msg,"\t\t\tParsing file \"%s\" started\n",filesInFolder->at(j).chars());
+			sprintf(msg, "\t\t\tParsing file \"%s\" started\n", filesInFolder->at(j).chars());
 			Global::ConfigManagerObj->ModuleConfig.append(msg);
 
 			parseFile(ke::AString(path), filesInFolder->at(j), classname);
 
-			sprintf(msg,"\t\t\tParsing file \"%s\" ended\n",filesInFolder->at(j).chars());
+			sprintf(msg, "\t\t\tParsing file \"%s\" ended\n", filesInFolder->at(j).chars());
 			Global::ConfigManagerObj->ModuleConfig.append(msg);
 		}
 
-		sprintf(msg,"\t\tParsing folder \"%s\" ended\n",folders->at(i).chars());
+		sprintf(msg, "\t\tParsing folder \"%s\" ended\n", folders->at(i).chars());
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
 	}
 }
@@ -1111,19 +1110,19 @@ void ConfigManager::parseMemoryObject(Json::Value root)
 
 	Json::Value nameValue = root["name"];
 
-	if(nameValue.isString())
+	if (nameValue.isString())
 	{
 		ke::AString name;
 		ke::AString library;
-		
+
 		name = nameValue.asCString();
 
-		sprintf(msg,"\t\t\tProcessing memory structure \"%s\"\n", nameValue.asCString());
+		sprintf(msg, "\t\t\tProcessing memory structure \"%s\"\n", nameValue.asCString());
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
 
 		Json::Value libraryValue = root["library"];
-		
-		if(libraryValue.isString())
+
+		if (libraryValue.isString())
 		{
 			library = libraryValue.asCString();
 		}
@@ -1134,25 +1133,25 @@ void ConfigManager::parseMemoryObject(Json::Value root)
 
 		TypeHandler* typeHandler = NULL;
 
-		if(type.isString())
+		if (type.isString())
 		{
 			typeHandler = Global::TypeHandlerManagerObj->getTypeHandler((char*)type.asCString());
 
-			if(!typeHandler)
+			if (!typeHandler)
 			{
-				sprintf(msg,"\t\t\tMemory object identifier type \"%s\" is invalid\n",type.asCString());
+				sprintf(msg, "\t\t\tMemory object identifier type \"%s\" is invalid\n", type.asCString());
 				Global::ConfigManagerObj->ModuleConfig.append(msg);
 				return;
 			}
 		}
 		else
 		{
-			sprintf(msg,"\t\t\tMemory object identifier field \"type\" must be a ke::AString\n");
+			sprintf(msg, "\t\t\tMemory object identifier field \"type\" must be a ke::AString\n");
 			Global::ConfigManagerObj->ModuleConfig.append(msg);
 			return;
 		}
 
-		static char memoryTypes[3][7] = {"code","data","rodata"};
+		static char memoryTypes[3][7] ={ "code", "data", "rodata" };
 
 #if defined __linux__
 		static int  memoryProtections[3] = {PROT_READ|PROT_EXEC,PROT_READ|PROT_WRITE,PROT_READ};
@@ -1161,36 +1160,35 @@ void ConfigManager::parseMemoryObject(Json::Value root)
 
 		int memoryProtection = 0;
 
-		if(memoryType.isString())
+		if (memoryType.isString())
 		{
 			bool valid = false;
 
-			for(int i=0;i<3;i++)
+			for (int i=0; i < 3; i++)
 			{
-				if(!strcmp(memoryType.asCString(),memoryTypes[i]))
+				if (!strcmp(memoryType.asCString(), memoryTypes[i]))
 				{
 #if defined __linux__
 					memoryProtection = memoryProtections[i];
-#endif				
+#endif
 					valid = true;
 					break;
 				}
 			}
 
-			if(!valid)
+			if (!valid)
 			{
-				sprintf(msg,"\t\t\tMemory object \"memoryType\" has invalid value. Valid: [\"%s\",\"%s\",\"%s\"]\n",memoryTypes[0],memoryTypes[1],memoryTypes[2]);
+				sprintf(msg, "\t\t\tMemory object \"memoryType\" has invalid value. Valid: [\"%s\",\"%s\",\"%s\"]\n", memoryTypes[0], memoryTypes[1], memoryTypes[2]);
 				Global::ConfigManagerObj->ModuleConfig.append(msg);
 				return;
 			}
 		}
 		else
 		{
-			sprintf(msg,"\t\t\tMemory object \"memoryType\" field is invalid\n");
+			sprintf(msg, "\t\t\tMemory object \"memoryType\" field is invalid\n");
 			Global::ConfigManagerObj->ModuleConfig.append(msg);
 			return;
 		}
-
 
 		MemoryStructure* memoryStructure = new MemoryStructure;
 
@@ -1201,21 +1199,21 @@ void ConfigManager::parseMemoryObject(Json::Value root)
 
 		Json::Value identifiers = root["identifiers"];
 
-		if(!identifiers.isNull() && identifiers.isArray())
+		if (!identifiers.isNull() && identifiers.isArray())
 		{
-			for(unsigned int i=0;i<identifiers.size();i++)
+			for (unsigned int i=0; i < identifiers.size(); i++)
 			{
 				Json::Value identifier = identifiers[i];
 
-				if(identifier.isObject())
+				if (identifier.isObject())
 				{
 					Json::Value mod = identifier["mod"];
 
-					if(isMod)
+					if (isMod)
 					{
-						if(!mod.isString())
+						if (!mod.isString())
 						{
-							sprintf(msg,"\t\t\tMemory object identifier must have a \"mod\" field\n");
+							sprintf(msg, "\t\t\tMemory object identifier must have a \"mod\" field\n");
 							Global::ConfigManagerObj->ModuleConfig.append(msg);
 
 							return;
@@ -1228,28 +1226,28 @@ void ConfigManager::parseMemoryObject(Json::Value root)
 
 					Json::Value os = identifier["os"];
 
-					if(!os.isString())
+					if (!os.isString())
 					{
-						sprintf(msg,"\t\t\tMemory object identifier must have a \"os\" field\n");
+						sprintf(msg, "\t\t\tMemory object identifier must have a \"os\" field\n");
 						Global::ConfigManagerObj->ModuleConfig.append(msg);
 						return;
 					}
 					else
 					{
-						if(os.asString() != OperativeSystem)
+						if (os.asString() != OperativeSystem)
 						{
 							continue;
 						}
 					}
-					
+
 					Json::Value value = identifier["value"];
 
 					bool isNumeric = value.isNumeric();
 					bool isArray = value.isArray();
 
-					if(isNumeric || isArray)
+					if (isNumeric || isArray)
 					{
-						if(isNumeric)
+						if (isNumeric)
 						{
 							memoryStructure->type = MemTypeOffset;
 							memoryStructure->offset = value.asUInt();
@@ -1260,15 +1258,15 @@ void ConfigManager::parseMemoryObject(Json::Value root)
 
 							int displacementValue = 0;
 
-							if(!displacement.isNull())
+							if (!displacement.isNull())
 							{
-								if(displacement.isInt())
+								if (displacement.isInt())
 								{
 									displacementValue = displacement.asInt();
 								}
 								else
 								{
-									sprintf(msg,"\t\t\t\tDisplacement must be numeric\n");
+									sprintf(msg, "\t\t\t\tDisplacement must be numeric\n");
 									Global::ConfigManagerObj->ModuleConfig.append(msg);
 									return;
 								}
@@ -1286,17 +1284,17 @@ void ConfigManager::parseMemoryObject(Json::Value root)
 
 							bool validSignature = true;
 
-							for(unsigned int j=0;j<value.size();j++)
+							for (unsigned int j=0; j < value.size(); j++)
 							{
 								Json::Value entry = value[j];
 
-								if(entry.isString())
+								if (entry.isString())
 								{
-									if(entry.asString() == "?")
+									if (entry.asString() == "?")
 									{
 										signatureEntryData[j] = AnyByte;
 									}
-									else if(entry.asString() == "*")
+									else if (entry.asString() == "*")
 									{
 										signatureEntryData[j] = AnyByteOrNothing;
 									}
@@ -1306,14 +1304,14 @@ void ConfigManager::parseMemoryObject(Json::Value root)
 										break;
 									}
 								}
-								else if(entry.isNumeric())
+								else if (entry.isNumeric())
 								{
 									unsigned int entryValue = entry.asUInt();
 
-									if((entryValue >= 0) && (entryValue <= 0xFF))
+									if ((entryValue >= 0) && (entryValue <= 0xFF))
 									{
 										signatureEntryData[j] = SpecificByte;
-										signature[j] = (byte) entryValue;
+										signature[j] = (byte)entryValue;
 									}
 									else
 									{
@@ -1328,9 +1326,9 @@ void ConfigManager::parseMemoryObject(Json::Value root)
 								}
 							}
 
-							if(!validSignature)
+							if (!validSignature)
 							{
-								sprintf(msg,"\t\t\tInvalid signature data\n");
+								sprintf(msg, "\t\t\tInvalid signature data\n");
 								Global::ConfigManagerObj->ModuleConfig.append(msg);
 
 								delete[] signatureEntryData;
@@ -1338,27 +1336,27 @@ void ConfigManager::parseMemoryObject(Json::Value root)
 								delete memoryStructure;
 
 								return;
-							}	
+							}
 
-							memoryStructure->basicAddress = LibrariesManager::findMemory((char*)library.chars(),memoryStructure->signature,memoryStructure->signatureEntryData,memoryStructure->signatureLength,LibrariesManager::getLibraryAddress((char*)library.chars()));
-						}						
+							memoryStructure->basicAddress = LibrariesManager::findMemory((char*)library.chars(), memoryStructure->signature, memoryStructure->signatureEntryData, memoryStructure->signatureLength, LibrariesManager::getLibraryAddress((char*)library.chars()));
+						}
 
 						Global::MemoryStructManagerObj->add(memoryStructure);
 
-						sprintf(msg,"\t\t\t\tAdded memory search structure \"%s\"\n",memoryStructure->name.chars());
+						sprintf(msg, "\t\t\t\tAdded memory search structure \"%s\"\n", memoryStructure->name.chars());
 						Global::ConfigManagerObj->ModuleConfig.append(msg);
 						return;
 					}
 					else
 					{
-						sprintf(msg,"\t\t\tMemory object identifier must have a \"value\" field that contains a signature or an offset\n");
+						sprintf(msg, "\t\t\tMemory object identifier must have a \"value\" field that contains a signature or an offset\n");
 						Global::ConfigManagerObj->ModuleConfig.append(msg);
 						return;
 					}
 				}
 				else
 				{
-					sprintf(msg,"\t\t\tMemory identifiers must be objects\n");
+					sprintf(msg, "\t\t\tMemory identifiers must be objects\n");
 					Global::ConfigManagerObj->ModuleConfig.append(msg);
 				}
 			}
@@ -1368,16 +1366,16 @@ void ConfigManager::parseMemoryObject(Json::Value root)
 			memoryStructure->type = MemTypeSearch;
 			Global::MemoryStructManagerObj->add(memoryStructure);
 
-			sprintf(msg,"\t\t\t\tAdded memory search structure \"%s\"\n",memoryStructure->name.chars());
+			sprintf(msg, "\t\t\t\tAdded memory search structure \"%s\"\n", memoryStructure->name.chars());
 			Global::ConfigManagerObj->ModuleConfig.append(msg);
 			return;
 		}
 	}
 	else
 	{
-		sprintf(msg,"\t\t\tMemory object must have a name\n");
+		sprintf(msg, "\t\t\tMemory object must have a name\n");
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
-	}	
+	}
 }
 
 static KTrie<time_t> memoryStructureNameToTimestamp;
@@ -1393,9 +1391,9 @@ void ConfigManager::loadMemoryStructures()
 
 	CVector<ke::AString>* files = FilesManager::getFiles(orpheuPaths.memory);
 
-	for(unsigned int i=0;i<files->size();i++)
+	for (unsigned int i=0; i < files->size(); i++)
 	{
-		sprintf(msg,"\t\tParsing memory file \"%s\"\n",files->at(i).chars());
+		sprintf(msg, "\t\tParsing memory file \"%s\"\n", files->at(i).chars());
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
 
 		UTIL_Format(path, sizeof(path) - 1, "%s%s", orpheuPaths.memory.chars(), files->at(i).chars());
@@ -1403,36 +1401,36 @@ void ConfigManager::loadMemoryStructures()
 		time_t* timestampPointer = memoryStructureNameToTimestamp.retrieve((char*)files->at(i).chars());
 		time_t newTimestamp = boost::filesystem::last_write_time(path);
 
-		if(timestampPointer)
+		if (timestampPointer)
 		{
-			if(*timestampPointer == newTimestamp)
+			if (*timestampPointer == newTimestamp)
 			{
-				sprintf(msg,"\t\t\tFile \"%s\" is updated\n",files->at(i).chars());
+				sprintf(msg, "\t\t\tFile \"%s\" is updated\n", files->at(i).chars());
 				Global::ConfigManagerObj->ModuleConfig.append(msg);
 				continue;
 			}
 			else
 			{
-				memoryStructureNameToTimestamp.replace((char*)files->at(i).chars(),newTimestamp);
+				memoryStructureNameToTimestamp.replace((char*)files->at(i).chars(), newTimestamp);
 			}
 		}
 		else
 		{
-			memoryStructureNameToTimestamp.insert((char*)files->at(i).chars(),newTimestamp);
+			memoryStructureNameToTimestamp.insert((char*)files->at(i).chars(), newTimestamp);
 		}
 
 		std::ifstream file(path);
-		
+
 		Json::Value root;
 		Json::Reader reader;
 
-		bool parsingSuccessful = reader.parse(file,root);
+		bool parsingSuccessful = reader.parse(file, root);
 
-		if(parsingSuccessful)
+		if (parsingSuccessful)
 		{
-			if(root.isArray())
+			if (root.isArray())
 			{
-				for(unsigned int j=0;j<root.size();j++)
+				for (unsigned int j=0; j < root.size(); j++)
 				{
 					this->parseMemoryObject(root[j]);
 				}
@@ -1444,7 +1442,7 @@ void ConfigManager::loadMemoryStructures()
 		}
 		else
 		{
-			sprintf(msg,"\t\tFile incorrectly formatted\n");
+			sprintf(msg, "\t\tFile incorrectly formatted\n");
 			Global::ConfigManagerObj->ModuleConfig.append(msg);
 		}
 	}
