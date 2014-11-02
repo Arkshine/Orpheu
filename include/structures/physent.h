@@ -38,7 +38,7 @@ class PhysentStructData : public StructData<physent_s>
 			addMember("vuser4",&structure->vuser4,Types[TypeVector]);
 		}
 
-		string getName() 
+		const char *getName() 
 		{
 			return "physent_s *";
 		};

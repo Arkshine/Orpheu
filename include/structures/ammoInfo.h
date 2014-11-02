@@ -17,7 +17,7 @@ class AmmoInfo : public StructData<AmmoInfo_>
 			addMember("pszName",&structure->pszName,Types[TypeString]);
 		}
 
-		string getName() 
+		const char *getName() 
 		{
 			return "AmmoInfo *";
 		};

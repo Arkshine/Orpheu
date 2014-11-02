@@ -17,12 +17,12 @@ using namespace std;
 
 #include <memoryStructure.h>
 
-string OperativeSystems[] = {"linux","windows"};
+const char *OperativeSystems[] = { "linux", "windows" };
 
 #if defined __linux__
-string OperativeSystem = OperativeSystems[0];
+const char *OperativeSystem = OperativeSystems[0];
 #else
-string OperativeSystem = OperativeSystems[1];
+const char *OperativeSystem = OperativeSystems[1];
 #endif
 
 ConfigManager::ConfigManager()
@@ -32,20 +32,34 @@ ConfigManager::ConfigManager()
 
 void ConfigManager::obtainPaths()
 {
-	char modDir[100];
+	char modDir[32];
+	char buffer[256];
+
 	g_engfuncs.pfnGetGameDir(modDir);
 	char* configsDir = LOCALINFO("amxx_configsdir");
 
 	Global::Modname = modDir;
 
-	orpheuPaths.config =  string(modDir) + "/" + configsDir + "/" + Global::OrpheuFolders.config;
+	UTIL_Format(buffer, sizeof(buffer) - 1, "%s/%s/%s", modDir, configsDir, Global::OrpheuFolders.config.chars());
+	orpheuPaths.config = buffer;
 
-	orpheuPaths.functions = orpheuPaths.config + "/" + Global::OrpheuFolders.functions + "/";
-	orpheuPaths.libraries = orpheuPaths.config + "/" + Global::OrpheuFolders.libraries + "/";
-	orpheuPaths.typeAliases = orpheuPaths.config + "/" + Global::OrpheuFolders.typeAliases + "/";	
-	orpheuPaths.virtualFunctions = orpheuPaths.config + "/" + Global::OrpheuFolders.virtualFunctions + "/";	
-	orpheuPaths.mods = orpheuPaths.config + "/" + Global::OrpheuFolders.mods + "/";
-	orpheuPaths.memory = orpheuPaths.config + "/" + Global::OrpheuFolders.memory + "/";
+	UTIL_Format(buffer, sizeof(buffer) - 1, "%s/%s/", orpheuPaths.config.chars(), Global::OrpheuFolders.functions.chars());
+	orpheuPaths.functions = buffer;
+
+	UTIL_Format(buffer, sizeof(buffer) - 1, "%s/%s/", orpheuPaths.config.chars(), Global::OrpheuFolders.libraries.chars());
+	orpheuPaths.libraries = buffer;
+
+	UTIL_Format(buffer, sizeof(buffer) - 1, "%s/%s/", orpheuPaths.config.chars(), Global::OrpheuFolders.typeAliases.chars());
+	orpheuPaths.typeAliases = buffer;
+
+	UTIL_Format(buffer, sizeof(buffer) - 1, "%s/%s/", orpheuPaths.config.chars(), Global::OrpheuFolders.virtualFunctions.chars());
+	orpheuPaths.virtualFunctions = buffer;
+
+	UTIL_Format(buffer, sizeof(buffer) - 1, "%s/%s/", orpheuPaths.config.chars(), Global::OrpheuFolders.mods.chars());
+	orpheuPaths.mods = buffer;
+
+	UTIL_Format(buffer, sizeof(buffer) - 1, "%s/%s/", orpheuPaths.config.chars(), Global::OrpheuFolders.memory.chars());
+	orpheuPaths.mods = buffer;
 }
 
 void ConfigManager::loadFunctions()
@@ -76,21 +90,22 @@ void ConfigManager::loadVirtualFunctions()
 
 void ConfigManager::parseModsInfo()
 {
-	static char msg[100];
+	char msg[100];
+	char filepath[255];
 
-	CVector<string>* files = FilesManager::getFiles(orpheuPaths.mods);	
+	CVector<ke::AString>* files = FilesManager::getFiles(orpheuPaths.mods);	
 
-	sprintf(msg,"\t\tCurrent mod : \"%s\"\n\n", Global::Modname.c_str() );
+	sprintf(msg,"\t\tCurrent mod : \"%s\"\n\n", Global::Modname.chars() );
 	Global::ConfigManagerObj->ModuleConfig.append(msg);
 
 	for(unsigned i=0;i<files->size();i++)
 	{
-		string path = orpheuPaths.mods + files->at(i);
+		UTIL_Format(filepath, sizeof(filepath) - 1, "%s/%s", orpheuPaths.mods.chars(), files->at(i).chars());
 
-		sprintf(msg,"\t\tParsing mod file \"%s\"\n",files->at(i).c_str());
+		sprintf(msg,"\t\tParsing mod file \"%s\"\n",files->at(i).chars());
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
 
-		std::ifstream file(path.c_str());
+		std::ifstream file(filepath);
 		
 		Json::Value root;
 		Json::Reader reader;
@@ -109,7 +124,7 @@ void ConfigManager::parseModsInfo()
 			}
 			else
 			{
-				if(name.asString() != Global::Modname)
+				if (Global::Modname.compare(name.asCString()) != 0)
 				{
 					Json::Value aliases = root["aliases"];
 
@@ -123,11 +138,11 @@ void ConfigManager::parseModsInfo()
 								Global::ConfigManagerObj->ModuleConfig.append(msg);
 								break;
 							}
-							if(Global::Modname == aliases[j].asString())
+							if(Global::Modname.compare(aliases[j].asCString()) == 0)
 							{
 								sprintf(msg,"\t\t\tFound an alias.\n");
 								Global::ConfigManagerObj->ModuleConfig.append(msg);
-								Global::Modname = name.asString();
+								Global::Modname = name.asCString();
 								foundMod = true;
 								break;
 							}
@@ -145,7 +160,7 @@ void ConfigManager::parseModsInfo()
 					Global::ConfigManagerObj->ModuleConfig.append(msg);
 
 					foundMod = true;
-					Global::Modname = name.asString();
+					Global::Modname = name.asCString();
 				}
 
 				if( foundMod )
@@ -168,7 +183,7 @@ void ConfigManager::parseModsInfo()
 		}
 		else
 		{
-			sprintf(msg,"\t\t\tFile incorrectly formatted\"%s\"\n",files->at(i).c_str());
+			sprintf(msg,"\t\t\tFile incorrectly formatted\"%s\"\n",files->at(i).chars());
 			Global::ConfigManagerObj->ModuleConfig.append(msg);
 		}
 	}
@@ -218,13 +233,14 @@ void ConfigManager::loadBaseData()
 	Global::ConfigManagerObj->ModuleConfig.append("\nOrpheu configuration ended.\n");
 }
 
-bool validateFile(string folder,string filename,string classname,Json::Value& root)
+bool validateFile(ke::AString folder,ke::AString filename,ke::AString classname,Json::Value& root)
 {
 		static char msg[100];
+		char path[255];
 
-		string path = folder + filename;
+		UTIL_Format(path, sizeof(path) - 1, "%s%s", folder, filename.chars());
 
-		std::ifstream file(path.c_str());
+		std::ifstream file(path);
 	
 		Json::Reader reader;
 	    
@@ -232,22 +248,23 @@ bool validateFile(string folder,string filename,string classname,Json::Value& ro
 
 		file.close();
 
-		if(parsingSuccessful)
+		if (parsingSuccessful)
 		{
 			Json::Value name = root["name"];
 			Json::Value classname_ = root["class"];
 
-			if(name.isString())
+			if (name.isString())
 			{
-				if(name == filename)
+				if (name == filename.chars())
 				{
-					if(classname.length())
+					if (classname.length())
 					{
-						if(classname_.isString() && (classname == classname_.asString()))
+						if (classname_.isString() && (classname_.asString() == classname.chars()))
 						{
-							string classtype = classname + " *";
-
-							if(!Global::TypeHandlerManagerObj->typeHandlerExists((char *)classtype.c_str()))
+							char classtype[32];
+							UTIL_Format(classtype, sizeof(classtype) - 1, "%s *", classname.chars());
+				
+							if (!Global::TypeHandlerManagerObj->typeHandlerExists(classtype))
 							{
 								Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tClass type not registered\n");
 								return false;
@@ -262,9 +279,9 @@ bool validateFile(string folder,string filename,string classname,Json::Value& ro
 					
 					Json::Value library = root["library"];
 
-					if(library.isString())
+					if (library.isString())
 					{
-						if(LibrariesManager::hasLibrary((char*)library.asCString()))
+						if (LibrariesManager::hasLibrary((char*)library.asCString()))
 						{
 							Json::Value arguments = root["arguments"];
 
@@ -295,7 +312,7 @@ bool validateFile(string folder,string filename,string classname,Json::Value& ro
 										}
 										else
 										{
-											Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tArguments must have a type and it must be a string\n");
+											Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tArguments must have a type and it must be a ke::AString\n");
 											return false;
 										}
 									}
@@ -331,7 +348,7 @@ bool validateFile(string folder,string filename,string classname,Json::Value& ro
 								}
 								else
 								{
-									Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tReturn must have a type and it must be a string\n");
+									Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tReturn must have a type and it must be a ke::AString\n");
 									return false;
 								}
 							}
@@ -358,7 +375,7 @@ bool validateFile(string folder,string filename,string classname,Json::Value& ro
 
 										if(!mod.isString())
 										{
-											Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tMod must be a string\n");
+											Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tMod must be a ke::AString\n");
 											return false;
 										}
 										else
@@ -400,7 +417,7 @@ bool validateFile(string folder,string filename,string classname,Json::Value& ro
 
 									if(!validValue)
 									{
-										Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tThe value of the identifier must be a string or an array with bytes or question marks or asterisks, or an number\n");
+										Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tThe value of the identifier must be a ke::AString or an array with bytes or question marks or asterisks, or an number\n");
 										return false;
 									}
 								}
@@ -463,7 +480,7 @@ bool validateFile(string folder,string filename,string classname,Json::Value& ro
 			}
 			else
 			{
-				Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tFunction name must be a string\n");	
+				Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tFunction name must be a ke::AString\n");	
 			}
 		}
 		else
@@ -474,26 +491,29 @@ bool validateFile(string folder,string filename,string classname,Json::Value& ro
 		return false;
 }
 
-void parseFile(string folder,string filename,string classname="")
+void parseFile(ke::AString folder,ke::AString filename, ke::AString classname = ke::AString(""))
 {
-	string name;
+	char name[64];
 
-	if(classname.length())
+	if (classname.length())
 	{
-		name = classname + "::" + filename;
+		UTIL_Format(name, sizeof(name) - 1, "%s::%s", classname.chars(), filename.chars());
 	}
 	else
 	{
-		name = filename;
+		UTIL_Format(name, sizeof(name) - 1, "%s", filename.chars());
 	}
 
 	Json::Value root;
 	static char msg[100];
 
-	boost::filesystem::path path(folder + filename);
+	char filepath[256];
+	UTIL_Format(filepath, sizeof(filepath) - 1, "%s%s", folder.chars(), filename.chars());
+
+	boost::filesystem::path path(filepath);
 	std::time_t newTimestamp = boost::filesystem::last_write_time(path);
 
-	time_t timestamp = Global::FunctionStructuresManagerObj->getTimestamp((char*)name.c_str());
+	time_t timestamp = Global::FunctionStructuresManagerObj->getTimestamp(name);
 		
 	if(timestamp == newTimestamp)
 	{
@@ -501,7 +521,7 @@ void parseFile(string folder,string filename,string classname="")
 		return;
 	}
 	
-	timestamp = Global::FunctionManagerObj->getTimestamp((char*)name.c_str());
+	timestamp = Global::FunctionManagerObj->getTimestamp(name);
 		
 	if(timestamp == newTimestamp)
 	{
@@ -509,7 +529,7 @@ void parseFile(string folder,string filename,string classname="")
 		return;
 	}
 
-	timestamp = Global::FunctionVirtualManagerObj->getTimestamp((char*)name.c_str());
+	timestamp = Global::FunctionVirtualManagerObj->getTimestamp(name);
 
 	if(timestamp == newTimestamp)
 	{
@@ -536,8 +556,9 @@ void parseFile(string folder,string filename,string classname="")
 
 			if(isMethod)
 			{
-				string classtype = classname + " *";
-				arguments[0] = Global::TypeHandlerManagerObj->getTypeHandler((char*)classtype.c_str());
+				char classtype[32];
+				UTIL_Format(classtype, sizeof(classtype) - 1, "%s *", classname.chars());
+				arguments[0] = Global::TypeHandlerManagerObj->getTypeHandler(classtype);
 			}
 
 			for(unsigned int argN=(int)isMethod; argN<size; argN++)
@@ -559,7 +580,7 @@ void parseFile(string folder,string filename,string classname="")
 			functionStructure->returnHandler = returnValue;
 			functionStructure->isMethod = isMethod;
 			functionStructure->address = NULL;
-			functionStructure->library = library.asString();
+			functionStructure->library = library.asCString();
 			functionStructure->name = name;
 
 			Json::Value indexes = root["indexes"];
@@ -574,7 +595,7 @@ void parseFile(string folder,string filename,string classname="")
 
 					if(index["os"].asString() == OperativeSystem)
 					{
-						if(!libraryIsMod || (index["mod"].asString() == Global::Modname))
+						if (!libraryIsMod || Global::Modname.compare(index["mod"].asCString()) == 0)
 						{
 							functionStructure->virtualTableIndex = index["value"].asUInt();
 							Global::FunctionVirtualManagerObj->add(functionStructure,newTimestamp);
@@ -605,7 +626,7 @@ void parseFile(string folder,string filename,string classname="")
 					{
 						Json::Value mod = identifier["mod"];
 
-						if(mod.asString() != Global::Modname)
+						if (Global::Modname.compare(mod.asCString()) != 0)
 							continue;
 					}
 
@@ -715,8 +736,9 @@ void parseFile(string folder,string filename,string classname="")
 
 						if(isMethod)
 						{
-							string classtype = classname + " *";
-							arguments[0] = Global::TypeHandlerManagerObj->getTypeHandler((char*)classtype.c_str());
+							char classtype[32];
+							UTIL_Format(classtype, sizeof(classtype) - 1, "%s *", classname.chars());
+							arguments[0] = Global::TypeHandlerManagerObj->getTypeHandler(classtype);
 						}
 
 						for(unsigned int argN=(int)isMethod; argN<size; argN++)
@@ -731,11 +753,11 @@ void parseFile(string folder,string filename,string classname="")
 							returnValue = Global::TypeHandlerManagerObj->getTypeHandler((char*)returnJson["type"].asCString());
 						}
 						
-						Function* function = new Function(functionAddress,arguments,size,returnValue,library.asString(),isMethod);
+						Function* function = new Function(functionAddress,arguments,size,returnValue,ke::AString(library.asCString()),isMethod);
 
 						Global::ConfigManagerObj->ModuleConfig.append("FOUND\n");
 
-						Global::FunctionManagerObj->addFunction((char*)name.c_str(),function,newTimestamp);
+						Global::FunctionManagerObj->addFunction(name,function,newTimestamp);
 
 						break;
 					}
@@ -755,43 +777,44 @@ void parseFile(string folder,string filename,string classname="")
 
 void ConfigManager::parseFunctionsInfo()
 {
-	CVector<string>* files = FilesManager::getFiles(orpheuPaths.functions);
-	CVector<string>* folders = FilesManager::getFolders(orpheuPaths.functions);
+	CVector<ke::AString>* files = FilesManager::getFiles(orpheuPaths.functions);
+	CVector<ke::AString>* folders = FilesManager::getFolders(orpheuPaths.functions);
 
 	static char msg[100];
+	char path[256];
 
 	for(unsigned int i=0;i<files->size();i++)
 	{	
-		sprintf(msg,"\t\tParsing file \"%s\" started\n",files->at(i).c_str());
+		sprintf(msg,"\t\tParsing file \"%s\" started\n",files->at(i).chars());
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
 
 		parseFile(orpheuPaths.functions,files->at(i));
 
-		sprintf(msg,"\t\tParsing file \"%s\" ended\n",files->at(i).c_str());
+		sprintf(msg,"\t\tParsing file \"%s\" ended\n",files->at(i).chars());
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
 	}
 	for(unsigned int i=0;i<folders->size();i++)
 	{
-		string classname = folders->at(i);
-		string folder = orpheuPaths.functions + classname + "/";
+		ke::AString classname = folders->at(i);
+		UTIL_Format(path, sizeof(path) - 1, "%s%s/", orpheuPaths.functions.chars(), classname.chars());
 
-		sprintf(msg,"\t\tParsing folder \"%s\" started\n",folders->at(i).c_str());
+		sprintf(msg,"\t\tParsing folder \"%s\" started\n",folders->at(i).chars());
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
 
-		CVector<string>* filesInFolder = FilesManager::getFiles(folder);
+		CVector<ke::AString>* filesInFolder = FilesManager::getFiles(ke::AString(path));
 
 		for(unsigned int j=0;j<filesInFolder->size();j++)
 		{
-			sprintf(msg,"\t\t\tParsing file \"%s\" started\n",filesInFolder->at(j).c_str());
+			sprintf(msg,"\t\t\tParsing file \"%s\" started\n",filesInFolder->at(j).chars());
 			Global::ConfigManagerObj->ModuleConfig.append(msg);
 
-			parseFile(folder,filesInFolder->at(j),classname);
+			parseFile(ke::AString(path),filesInFolder->at(j),classname);
 
-			sprintf(msg,"\t\t\tParsing file \"%s\" ended\n",filesInFolder->at(j).c_str());
+			sprintf(msg,"\t\t\tParsing file \"%s\" ended\n",filesInFolder->at(j).chars());
 			Global::ConfigManagerObj->ModuleConfig.append(msg);
 		}
 
-		sprintf(msg,"\t\tParsing folder \"%s\" ended\n",folders->at(i).c_str());
+		sprintf(msg,"\t\tParsing folder \"%s\" ended\n",folders->at(i).chars());
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
 	}
 }
@@ -799,19 +822,19 @@ void ConfigManager::parseFunctionsInfo()
 KTrie<CVector<char*>*>* ConfigManager::parseTypeAliasesInfo(KTrie<long>& typeNameToVirtualTableOffset)
 {
 	static char msg[100];
+	char path[256];
 
 	KTrie<CVector<char*>*>* typeAliasesInfo = new KTrie<CVector<char*>*>();
 
-	CVector<string>* folders = FilesManager::getFolders(orpheuPaths.typeAliases);
+	CVector<ke::AString>* folders = FilesManager::getFolders(orpheuPaths.typeAliases);
 
 	for(unsigned int i=0;i<folders->size();i++)
 	{
-		sprintf(msg,"\t\tParsing folder \"%s\"\n",folders->at(i).c_str());
+		sprintf(msg,"\t\tParsing folder \"%s\"\n",folders->at(i).chars());
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
 
-		string path = orpheuPaths.typeAliases + folders->at(i) + "/data" ;
-		
-		std::ifstream file(path.c_str());
+		UTIL_Format(path, sizeof(path) - 1, "%s%s/data", orpheuPaths.typeAliases.chars(), folders->at(i).chars());
+		std::ifstream file(path);
 	
 		Json::Reader reader;
 		Json::Value root;  
@@ -849,14 +872,15 @@ KTrie<CVector<char*>*>* ConfigManager::parseTypeAliasesInfo(KTrie<long>& typeNam
 						}
 					}
 
-					string modsDataPath = orpheuPaths.typeAliases + folders->at(i) + "/modsData/";
-
-					CVector<string>* files = FilesManager::getFiles(modsDataPath);
+					char modsDataPath[256];
+					UTIL_Format(modsDataPath, sizeof(modsDataPath) - 1, "%s%s/modsData/", orpheuPaths.typeAliases.chars(), folders->at(i).chars());
+	
+					CVector<ke::AString>* files = FilesManager::getFiles(ke::AString(modsDataPath));
 
 					for(unsigned int fileID=0;fileID < files->size();fileID++)
 					{
-						string path = modsDataPath + files->at(fileID);
-						std::ifstream file(path.c_str());
+						UTIL_Format(path, sizeof(path) - 1, "%s%s", modsDataPath, files->at(fileID).chars());
+						std::ifstream file(path);
 
 						Json::Reader reader;
 						Json::Value root;  
@@ -873,7 +897,7 @@ KTrie<CVector<char*>*>* ConfigManager::parseTypeAliasesInfo(KTrie<long>& typeNam
 
 								if(modName.isString())
 								{
-									if(modName.asString() == Global::Modname)
+									if (Global::Modname.compare(modName.asCString()) == 0)
 									{
 										Json::Value vtableOffsets = root["vtableOffsets"];
 
@@ -889,40 +913,41 @@ KTrie<CVector<char*>*>* ConfigManager::parseTypeAliasesInfo(KTrie<long>& typeNam
 										}
 										else
 										{
-											sprintf(msg,"File \"%s\" must have a \"vtableOffsets\" entry and it must be an object\n",files->at(fileID).c_str());
+											sprintf(msg,"File \"%s\" must have a \"vtableOffsets\" entry and it must be an object\n",files->at(fileID).chars());
 											Global::ConfigManagerObj->ModuleConfig.append(msg);
 										}
 									}
 								}
 								else
 								{
-									sprintf(msg,"File \"%s\" must have a \"name\" entry\n",files->at(fileID).c_str());
+									sprintf(msg,"File \"%s\" must have a \"name\" entry\n",files->at(fileID).chars());
 									Global::ConfigManagerObj->ModuleConfig.append(msg);
 								}
 							}
 							else
 							{
-								sprintf(msg,"File \"%s\" incorrectly formatted\n", files->at(fileID).c_str());
+								sprintf(msg,"File \"%s\" incorrectly formatted\n", files->at(fileID).chars());
 								Global::ConfigManagerObj->ModuleConfig.append(msg);
 							}
 						}
 						else
 						{	
-							sprintf(msg,"File \"%s\" incorrectly formatted\n", files->at(fileID).c_str());
+							sprintf(msg,"File \"%s\" incorrectly formatted\n", files->at(fileID).chars());
 							Global::ConfigManagerObj->ModuleConfig.append(msg);
 						}
 					}
 
-					string aliasesPath = orpheuPaths.typeAliases + folders->at(i) + "/aliases/";
+					char aliasesPath[256];
+					UTIL_Format(aliasesPath, sizeof(aliasesPath) - 1, "%s%s/aliases/", orpheuPaths.typeAliases.chars(), folders->at(i).chars());
 
-					files = FilesManager::getFiles(aliasesPath);
+					files = FilesManager::getFiles(ke::AString(aliasesPath));
 
 					CVector<char*>* aliasesForName = new CVector<char*>();
 
 					for(unsigned int fileID=0;fileID < files->size();fileID++)
 					{
-						string path = aliasesPath + files->at(fileID);
-						std::ifstream file(path.c_str());
+						UTIL_Format(path, sizeof(path) - 1, "%s%s", aliasesPath, files->at(fileID).chars());
+						std::ifstream file(path);
 
 						Json::Reader reader;
 						Json::Value root;  
@@ -945,19 +970,19 @@ KTrie<CVector<char*>*>* ConfigManager::parseTypeAliasesInfo(KTrie<long>& typeNam
 								}
 								else
 								{
-									sprintf(msg,"File \"%s\" incorrectly formatted\n",files->at(fileID).c_str());
+									sprintf(msg,"File \"%s\" incorrectly formatted\n",files->at(fileID).chars());
 									Global::ConfigManagerObj->ModuleConfig.append(msg);
 								}
 							}
 							else
 							{
-								sprintf(msg,"File \"%s\" incorrectly formatted\n",files->at(fileID).c_str());
+								sprintf(msg,"File \"%s\" incorrectly formatted\n",files->at(fileID).chars());
 								Global::ConfigManagerObj->ModuleConfig.append(msg);
 							}
 						}
 						else
 						{	
-							sprintf(msg,"File \"%s\" incorrectly formatted\n",files->at(fileID).c_str());
+							sprintf(msg,"File \"%s\" incorrectly formatted\n",files->at(fileID).chars());
 							Global::ConfigManagerObj->ModuleConfig.append(msg);
 						}	
 					}
@@ -990,12 +1015,14 @@ KTrie<char*>* ConfigManager::parseExternalLibrariesInfo()
 {
 	KTrie<char*>* externalLibrariesInfo = new KTrie<char*>();
 
-	CVector<string>* files = FilesManager::getFiles(orpheuPaths.libraries);
+	CVector<ke::AString>* files = FilesManager::getFiles(orpheuPaths.libraries);
+
+	char path[256];
 
 	for(unsigned int i=0;i<files->size();i++)
 	{
-		string path = orpheuPaths.libraries + files->at(i);
-		std::ifstream file(path.c_str());
+		UTIL_Format(path, sizeof(path) - 1, "%s%s", orpheuPaths.libraries.chars(), files->at(i).chars());
+		std::ifstream file(path);
 	
 		Json::Reader reader;
 		Json::Value root;  
@@ -1005,7 +1032,7 @@ KTrie<char*>* ConfigManager::parseExternalLibrariesInfo()
 		file.close();
 
 		char* msg = new char[100];
-		sprintf(msg,"\t\tParsing file \"%s\"\n",files->at(i).c_str());
+		sprintf(msg,"\t\tParsing file \"%s\"\n",files->at(i).chars());
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
 
 		bool correctlyFormated = false;
@@ -1047,32 +1074,33 @@ KTrie<char*>* ConfigManager::parseExternalLibrariesInfo()
 
 void ConfigManager::parseVirtualFunctionsInfo()
 {
-	CVector<string>* folders = FilesManager::getFolders(orpheuPaths.virtualFunctions);
+	CVector<ke::AString>* folders = FilesManager::getFolders(orpheuPaths.virtualFunctions);
 
 	static char msg[100];
+	char path[256];
 
-	for(unsigned int i=0;i<folders->size();i++)
+	for (unsigned int i=0;i<folders->size();i++)
 	{
-		string classname = folders->at(i);
-		string folder = orpheuPaths.virtualFunctions + classname + "/";
+		ke::AString classname = folders->at(i);
+		UTIL_Format(path, sizeof(path) - 1, "%s%s/", orpheuPaths.virtualFunctions.chars(), classname.chars());
 
-		sprintf(msg,"\t\tParsing folder \"%s\" started\n",folders->at(i).c_str());
+		sprintf(msg,"\t\tParsing folder \"%s\" started\n",folders->at(i).chars());
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
 
-		CVector<string>* filesInFolder = FilesManager::getFiles(folder);
+		CVector<ke::AString>* filesInFolder = FilesManager::getFiles(ke::AString(path));
 
-		for(unsigned int j=0;j<filesInFolder->size();j++)
+		for (unsigned int j=0;j<filesInFolder->size();j++)
 		{
-			sprintf(msg,"\t\t\tParsing file \"%s\" started\n",filesInFolder->at(j).c_str());
+			sprintf(msg,"\t\t\tParsing file \"%s\" started\n",filesInFolder->at(j).chars());
 			Global::ConfigManagerObj->ModuleConfig.append(msg);
 
-			parseFile(folder,filesInFolder->at(j),classname);
+			parseFile(ke::AString(path), filesInFolder->at(j), classname);
 
-			sprintf(msg,"\t\t\tParsing file \"%s\" ended\n",filesInFolder->at(j).c_str());
+			sprintf(msg,"\t\t\tParsing file \"%s\" ended\n",filesInFolder->at(j).chars());
 			Global::ConfigManagerObj->ModuleConfig.append(msg);
 		}
 
-		sprintf(msg,"\t\tParsing folder \"%s\" ended\n",folders->at(i).c_str());
+		sprintf(msg,"\t\tParsing folder \"%s\" ended\n",folders->at(i).chars());
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
 	}
 }
@@ -1085,21 +1113,22 @@ void ConfigManager::parseMemoryObject(Json::Value root)
 
 	if(nameValue.isString())
 	{
-		string name = nameValue.asString();
+		ke::AString name;
+		ke::AString library;
+		
+		name = nameValue.asCString();
 
-		sprintf(msg,"\t\t\tProcessing memory structure \"%s\"\n",nameValue.asCString());
+		sprintf(msg,"\t\t\tProcessing memory structure \"%s\"\n", nameValue.asCString());
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
 
 		Json::Value libraryValue = root["library"];
-
-		string library = "";
 		
 		if(libraryValue.isString())
 		{
-			library = libraryValue.asString();
+			library = libraryValue.asCString();
 		}
 
-		bool isMod = library == "mod";
+		bool isMod = (library.compare("mod") == 0);
 
 		Json::Value type = root["type"];
 
@@ -1118,7 +1147,7 @@ void ConfigManager::parseMemoryObject(Json::Value root)
 		}
 		else
 		{
-			sprintf(msg,"\t\t\tMemory object identifier field \"type\" must be a string\n");
+			sprintf(msg,"\t\t\tMemory object identifier field \"type\" must be a ke::AString\n");
 			Global::ConfigManagerObj->ModuleConfig.append(msg);
 			return;
 		}
@@ -1191,7 +1220,7 @@ void ConfigManager::parseMemoryObject(Json::Value root)
 
 							return;
 						}
-						else if(mod.asString() != Global::Modname)
+						else if (Global::Modname.compare(mod.asCString()) != 0)
 						{
 							continue;
 						}
@@ -1311,12 +1340,12 @@ void ConfigManager::parseMemoryObject(Json::Value root)
 								return;
 							}	
 
-							memoryStructure->basicAddress = LibrariesManager::findMemory((char*)library.c_str(),memoryStructure->signature,memoryStructure->signatureEntryData,memoryStructure->signatureLength,LibrariesManager::getLibraryAddress((char*)library.c_str()));
+							memoryStructure->basicAddress = LibrariesManager::findMemory((char*)library.chars(),memoryStructure->signature,memoryStructure->signatureEntryData,memoryStructure->signatureLength,LibrariesManager::getLibraryAddress((char*)library.chars()));
 						}						
 
 						Global::MemoryStructManagerObj->add(memoryStructure);
 
-						sprintf(msg,"\t\t\t\tAdded memory search structure \"%s\"\n",memoryStructure->name.c_str());
+						sprintf(msg,"\t\t\t\tAdded memory search structure \"%s\"\n",memoryStructure->name.chars());
 						Global::ConfigManagerObj->ModuleConfig.append(msg);
 						return;
 					}
@@ -1339,7 +1368,7 @@ void ConfigManager::parseMemoryObject(Json::Value root)
 			memoryStructure->type = MemTypeSearch;
 			Global::MemoryStructManagerObj->add(memoryStructure);
 
-			sprintf(msg,"\t\t\t\tAdded memory search structure \"%s\"\n",memoryStructure->name.c_str());
+			sprintf(msg,"\t\t\t\tAdded memory search structure \"%s\"\n",memoryStructure->name.chars());
 			Global::ConfigManagerObj->ModuleConfig.append(msg);
 			return;
 		}
@@ -1356,42 +1385,43 @@ static KTrie<time_t> memoryStructureNameToTimestamp;
 void ConfigManager::loadMemoryStructures()
 {
 	char static msg[100];
+	char path[256];
 
 	Global::ConfigManagerObj->ModuleConfig.append("\nOrpheu memory structures search started.\n");
 
 	Global::ConfigManagerObj->ModuleConfig.append("\n\tParsing memory structures started.\n\n");
 
-	CVector<string>* files = FilesManager::getFiles(orpheuPaths.memory);
+	CVector<ke::AString>* files = FilesManager::getFiles(orpheuPaths.memory);
 
 	for(unsigned int i=0;i<files->size();i++)
 	{
-		sprintf(msg,"\t\tParsing memory file \"%s\"\n",files->at(i).c_str());
+		sprintf(msg,"\t\tParsing memory file \"%s\"\n",files->at(i).chars());
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
 
-		string path = orpheuPaths.memory + files->at(i);
+		UTIL_Format(path, sizeof(path) - 1, "%s%s", orpheuPaths.memory.chars(), files->at(i).chars());
 
-		time_t* timestampPointer = memoryStructureNameToTimestamp.retrieve((char*)files->at(i).c_str());
+		time_t* timestampPointer = memoryStructureNameToTimestamp.retrieve((char*)files->at(i).chars());
 		time_t newTimestamp = boost::filesystem::last_write_time(path);
 
 		if(timestampPointer)
 		{
 			if(*timestampPointer == newTimestamp)
 			{
-				sprintf(msg,"\t\t\tFile \"%s\" is updated\n",files->at(i).c_str());
+				sprintf(msg,"\t\t\tFile \"%s\" is updated\n",files->at(i).chars());
 				Global::ConfigManagerObj->ModuleConfig.append(msg);
 				continue;
 			}
 			else
 			{
-				memoryStructureNameToTimestamp.replace((char*)files->at(i).c_str(),newTimestamp);
+				memoryStructureNameToTimestamp.replace((char*)files->at(i).chars(),newTimestamp);
 			}
 		}
 		else
 		{
-			memoryStructureNameToTimestamp.insert((char*)files->at(i).c_str(),newTimestamp);
+			memoryStructureNameToTimestamp.insert((char*)files->at(i).chars(),newTimestamp);
 		}
 
-		std::ifstream file(path.c_str());
+		std::ifstream file(path);
 		
 		Json::Value root;
 		Json::Reader reader;
@@ -1424,3 +1454,20 @@ void ConfigManager::loadMemoryStructures()
 	Global::ConfigManagerObj->ModuleConfig.append("\nOrpheu memory structures search ended.\n");
 }
 
+size_t UTIL_Format(char *buffer, size_t maxlength, const char *fmt, ...)
+{
+	va_list ap;
+	va_start(ap, fmt);
+	size_t len = vsnprintf(buffer, maxlength, fmt, ap);
+	va_end(ap);
+
+	if (len >= maxlength)
+	{
+		buffer[maxlength - 1] = '\0';
+		return (maxlength - 1);
+	}
+	else
+	{
+		return len;
+	}
+}

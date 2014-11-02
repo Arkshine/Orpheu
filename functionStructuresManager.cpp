@@ -12,7 +12,7 @@ time_t FunctionStructuresManager::getTimestamp(char* functionName)
 
 void FunctionStructuresManager::addFunctionStructure(FunctionStructure* functionStructure,time_t timestamp)
 {
-	char* functionName = (char*) functionStructure->name.c_str();
+	char* functionName = (char*) functionStructure->name.chars();
 
 	unsigned int* idPointer = functionStructureNameToFunctionStructureID.retrieve(functionName);
 
@@ -40,7 +40,7 @@ unsigned short int FunctionStructuresManager::makeFunction(FunctionStructure* fu
 {
 	Function* function = new Function(address,functionStructure->argumentsHandlers,functionStructure->argumentsCount,functionStructure->returnHandler,functionStructure->library,functionStructure->isMethod);
 
-	return Global::FunctionManagerObj->addFunction((char*)functionStructure->name.c_str(),function,0);
+	return Global::FunctionManagerObj->addFunction((char*)functionStructure->name.chars(),function,0);
 }
 
 FunctionStructure* FunctionStructuresManager::getFunctionStructure(char* functionName)

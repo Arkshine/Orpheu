@@ -2,7 +2,7 @@
 #include <function.h>
 #include <configManager.h>
 #include <cbase.h>
-#include <string>
+#include <am-string.h>
 using namespace std;
 
 #include <global.h>
@@ -69,7 +69,7 @@ int Function::patchSize = sizeof(patch);
 unsigned short int* Function::patchFunctionIDAddress = (unsigned short int*) &patch[2];
 long* Function::patchFunctionJumpAddress = (long*) &patch[1];
 
-Function::Function(void* address,TypeHandler** argumentsHandlers,unsigned int argumentsCount,TypeHandler* returnHandler,string library,bool isMethod)
+Function::Function(void* address,TypeHandler** argumentsHandlers,unsigned int argumentsCount,TypeHandler* returnHandler,ke::AString library,bool isMethod)
 {
 	this->address = address;
 	this->isMethod = isMethod;

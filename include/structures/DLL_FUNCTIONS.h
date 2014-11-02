@@ -60,7 +60,7 @@ class DLL_FUNCTIONS_StructData : public StructData<DLL_FUNCTIONS>
 			addMember("pfnAllowLagCompensation",&structure->pfnAllowLagCompensation,Types[TypeLong]);
 		}
 
-		string getName() 
+		const char *getName() 
 		{
 			return "DLL_FUNCTIONS *";
 		};

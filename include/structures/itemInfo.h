@@ -35,7 +35,7 @@ class ItemInfo : public StructData<ItemInfo_>
 			addMember("iWeight",&structure->iWeight,Types[TypeLong]);
 		}
 
-		string getName() 
+		const char *getName() 
 		{
 			return "ItemInfo *";
 		};

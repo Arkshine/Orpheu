@@ -14,7 +14,7 @@ class KeyValueData_StructData : public StructData<KeyValueData_s>
 			addMember("fHandled",&structure->fHandled,Types[TypeLong]);
 		}
 
-		string getName() 
+		const char *getName() 
 		{
 			return "KeyValueData_s *";
 		};

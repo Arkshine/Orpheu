@@ -71,7 +71,7 @@ namespace Global
 	extern StructHandlerDirect* StructuresDirect[];
 	extern unsigned int TypesCount;
 	extern unsigned int StructuresCount;
-	extern string Modname;
+	extern ke::AString Modname;
 	extern int pev;
 	extern KTrie<char*>* LibrariesCvarToName;
 	extern Function* FunctionBeingHooked;

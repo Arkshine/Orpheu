@@ -8,7 +8,7 @@
 #undef min
 #undef max 
 
-#include <string>
+#include <am-string.h>
 #include <CVector.h>
 
 using namespace std;
@@ -20,8 +20,8 @@ struct FunctionStructure
 	unsigned int argumentsCount;
 	TypeHandler* returnHandler;
 	bool isMethod;
-	string library;
-	string name;
+	ke::AString library;
+	ke::AString name;
 	unsigned int virtualTableIndex;
 	map<void*,Function*> virtualFunctionsCreated;
 };

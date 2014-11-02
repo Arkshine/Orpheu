@@ -49,13 +49,13 @@ namespace Global
 
 	Folders OrpheuFolders = 
 	{
-		"orpheu",
-		"libraries",
-		"functions",
-		"types",
-		"virtualFunctions",
-		"mods",
-		"memory"
+		ke::AString("orpheu"),
+		ke::AString("libraries"),
+		ke::AString("functions"),
+		ke::AString("types"),
+		ke::AString("virtualFunctions"),
+		ke::AString("mods"),
+		ke::AString("memory")
 	};
 
 	TypeHandler* Types[] = 
@@ -122,7 +122,7 @@ namespace Global
 	unsigned int TypesCount = sizeof(Types) / sizeof(TypeHandler*);
 	unsigned int StructuresCount = sizeof(Structures) / sizeof(StructHandler*);
 
-	string Modname = "";
+	ke::AString Modname;
 
 	int pev = 0;
 

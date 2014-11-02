@@ -12,7 +12,7 @@ time_t FunctionVirtualManager::getTimestamp(char* functionName)
 
 void FunctionVirtualManager::add(FunctionStructure* functionStructure,time_t timestamp)
 {
-	char* functionName = (char*) functionStructure->name.c_str();
+	char* functionName = (char*) functionStructure->name.chars();
 
 	unsigned int* idPointer = functionVirtualNameToFunctionStructureID.retrieve(functionName);
 

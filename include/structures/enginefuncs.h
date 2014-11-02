@@ -167,7 +167,7 @@ class enginefuncsStructData : public StructData<enginefuncs_t>
 			addMember("pfnQueryClientCvarValue2",&structure->pfnQueryClientCvarValue2,Types[TypeLong]);	
 		}
 
-		string getName() 
+		const char *getName() 
 		{
 			return "enginefuncs_t *";
 		};

@@ -4,7 +4,7 @@
 
 #include <typeHandler.h>
 
-#include <string>
+#include <am-string.h>
 using namespace std;
 
 #include <CVector.h>
@@ -24,7 +24,7 @@ template <typename T> class StructData
 	protected:
 
 		T* structure;
-		void addMember(string name,void* offset,TypeHandler* type)
+		void addMember(const char *name,void* offset,TypeHandler* type)
 		{
 			Member member;
 	
@@ -37,7 +37,7 @@ template <typename T> class StructData
 
 	public:
 
-		virtual string getName() = 0;
+		virtual const char *getName() = 0;
 
 		StructInfo& getStructInfo()
 		{

@@ -14,7 +14,7 @@ class cvarStructData : public StructData<cvar_s>
 			addMember("next",&structure->next,Structures[StructCvar]);
 		}
 
-		string getName() 
+		const char *getName() 
 		{
 			return "cvar_s *";
 		};

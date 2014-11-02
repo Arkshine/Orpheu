@@ -14,7 +14,7 @@ MemoryStructure* MemoryStructManager::get(char* name)
 }
 void MemoryStructManager::add(MemoryStructure* memoryStructure)
 {
-	char* memoryStructureName = (char*) memoryStructure->name.c_str();
+	char* memoryStructureName = (char*) memoryStructure->name.chars();
 
 	unsigned int* idPointer = this->memoryStructureNameToMemoryStructureID.retrieve(memoryStructureName);
 

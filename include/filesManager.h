@@ -7,15 +7,16 @@
 
 using namespace boost::filesystem; 
 
+
 #include <CVector.h>
 
-#include <string>
+#include <am-string.h>
 using namespace std;
 
 namespace FilesManager
 {
-	CVector<string>* getFolders(const path& directory);
-	CVector<string>* getFiles(const path& directory);
+	CVector<ke::AString>* getFolders(const ke::AString& directory);
+	CVector<ke::AString>* getFiles(const ke::AString& directory);
 }
 
 #endif

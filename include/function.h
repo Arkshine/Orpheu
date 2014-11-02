@@ -11,7 +11,7 @@
 #undef max
 
 #include <map>
-#include <string>
+#include <am-string.h>
 
 using namespace std;
 
@@ -94,10 +94,10 @@ class Function
 #endif
 		long callOriginal();
 
-		string library;
+		ke::AString library;
 
 	public:
-		Function(void* address,TypeHandler** argumentsHandlers,unsigned int argumentsCount,TypeHandler* returnHandler,string library,bool isMethod = false);
+		Function(void* address,TypeHandler** argumentsHandlers,unsigned int argumentsCount,TypeHandler* returnHandler,ke::AString library,bool isMethod = false);
 		~Function();
 		unsigned int& getIfReturnByRefParamsCount();
 		unsigned int& getArgumentsCount();
@@ -146,7 +146,7 @@ class Function
 		{
 			return hookReturnStatus;
 		}
-		string getLibrary()
+		ke::AString getLibrary()
 		{
 			return this->library;
 		}

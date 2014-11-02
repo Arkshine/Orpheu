@@ -19,7 +19,7 @@ class TraceResultStructData : public StructData<TraceResult>
 			addMember("iHitgroup",&structure->iHitgroup,Types[TypeLong]);
 		}
 
-		string getName() 
+		const char *getName() 
 		{
 			return "TraceResult *";
 		};

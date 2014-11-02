@@ -6,7 +6,7 @@
 #include <CVector.h>
 #include "CString.h"
 #include <sm_trie_tpl.h>
-#include <string>
+#include <am-string.h>
 
 #include <cstdlib>
 #include <iostream>
@@ -41,6 +41,8 @@ class ConfigManager
 		void parseVirtualFunctionsInfo();
 		void parseModsInfo();
 };
+
+size_t UTIL_Format(char *buffer, size_t maxlength, const char *fmt, ...);
 
 #endif
 
