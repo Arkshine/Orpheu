@@ -198,8 +198,6 @@
     <ClCompile Include="..\typeHandlerImplementations\short.cpp" />
     <ClCompile Include="..\typeHandlerImplementations\VectorHandler.cpp" />
     <ClCompile Include="..\typeHandlerImplementations\VectorPointerHandler.cpp" />
-    <ClCompile Include="..\json\json_reader.cpp" />
-    <ClCompile Include="..\json\json_value.cpp" />
     <ClCompile Include="..\sdk\amxxmodule.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -254,14 +252,6 @@
     <ClInclude Include="..\include\typeHandlerImplementations\VectorHandler.h" />
     <ClInclude Include="..\include\typeHandlerImplementations\VectorPointerByRefHandler.h" />
     <ClInclude Include="..\include\typeHandlerImplementations\VectorPointerHandler.h" />
-    <ClInclude Include="..\include\json\autolink.h" />
-    <ClInclude Include="..\include\json\config.h" />
-    <ClInclude Include="..\include\json\features.h" />
-    <ClInclude Include="..\include\json\forwards.h" />
-    <ClInclude Include="..\include\json\json.h" />
-    <ClInclude Include="..\include\json\reader.h" />
-    <ClInclude Include="..\include\json\value.h" />
-    <ClInclude Include="..\include\json\writer.h" />
     <ClInclude Include="..\include\structures\ammoInfo.h" />
     <ClInclude Include="..\include\structures\cvar.h" />
     <ClInclude Include="..\include\structures\DLL_FUNCTIONS.h" />

@@ -5,7 +5,6 @@
 #include <global.h>
 #include <filesManager.h>
 
-#include <iostream>
 #include <ctime>
 
 #include <function.h>
@@ -897,37 +896,39 @@ KTrie<CVector<char*>*>* ConfigManager::parseTypeAliasesInfo(KTrie<long>& typeNam
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
 
 		UTIL_Format(path, sizeof(path) - 1, "%s%s/data", orpheuPaths.typeAliases.chars(), folders->at(i).chars());
-		std::ifstream file(path);
+		
+		json_error_t error;
+		json_t *root = json_load_file(path, 0, &error);
 
-		Json::Reader reader;
-		Json::Value root;
-
-		bool parsingSuccessful = reader.parse(file, root);
-
-		file.close();
+		bool parsingSuccessful = !json_is_null(root);
 
 		bool correctlyFormated = false;
 
 		if (parsingSuccessful)
 		{
-			if (root.isObject())
+			if (json_is_object(root))
 			{
-				Json::Value name = root["name"];
-				Json::Value aliases = root["aliases"];
+				//Json::Value name = root["name"];
+				//Json::Value aliases = root["aliases"];
 
-				if (name.isString())
+				json_t *name = json_object_get(root, "name");
+				json_t *aliases = json_object_get(root, "aliases");
+
+				if (json_is_string(name))
 				{
-					Json::Value virtualTableOffsets = root["vtableOffsets"];
+					//Json::Value virtualTableOffsets = root["vtableOffsets"];
+					json_t *virtualTableOffsets = json_object_get(root, "vtableOffsets");
 
 					correctlyFormated = true;
 
-					if (!virtualTableOffsets.isNull() && virtualTableOffsets.isObject())
+					if (!json_is_null(virtualTableOffsets) && json_is_object(virtualTableOffsets))
 					{
-						Json::Value value = virtualTableOffsets[OperativeSystem];
+						//Json::Value value = virtualTableOffsets[OperativeSystem];
+						json_t *value = json_object_get(virtualTableOffsets, OperativeSystem);
 
-						if (value.isNumeric())
+						if (json_is_integer(value))
 						{
-							typeNameToVirtualTableOffset.insert((char*)name.asCString(), value.asUInt());
+							typeNameToVirtualTableOffset.insert(json_string_value(name), (long)json_integer_value(value));
 						}
 						else
 						{
@@ -943,34 +944,34 @@ KTrie<CVector<char*>*>* ConfigManager::parseTypeAliasesInfo(KTrie<long>& typeNam
 					for (unsigned int fileID=0; fileID < files->size(); fileID++)
 					{
 						UTIL_Format(path, sizeof(path) - 1, "%s%s", modsDataPath, files->at(fileID).chars());
-						std::ifstream file(path);
+						
+						json_error_t error;
+						json_t *root = json_load_file(path, 0, &error);
 
-						Json::Reader reader;
-						Json::Value root;
-
-						bool parsingSuccessful = reader.parse(file, root);
-
-						file.close();
+						bool parsingSuccessful = !json_is_null(root);
 
 						if (parsingSuccessful)
 						{
-							if (root.isObject())
+							if (json_is_object(root))
 							{
-								Json::Value modName = root["name"];
+								//Json::Value modName = root["name"];
+								json_t *modName = json_object_get(root, "name");
 
-								if (modName.isString())
+								if (json_is_string(modName))
 								{
-									if (Global::Modname.compare(modName.asCString()) == 0)
+									if (Global::Modname.compare(json_string_value(modName)) == 0)
 									{
-										Json::Value vtableOffsets = root["vtableOffsets"];
+										//Json::Value vtableOffsets = root["vtableOffsets"];
+										json_t *vtableOffsets = json_object_get(root, "vtableOffsets");
 
-										if (vtableOffsets.isObject())
+										if (json_is_object(vtableOffsets))
 										{
-											Json::Value value = vtableOffsets[OperativeSystem];
+											//Json::Value value = vtableOffsets[OperativeSystem];
+											json_t *value = json_object_get(vtableOffsets, OperativeSystem);
 
-											if (value.isNumeric())
+											if (json_is_integer(value))
 											{
-												typeNameToVirtualTableOffset.insert((char*)name.asCString(), value.asUInt());
+												typeNameToVirtualTableOffset.insert(json_string_value(name), json_integer_value(value));
 												break;
 											}
 										}
@@ -1010,25 +1011,23 @@ KTrie<CVector<char*>*>* ConfigManager::parseTypeAliasesInfo(KTrie<long>& typeNam
 					for (unsigned int fileID=0; fileID < files->size(); fileID++)
 					{
 						UTIL_Format(path, sizeof(path) - 1, "%s%s", aliasesPath, files->at(fileID).chars());
-						std::ifstream file(path);
+						
+						json_error_t error;
+						json_t *root = json_load_file(path, 0, &error);
 
-						Json::Reader reader;
-						Json::Value root;
-
-						bool parsingSuccessful = reader.parse(file, root);
-
-						file.close();
+						bool parsingSuccessful = !json_is_null(root);
 
 						if (parsingSuccessful)
 						{
-							if (root.isArray())
+							if (json_is_array(root))
 							{
-								Json::Value alias = root[(unsigned int)0];
+								//Json::Value alias = root[(unsigned int)0];
+								json_t *alias = json_array_get(root, 0);
 
-								if (alias.isString())
+								if (json_is_string(alias))
 								{
-									char* aliasAloc = new char[alias.asString().length() + 1];
-									strcpy(aliasAloc, alias.asCString());
+									char* aliasAloc = new char[json_string_length(alias) + 1];
+									strcpy(aliasAloc, json_string_value(alias));
 									aliasesForName->push_back(aliasAloc);
 								}
 								else
@@ -1052,10 +1051,10 @@ KTrie<CVector<char*>*>* ConfigManager::parseTypeAliasesInfo(KTrie<long>& typeNam
 
 					if (aliasesForName->size())
 					{
-						UTIL_Format(msg, sizeof(msg) - 1, "\t\t\tAdding alias\"%s\"\n", name.asCString());
+						UTIL_Format(msg, sizeof(msg) - 1, "\t\t\tAdding alias\"%s\"\n", json_string_value(name));
 						Global::ConfigManagerObj->ModuleConfig.append(msg);
 
-						typeAliasesInfo->insert(name.asCString(), aliasesForName);
+						typeAliasesInfo->insert(json_string_value(name), aliasesForName);
 					}
 					else
 					{

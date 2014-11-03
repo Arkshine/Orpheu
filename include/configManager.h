@@ -7,16 +7,7 @@
 #include "CString.h"
 #include <sm_trie_tpl.h>
 #include <am-string.h>
-
-#include <cstdlib>
-#include <iostream>
-#include <fstream>
-#include <json/reader.h>
 #include "jansson.h"
-
-#include <memory.h>
-
-
 
 class ConfigManager
 {

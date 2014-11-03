@@ -12,8 +12,6 @@
 #include <am-string.h>
 #include <am-vector.h>
 
-
-
 #include <eiface.h>
 
 #include <typeHandlerImplementations/CBaseEntityHandler.h>
