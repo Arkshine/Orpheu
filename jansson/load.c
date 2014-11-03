@@ -484,6 +484,7 @@ static int lex_scan_number(lex_t *lex, int c, json_error_t *error)
     const char *saved_text;
     char *end;
     double doubleval;
+    char is_hex = 0;
 
     lex->token = TOKEN_INVALID;
 
@@ -492,7 +493,12 @@ static int lex_scan_number(lex_t *lex, int c, json_error_t *error)
 
     if(c == '0') {
         c = lex_get_save(lex, error);
-        if(l_isdigit(c)) {
+        
+        if (c == 'x') { // 0x
+            c = lex_get_save(lex, error);
+            is_hex = 1;
+        }
+        else if(l_isdigit(c)) {
             lex_unget_unsave(lex, c);
             goto out;
         }
@@ -507,6 +513,12 @@ static int lex_scan_number(lex_t *lex, int c, json_error_t *error)
         goto out;
     }
 
+    if (is_hex)
+    {
+        while (l_isxdigit(c))
+            c = lex_get_save(lex, error);
+    }
+
     if(c != '.' && c != 'E' && c != 'e') {
         json_int_t intval;
 
@@ -515,7 +527,7 @@ static int lex_scan_number(lex_t *lex, int c, json_error_t *error)
         saved_text = strbuffer_value(&lex->saved_text);
 
         errno = 0;
-        intval = json_strtoint(saved_text, &end, 10);
+        intval = json_strtoint(saved_text, &end, is_hex ? 16: 10); // 0x
         if(errno == ERANGE) {
             if(intval < 0)
                 error_set(error, lex, "too big negative integer");
