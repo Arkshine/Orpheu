@@ -226,9 +226,6 @@
     <ClInclude Include="..\include\structManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\svn_version.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\typeHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>

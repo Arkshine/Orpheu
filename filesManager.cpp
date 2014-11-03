@@ -36,11 +36,11 @@ namespace FilesManager
 		return false;
 	}
 
-	CVector<ke::AString>* getFolders(const ke::AString& directory)
+	CVector<ke::AString>* getFolders(const char *directory)
 	{
 		CVector<ke::AString>* folders = new CVector<ke::AString>();
 
-		if (dirExists(directory.chars()))
+		if (dirExists(directory))
 		{
 #if defined WIN32 || defined _WIN32
 			char path[256];
@@ -53,6 +53,11 @@ namespace FilesManager
 			{
 				do
 				{
+					if (fd.cFileName[0] == '.')
+					{
+						continue;
+					}
+
 					UTIL_Format(path, sizeof(path) - 1, "%s%s", directory, fd.cFileName);
 
 					if (dirExists(path))
@@ -75,6 +80,11 @@ namespace FilesManager
 
 				while ((ep = readdir(dp))
 				{
+					if (ep->d_name[0] == '.')
+					{
+						continue;
+					}
+
 					UTIL_Format(path, sizeof(path) - 1, "%s%s", directory, ep->d_name);
 
 					if (dirExists(path))
@@ -90,11 +100,11 @@ namespace FilesManager
 
 		return folders;
 	}
-	CVector<ke::AString>* getFiles(const ke::AString& directory)
+	CVector<ke::AString>* getFiles(const char *directory)
 	{
 		CVector<ke::AString>* files = new CVector<ke::AString>();
 
-		if (dirExists(directory.chars()))
+		if (dirExists(directory))
 		{
 #if defined WIN32 || defined _WIN32
 			char path[256];
@@ -107,6 +117,11 @@ namespace FilesManager
 			{
 				do
 				{
+					if (fd.cFileName[0] == '.')
+					{
+						continue;
+					}
+
 					UTIL_Format(path, sizeof(path) - 1, "%s%s", directory, fd.cFileName);
 
 					if (!dirExists(path))
@@ -129,6 +144,11 @@ namespace FilesManager
 
 				while ((ep = readdir(dp))
 				{
+					if (ep->d_name[0] == '.')
+					{
+						continue;
+					}
+
 					UTIL_Format(path, sizeof(path) - 1, "%s%s", directory, ep->d_name);
 
 					if (!dirExists(path))

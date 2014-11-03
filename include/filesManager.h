@@ -8,8 +8,8 @@
 
 namespace FilesManager
 {
-	CVector<ke::AString>* getFolders(const ke::AString& directory);
-	CVector<ke::AString>* getFiles(const ke::AString& directory);
+	CVector<ke::AString>* getFolders(const char *directory);
+	CVector<ke::AString>* getFiles(const char *directory);
 }
 
 #endif

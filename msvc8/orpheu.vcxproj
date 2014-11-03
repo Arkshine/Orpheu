@@ -121,7 +121,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\;..\include;..\sdk;..\public\amtl;..\public;$(METAMOD)\metamod;$(HLSDK)\common;$(HLSDK)\engine;$(HLSDK)\dlls;$(HLSDK)\pm_shared;$(HLSDK)\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\;..\include;..\jansson;..\sdk;..\public\amtl;..\public;$(METAMOD)\metamod;$(HLSDK)\common;$(HLSDK)\engine;$(HLSDK)\dlls;$(HLSDK)\pm_shared;$(HLSDK)\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;ORPHEU_EXPORTS;HAVE_STDINT_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -233,7 +233,6 @@
     <ClInclude Include="..\jansson\lookup3.h" />
     <ClInclude Include="..\jansson\strbuffer.h" />
     <ClInclude Include="..\jansson\utf.h" />
-    <ClInclude Include="..\svn_version.h" />
     <ClInclude Include="..\include\typeHandler.h" />
     <ClInclude Include="..\include\typeHandlerManager.h" />
     <ClInclude Include="..\include\typeHandlerImplementations\boolHandler.h" />
