@@ -26,8 +26,8 @@ void FunctionVirtualManager::add(FunctionStructure* functionStructure, time_t ti
 	}
 	else
 	{
-		id = functionStructures.size();
-		functionStructures.push_back(functionStructure);
+		id = functionStructures.length();
+		functionStructures.append(functionStructure);
 	}
 
 	functionVirtualNameToFunctionStructureID.replace(functionName, id);

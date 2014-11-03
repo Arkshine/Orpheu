@@ -3,7 +3,7 @@
 #define _INCLUDE_FUNCTION_MANAGER_
 
 #include <sm_trie_tpl.h>
-#include <CVector.h>
+#include <am-vector.h>
 
 #include <ctime>
 #include <function.h>
@@ -27,7 +27,7 @@ private:
 	KTrie<time_t>* functionNameToTimestamp;
 	KTrie<unsigned short int>* functionNameToFunctionID;
 	long currentHookID;
-	CVector<Function*>* functions;
+	ke::Vector<Function*>* functions;
 
 public:
 

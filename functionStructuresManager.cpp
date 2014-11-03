@@ -28,8 +28,8 @@ void FunctionStructuresManager::addFunctionStructure(FunctionStructure* function
 	}
 	else
 	{
-		id = functionStructures.size();
-		functionStructures.push_back(functionStructure);
+		id = functionStructures.length();
+		functionStructures.append(functionStructure);
 	}
 
 	functionStructureNameToFunctionStructureID.replace(functionName, id);

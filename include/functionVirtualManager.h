@@ -3,7 +3,7 @@
 #define _INCLUDE_FUNCTION_VIRTUAL_MANAGER_
 
 #include <sm_trie_tpl.h>
-#include <CVector.h>
+#include <am-vector.h>
 
 #include <ctime>
 #include <functionStructure.h>
@@ -15,7 +15,7 @@ private:
 
 	KTrie<time_t> functionVirtualNameToTimestamp;
 	KTrie<unsigned int> functionVirtualNameToFunctionStructureID;
-	CVector<FunctionStructure*> functionStructures;
+	ke::Vector<FunctionStructure*> functionStructures;
 
 public:
 

@@ -1487,7 +1487,7 @@ void CommandOrpheu(void)
 		printf("\n %s %s\n -\n", Plugin_info.name, Plugin_info.version);
 		printf(" Support  : %s\n", Plugin_info.url);
 		printf(" Author   : %s\n", Plugin_info.author);
-		printf(" Compiled : %s\n\n", __DATE__ ", " __TIME__);
+		printf(" Compiled : %s\n\n", __DATE__, __TIME__);
 		return;
 	}
 	else if (!strcasecmp(cmd, "config"))
@@ -1559,10 +1559,14 @@ void OnPluginsUnloaded()
 	Global::FunctionManagerObj->removeAllHooks();
 
 	for (unsigned int i=0; i < Global::TypesCount; i++)
+	{
 		Global::Types[i]->freeAllocatedMemory();
-
+	}
+	
 	for (unsigned int i=0; i < Global::StructuresCount; i++)
+	{
 		Global::Structures[i]->freeAllocatedMemory();
+	}
 
 	Global::ConfigManagerObj->ModuleConfig.clear();
 }

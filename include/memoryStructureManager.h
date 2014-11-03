@@ -3,7 +3,7 @@
 #define _INCLUDE_MEMORY_STRUCT_MANAGER_
 
 #include <sm_trie_tpl.h>
-#include <CVector.h>
+#include <am-vector.h>
 
 #include <ctime>
 #include <memoryStructure.h>
@@ -13,7 +13,7 @@ class MemoryStructManager
 private:
 
 	KTrie<unsigned int> memoryStructureNameToMemoryStructureID;
-	CVector<MemoryStructure*> memoryStructures;
+	ke::Vector<MemoryStructure*> memoryStructures;
 
 public:
 	//FunctionStructure* get(char* memoryStructureName);

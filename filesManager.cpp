@@ -36,9 +36,9 @@ namespace FilesManager
 		return false;
 	}
 
-	CVector<ke::AString>* getFolders(const char *directory)
+	ke::Vector<ke::AString>* getFolders(const char *directory)
 	{
-		CVector<ke::AString>* folders = new CVector<ke::AString>();
+		ke::Vector<ke::AString>* folders = new ke::Vector<ke::AString>();
 
 		if (dirExists(directory))
 		{
@@ -62,7 +62,7 @@ namespace FilesManager
 
 					if (dirExists(path))
 					{
-						folders->push_back(ke::AString(fd.cFileName));
+						folders->append(ke::AString(fd.cFileName));
 					}
 				} while (FindNextFile(hFile, &fd));
 
@@ -89,7 +89,7 @@ namespace FilesManager
 
 					if (dirExists(path))
 					{
-						folders->push_back(ke::AString(ep->d_name));
+						folders->append(ke::AString(ep->d_name));
 					}
 				}
 
@@ -100,9 +100,9 @@ namespace FilesManager
 
 		return folders;
 	}
-	CVector<ke::AString>* getFiles(const char *directory)
+	ke::Vector<ke::AString>* getFiles(const char *directory)
 	{
-		CVector<ke::AString>* files = new CVector<ke::AString>();
+		ke::Vector<ke::AString>* files = new ke::Vector<ke::AString>();
 
 		if (dirExists(directory))
 		{
@@ -126,7 +126,7 @@ namespace FilesManager
 
 					if (!dirExists(path))
 					{
-						files->push_back(ke::AString(fd.cFileName));
+						files->append(ke::AString(fd.cFileName));
 					}
 				} while (FindNextFile(hFile, &fd));
 
@@ -153,7 +153,7 @@ namespace FilesManager
 
 					if (!dirExists(path))
 					{
-						files->push_back(ke::AString(ep->d_name));
+						files->append(ke::AString(ep->d_name));
 					}
 				}
 

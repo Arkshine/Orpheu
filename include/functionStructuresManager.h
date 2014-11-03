@@ -3,7 +3,7 @@
 #define _INCLUDE_FUNCTION_STRUCTURES_MANAGER_
 
 #include <sm_trie_tpl.h>
-#include <CVector.h>
+#include <am-vector.h>
 
 #include <ctime>
 #include <functionStructure.h>
@@ -15,7 +15,7 @@ private:
 
 	KTrie<time_t> functionStructureNameToTimestamp;
 	KTrie<unsigned int> functionStructureNameToFunctionStructureID;
-	CVector<FunctionStructure*> functionStructures;
+	ke::Vector<FunctionStructure*> functionStructures;
 
 public:
 
