@@ -38,69 +38,13 @@ namespace ke {
 extern "C" {
   long __cdecl _InterlockedIncrement(long volatile *dest);
   long __cdecl _InterlockedDecrement(long volatile *dest);
-  long long __cdecl _InterlockedIncrement64(long long volatile *dest);
-  long long __cdecl _InterlockedDecrement64(long long volatile *dest);
-  long __cdecl _InterlockedCompareExchange(long volatile *dest, long exchange, long comparand);
-# if _MSC_VER > 1600 || (_MSC_VER == 1600 && !defined(_M_IX86))
-  void * __cdecl _InterlockedCompareExchangePointer(
-     void * volatile *Destination,
-     void * Exchange,
-     void * Comparand
-  );
-#else
-  static inline void * _InterlockedCompareExchangePointer(
-     void * volatile *Destination,
-     void * Exchange,
-     void * Comparand)
-  {
-    return (void *)_InterlockedCompareExchange((long volatile *)Destination, (long)Exchange, (long)Comparand);
-  }
-#endif
+  long __cdecl _InterlockedIncrement64(long long volatile *dest);
+  long __cdecl _InterlockedDecrement64(long long volatile *dest);
 }
 # pragma intrinsic(_InterlockedIncrement)
 # pragma intrinsic(_InterlockedDecrement)
-# pragma intrinsic(_InterlockedCompareExchange)
-# if _MSC_VER > 1600 || (_MSC_VER == 1600 && !defined(_M_IX86))
-#  pragma intrinsic(_InterlockedCompareExchangePointer)
-# endif
-# if defined(_WIN64)
-#  pragma intrinsic(_InterlockedIncrement64)
-#  pragma intrinsic(_InterlockedDecrement64)
-# endif
-#endif
-
-#if defined(__GNUC__)
-# if defined(i386) || defined(__x86_64__)
-#  if defined(__clang__)
-    static inline void YieldProcessor() { asm("pause"); }
-#  else
-#   if KE_GCC_AT_LEAST(4, 7)
-#    define YieldProcessor() __builtin_ia32_pause()
-#   else
-    static inline void YieldProcessor() { asm("pause"); }
-#   endif
-#  endif
-# else
-#  define YieldProcessor()
-# endif
-#elif defined(_MSC_VER)
-# if !defined(YieldProcessor)
-#  define YieldProcessor _mm_pause
-# endif
-#endif
-
-#if defined(_MSC_VER)
-static inline void *
-CompareAndSwapPtr(void *volatile *Destination, void *Exchange, void *Comparand)
-{
-  return _InterlockedCompareExchangePointer(Destination, Exchange, Comparand);
-}
-#else
-static inline void *
-CompareAndSwapPtr(void *volatile *dest, void *newval, void *oldval)
-{
-  return __sync_val_compare_and_swap(dest, oldval, newval);
-}
+# pragma intrinsic(_InterlockedIncrement64)
+# pragma intrinsic(_InterlockedDecrement64)
 #endif
 
 template <size_t Width>
@@ -160,12 +104,13 @@ struct AtomicOps<8>
 #endif
 };
 
-class KE_LINK AtomicRefcount
+
+class AtomicRefCount
 {
   typedef AtomicOps<sizeof(uintptr_t)> Ops;
 
  public:
-  AtomicRefcount(uintptr_t value)
+  AtomicRefCount(uintptr_t value)
    : value_(value)
   {
   }

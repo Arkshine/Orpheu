@@ -1,6 +1,6 @@
 // vim: set sts=8 ts=2 sw=2 tw=99 et:
 //
-// Copyright (C) 2013-2014, David Anderson and AlliedModders LLC
+// Copyright (C) 2013, David Anderson and AlliedModders LLC
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -40,10 +40,10 @@
 # include <inttypes.h>
 #endif
 #include <am-moveable.h>
-#include <am-cxx.h>
+
+#define KE_32BIT
 
 #if defined(_MSC_VER)
-// Mac file format warning.
 # pragma warning(disable:4355)
 #endif
 
@@ -55,6 +55,8 @@ static const size_t kKB = 1024;
 static const size_t kMB = 1024 * kKB;
 static const size_t kGB = 1024 * kMB;
 
+typedef uint8_t * Address;
+
 template <typename T> T
 ReturnAndVoid(T &t)
 {
@@ -62,6 +64,18 @@ ReturnAndVoid(T &t)
     t = T();
     return saved;
 }
+
+#if __cplusplus >= 201103L
+# define KE_CXX11
+#endif
+
+#if defined(KE_CXX11)
+# define KE_DELETE = delete
+# define KE_OVERRIDE override
+#else
+# define KE_DELETE
+# define KE_OVERRIDE
+#endif
 
 // Wrapper that automatically deletes its contents. The pointer can be taken
 // to avoid destruction.
@@ -72,26 +86,23 @@ class AutoPtr
 
   public:
     AutoPtr()
-      : t_(nullptr)
+      : t_(NULL)
     {
     }
     explicit AutoPtr(T *t)
       : t_(t)
     {
     }
-    AutoPtr(AutoPtr &&other)
+    AutoPtr(Moveable<AutoPtr<T> > other)
     {
-        t_ = other.t_;
-        other.t_ = nullptr;
+        t_ = other->t_;
+        other->t_ = NULL;
     }
     ~AutoPtr() {
         delete t_;
     }
     T *take() {
         return ReturnAndVoid(t_);
-    }
-    void forget() {
-        t_ = nullptr;
     }
     T *operator *() const {
         return t_;
@@ -110,10 +121,10 @@ class AutoPtr
     T **address() {
       return &t_;
     }
-    T *operator =(AutoPtr &&other) {
+    T *operator =(Moveable<AutoPtr<T> > other) {
         delete t_;
-        t_ = other.t_;
-        other.t_ = nullptr;
+        t_ = other->t_;
+        other->t_ = NULL;
         return t_;
     }
     bool operator !() const {
@@ -134,7 +145,7 @@ class AutoArray
 
   public:
     AutoArray()
-      : t_(nullptr)
+      : t_(NULL)
     {
     }
     explicit AutoArray(T *t)
@@ -147,11 +158,14 @@ class AutoArray
     T *take() {
         return ReturnAndVoid(t_);
     }
-    void forget() {
-        t_ = nullptr;
-    }
-    T &operator *() const {
+    T *operator *() const {
         return t_;
+    }
+    T &operator [](size_t index) {
+      return t_[index];
+    }
+    const T &operator [](size_t index) const {
+      return t_[index];
     }
     operator T *() const {
         return t_;
@@ -269,6 +283,8 @@ IsUintPtrMultiplySafe(size_t a, size_t b)
 }
 
 #define ARRAY_LENGTH(array) (sizeof(array) / sizeof(array[0]))
+#define STATIC_ASSERT(cond) extern int static_assert_f(int a[(cond) ? 1 : -1])
+
 #define IS_ALIGNED(addr, alignment)    (!(uintptr_t(addr) & ((alignment) - 1)))
 
 template <typename T>
@@ -279,11 +295,11 @@ IsAligned(T addr, size_t alignment)
     return !(uintptr_t(addr) & (alignment - 1));
 }
 
-static inline void *
-AlignedBase(void *addr, size_t alignment)
+static inline Address
+AlignedBase(Address addr, size_t alignment)
 {
     assert(IsPowerOfTwo(alignment));
-    return reinterpret_cast<void *>(uintptr_t(addr) & ~(alignment - 1));
+    return Address(uintptr_t(addr) & ~(alignment - 1));
 }
 
 template <typename T> static inline T
@@ -355,6 +371,18 @@ class StackLinked
   T *prev_;
 };
 
+#if __cplusplus >= 201103L
+# define KE_CXX11
+#endif
+
+#if defined(KE_CXX11)
+# define KE_DELETE = delete
+# define KE_OVERRIDE override
+#else
+# define KE_DELETE
+# define KE_OVERRIDE
+#endif
+
 #if defined(_MSC_VER)
 # define KE_SIZET_FMT           "%Iu"
 # define KE_I64_FMT             "%I64d"
@@ -373,22 +401,6 @@ class StackLinked
 # define KE_CRITICAL_LIKELY(x)  x
 #endif
 
-#if defined(_WIN32)
-# define KE_IMPORT __declspec(dllimport)
-# define KE_EXPORT __declspec(dllexport)
-#else
-# define KE_IMPORT
-# define KE_EXPORT __attribute__((visibility("default")))
-#endif
-
-#if defined(KE_EXPORTING)
-# define KE_LINK KE_EXPORT
-#elif defined(KE_IMPORTING)
-# define KE_LINK KE_IMPORT
-#else
-# define KE_LINK
-#endif
-
-} // namespace ke
+}
 
 #endif // _include_amtl_utility_h_

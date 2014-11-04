@@ -98,9 +98,11 @@ class HashSet : public AllocPolicy
 
   // The map must not have been mutated in between findForAdd() and add().
   // The Insert object is still valid after add() returns, however.
-  template <typename UK>
-  bool add(Insert &i, UK &&key) {
-    return table_.add(i, ke::Forward<UK>(key));
+  bool add(Insert &i, const K &key) {
+    return table_.add(i, key);
+  }
+  bool add(Insert &i, Moveable<K> key) {
+    return table_.add(i, key);
   }
 
   // This can be used to avoid compiler constructed temporaries, since AMTL

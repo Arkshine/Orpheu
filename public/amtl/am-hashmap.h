@@ -58,20 +58,29 @@ class HashMap : public AllocPolicy
     V value;
 
     Entry()
-    {}
-    Entry(const Entry &other)
-      : key(other.key),
-        value(other.value)
-    {}
-    Entry(Entry &&other)
-      : key(ke::Move(other.key)),
-        value(ke::Move(other.value))
-    {}
+    {
+    }
+    Entry(Moveable<Entry> other)
+      : key(Moveable<K>(other->key)),
+        value(Moveable<V>(other->value))
+    {
+    }
 
-    template <typename UK, typename UV>
-    Entry(UK &&aKey, UV &&aValue)
-     : key(ke::Forward<UK>(aKey)),
-       value(ke::Forward<UV>(aValue))
+    Entry(const K &aKey, const V &aValue)
+     : key(aKey),
+       value(aValue)
+    { }
+    Entry(const K &aKey, Moveable<V> aValue)
+     : key(aKey),
+       value(aValue)
+    { }
+    Entry(Moveable<K> aKey, const V &aValue)
+     : key(aKey),
+       value(aValue)
+    { }
+    Entry(Moveable<K> aKey, Moveable<V> aValue)
+     : key(aKey),
+       value(aValue)
     { }
   };
 
@@ -128,14 +137,24 @@ class HashMap : public AllocPolicy
 
   // The map must not have been mutated in between findForAdd() and add().
   // The Insert object is still valid after add() returns, however.
-  template <typename UK, typename UV>
-  bool add(Insert &i, UK &&key, UV &&value) {
-    Entry entry(ke::Forward<UK>(key), ke::Forward<UV>(value));
+  bool add(Insert &i, const K &key, const V &value) {
+    Entry entry(key, value);
     return table_.add(i, ke::Move(entry));
   }
-  template <typename UK>
-  bool add(Insert &i, UK &&key) {
-    Entry entry(ke::Forward<UK>(key), V());
+  bool add(Insert &i, Moveable<K> key, const V &value) {
+    Entry entry(key, value);
+    return table_.add(i, ke::Move(entry));
+  }
+  bool add(Insert &i, const K &key, Moveable<V> value) {
+    Entry entry(key, value);
+    return table_.add(i, ke::Move(entry));
+  }
+  bool add(Insert &i, Moveable<K> key, Moveable<V> value) {
+    Entry entry(key, value);
+    return table_.add(i, ke::Move(entry));
+  }
+  bool add(Insert &i, Moveable<K> key) {
+    Entry entry(key, V());
     return table_.add(i, ke::Move(entry));
   }
 

@@ -32,7 +32,6 @@
 
 #include <stddef.h>
 #include <assert.h>
-#include <am-cxx.h>
 
 namespace ke {
 
@@ -47,8 +46,8 @@ class InlineListNode
 
   public:
   InlineListNode()
-   : next_(nullptr),
-     prev_(nullptr)
+   : next_(NULL),
+     prev_(NULL)
   {
   }
 
@@ -148,7 +147,7 @@ class InlineList
     remove(at.iter_);
 
     // Iterator is no longer valid.
-    at.iter_ = nullptr;
+    at.iter_ = NULL;
 
     return next;
   }
@@ -162,8 +161,8 @@ class InlineList
     t->next_->prev_ = t->prev_;
 
 #if !defined(NDEBUG)
-    t->next_ = nullptr;
-    t->prev_ = nullptr;
+    t->next_ = NULL;
+    t->prev_ = NULL;
 #endif
   }
 

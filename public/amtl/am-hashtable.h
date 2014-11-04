@@ -54,9 +54,14 @@ namespace detail {
     void setHash(uint32_t hash) {
       hash_ = hash;
     }
-    template <typename U>
-    void construct(U &&u) {
-      new (&t_) T(ke::Forward<U>(u));
+    void construct() {
+      new (&t_) T();
+    }
+    void construct(const T &t) {
+      new (&t_) T(t);
+    }
+    void construct(Moveable<T> t) {
+      new (&t_) T(t);
     }
     uint32_t hash() const {
       return hash_;
@@ -146,7 +151,7 @@ class HashTable : public AllocPolicy
 
     Entry *table = (Entry *)this->malloc(capacity * sizeof(Entry));
     if (!table)
-      return nullptr;
+      return NULL;
 
     for (size_t i = 0; i < capacity; i++)
       table[i].initialize();
@@ -262,7 +267,7 @@ class HashTable : public AllocPolicy
       if (oldEntry.isLive()) {
         Insert p = insertUnique(oldEntry.hash());
         p.entry().setHash(p.hash());
-        p.entry().construct(ke::Move(oldEntry.payload()));
+        p.entry().construct(Moveable<Payload>(oldEntry.payload()));
       }
       oldEntry.destruct();
     }
@@ -368,7 +373,7 @@ class HashTable : public AllocPolicy
     capacity_(0),
     nelements_(0),
     ndeleted_(0),
-    table_(nullptr),
+    table_(NULL),
     minCapacity_(kMinCapacity)
   {
   }
@@ -380,7 +385,7 @@ class HashTable : public AllocPolicy
     this->free(table_);
   }
 
-  bool init(size_t capacity = 0) {
+  bool init(uint32_t capacity = 0) {
     if (capacity < kMinCapacity) {
       capacity = kMinCapacity;
     } else if (capacity > kMaxCapacity) {
@@ -388,10 +393,10 @@ class HashTable : public AllocPolicy
       return false;
     }
 
-    minCapacity_ = uint32_t(capacity);
+    minCapacity_ = capacity;
 
     assert(IsPowerOfTwo(capacity));
-    capacity_ = uint32_t(capacity);
+    capacity_ = capacity;
 
     table_ = createTable(capacity_);
     if (!table_)
@@ -427,11 +432,16 @@ class HashTable : public AllocPolicy
 
   // The table must not have been mutated in between findForAdd() and add().
   // The Insert object is still valid after add() returns, however.
-  template <typename U>
-  bool add(Insert &i, U &&payload) {
+  bool add(Insert &i, const Payload &payload) {
     if (!internalAdd(i))
       return false;
-    i.entry().construct(ke::Forward<U>(payload));
+    i.entry().construct(payload);
+    return true;
+  }
+  bool add(Insert &i, Moveable<Payload> payload) {
+    if (!internalAdd(i))
+      return false;
+    i.entry().construct(payload);
     return true;
   }
   bool add(Insert &i) {
@@ -600,7 +610,7 @@ template <>
 inline uint32_t
 HashInteger<4>(uintptr_t value)
 {
-  return HashInt32(uint32_t(value));
+  return HashInt32(value);
 }
 
 template <>
