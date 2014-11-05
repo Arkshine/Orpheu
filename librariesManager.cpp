@@ -1,51 +1,51 @@
 
 #include <librariesManager.h>
 
-#include <sm_trie_tpl.h>
+#include <sm_stringhashmap.h>
 
 #if defined __linux__
-#include <dlfcn.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <am-string.h>
-#include <stdio.h>
-#include <stdlib.h>
+	#include <dlfcn.h>
+	#include <sys/types.h>
+	#include <sys/stat.h>
+	#include <unistd.h>
+	#include <string.h>
+	#include <stdio.h>
+	#include <stdlib.h>
 
-#include <sys/mman.h>
-#include <link.h>
-#include <limits.h>
-#include <errno.h>
+	#include <sys/mman.h>
+	#include <link.h>
+	#include <limits.h>
+	#include <errno.h>
 
-#ifndef uint32
-#define uint32	unsigned int
-#endif
+	#ifndef uint32
+		#define uint32	unsigned int
+	#endif
 
-#ifndef FALSE
-#define FALSE	0
-#endif
+	#ifndef FALSE
+		#define FALSE	0
+	#endif
 
-#ifndef TRUE
-#define TRUE	1
-#endif
+	#ifndef TRUE
+		#define TRUE	1
+	#endif
 
-#ifndef PAGESIZE
-#define PAGESIZE sysconf(_SC_PAGESIZE)
-#endif
+	#ifndef PAGESIZE
+		#define PAGESIZE sysconf(_SC_PAGESIZE)
+	#endif
 
-typedef int BOOL;
+	typedef int BOOL;
 #else
-#include <windows.h>
-#include <psapi.h>
+	#include <windows.h>
+	#include <psapi.h>
 #endif
 
 namespace LibrariesManager
 {
-	KTrie<LibraryInfo*>* LibraryNameToLibraryInfo = new KTrie < LibraryInfo* > ;
+	StringHashMap<LibraryInfo*> LibraryNameToLibraryInfo;
 
 	bool hasLibrary(const char *libraryName)
 	{
-		return LibraryNameToLibraryInfo->retrieve(libraryName) != NULL;
+		return LibraryNameToLibraryInfo.contains(libraryName);
 	}
 
 #if defined __linux__
@@ -117,7 +117,7 @@ namespace LibrariesManager
 				libraryInfo->length = ( long )EndAddress - ( long )BaseAddress;
 				libraryInfo->handle = dlopen( LibraryName, RTLD_NOW );
 
-				LibraryNameToLibraryInfo->insert( libraryName, libraryInfo );
+				LibraryNameToLibraryInfo.insert( libraryName, libraryInfo );
 
 				return true;
 			}
@@ -147,7 +147,8 @@ namespace LibrariesManager
 				libraryInfo->length = moduleInfo.SizeOfImage;
 				libraryInfo->handle = module;
 
-				LibraryNameToLibraryInfo->insert(libraryName, libraryInfo);
+				printf("addLibrary : %s\n", libraryName);
+				LibraryNameToLibraryInfo.insert(libraryName, libraryInfo);
 
 				return true;
 			}
@@ -159,12 +160,10 @@ namespace LibrariesManager
 
 	void* findFunction(const char* libraryName, const char* functionName)
 	{
-		LibraryInfo** libraryInfoPointer = LibraryNameToLibraryInfo->retrieve(libraryName);
-
-		if (libraryInfoPointer)
+		LibraryInfo* libraryInfo;
+		
+		if (LibraryNameToLibraryInfo.retrieve(libraryName, &libraryInfo))
 		{
-			LibraryInfo* libraryInfo = *libraryInfoPointer;
-
 #if defined __linux__
 
 			return dlsym(libraryInfo->handle,functionName);
@@ -175,6 +174,7 @@ namespace LibrariesManager
 		}
 		return NULL;
 	}
+
 	bool compareSignature(unsigned char* address, unsigned char* signature, SignatureEntryType* signatureData, unsigned int length)
 	{
 		if (length == 1)
@@ -225,12 +225,10 @@ namespace LibrariesManager
 	}
 	void* findFunction(const char* libraryName, unsigned char* signature, SignatureEntryType* signatureData, unsigned int length)
 	{
-		LibraryInfo** libraryInfoPointer = LibraryNameToLibraryInfo->retrieve(libraryName);
+		LibraryInfo* libraryInfo;
 
-		if (libraryInfoPointer)
+		if (LibraryNameToLibraryInfo.retrieve(libraryName, &libraryInfo))
 		{
-			LibraryInfo* libraryInfo = *libraryInfoPointer;
-
 			for (unsigned int i=0; i <= libraryInfo->length - length; i++)
 			{
 				if (compareSignature((unsigned char *)libraryInfo->baseAddress + i, signature, signatureData, length))
@@ -245,12 +243,10 @@ namespace LibrariesManager
 
 	void* findMemory(const char* libraryName, unsigned char* signature, SignatureEntryType* signatureData, unsigned int length, long start)
 	{
-		LibraryInfo** libraryInfoPointer = LibraryNameToLibraryInfo->retrieve(libraryName);
+		LibraryInfo* libraryInfo;
 
-		if (libraryInfoPointer)
+		if (LibraryNameToLibraryInfo.retrieve(libraryName, &libraryInfo))
 		{
-			LibraryInfo* libraryInfo = *libraryInfoPointer;
-
 			for (unsigned int i = start - (unsigned int)libraryInfo->baseAddress; i <= libraryInfo->length - length; i++)
 			{
 				if (compareSignature((unsigned char *)libraryInfo->baseAddress + i, signature, signatureData, length))
@@ -262,39 +258,37 @@ namespace LibrariesManager
 
 		return NULL;
 	}
+
 	bool libraryContainsAddress(const char* libraryName, long address)
 	{
-		LibraryInfo** libraryInfoPointer = LibraryNameToLibraryInfo->retrieve(libraryName);
+		LibraryInfo* libraryInfo;
 
-		if (libraryInfoPointer)
+		if (LibraryNameToLibraryInfo.retrieve(libraryName, &libraryInfo))
 		{
-			LibraryInfo* libraryInfo = *libraryInfoPointer;
-
 			return (address >= (long)libraryInfo->baseAddress) && (address <= ((long)libraryInfo->baseAddress + libraryInfo->length));
 		}
 
 		return false;
 	}
+
 	long getAddressOffset(long address, const char* libraryName)
 	{
-		LibraryInfo** libraryInfoPointer = LibraryNameToLibraryInfo->retrieve(libraryName);
+		LibraryInfo* libraryInfo;
 
-		if (libraryInfoPointer)
+		if (LibraryNameToLibraryInfo.retrieve(libraryName, &libraryInfo))
 		{
-			LibraryInfo* libraryInfo = *libraryInfoPointer;
 			return address - (long)libraryInfo->baseAddress;
 		}
 
 		return 0;
 	}
+
 	long getAddressWithOffset(long offset, const char* libraryName)
 	{
-		LibraryInfo** libraryInfoPointer = LibraryNameToLibraryInfo->retrieve(libraryName);
+		LibraryInfo* libraryInfo;
 
-		if (libraryInfoPointer)
+		if (LibraryNameToLibraryInfo.retrieve(libraryName, &libraryInfo))
 		{
-			LibraryInfo* libraryInfo = *libraryInfoPointer;
-
 			if ((offset >= 0) && (offset <= (libraryInfo->length)))
 			{
 				return (long)libraryInfo->baseAddress + offset;
@@ -303,25 +297,26 @@ namespace LibrariesManager
 
 		return 0;
 	}
+
 	long getLibraryAddress(const char* libraryName)
 	{
-		LibraryInfo** libraryInfoPointer = LibraryNameToLibraryInfo->retrieve(libraryName);
+		LibraryInfo* libraryInfo;
 
-		if (libraryInfoPointer)
+		if (LibraryNameToLibraryInfo.retrieve(libraryName, &libraryInfo))
 		{
-			LibraryInfo* libraryInfo = *libraryInfoPointer;
 			return (long)libraryInfo->baseAddress;
 		}
 
 		return 0;
 	}
+
 	LibraryInfo* getLibrary(const char* libraryName)
 	{
-		LibraryInfo** libraryInfoPointer = LibraryNameToLibraryInfo->retrieve(libraryName);
+		LibraryInfo* libraryInfo;
 
-		if (libraryInfoPointer)
+		if (LibraryNameToLibraryInfo.retrieve(libraryName, &libraryInfo))
 		{
-			return *libraryInfoPointer;
+			return libraryInfo;
 		}
 
 		return NULL;

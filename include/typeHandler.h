@@ -2,9 +2,7 @@
 #ifndef _INCLUDE_TYPE_HANDLER_
 #define _INCLUDE_TYPE_HANDLER_
 
-#include <memory.h>
 #include <amxxmodule.h>
-
 #include <am-vector.h>
 
 typedef enum
