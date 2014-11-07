@@ -3,8 +3,6 @@
 
 FunctionManager::FunctionManager()
 {
-	functionNameToTimestamp = new KTrie < time_t > ;
-	functionNameToFunctionID = new KTrie < unsigned short int > ;
 	functions = new ke::Vector < Function* > ;
 	functions->append(nullptr);
 	currentHookID = 1;
@@ -12,20 +10,18 @@ FunctionManager::FunctionManager()
 
 time_t FunctionManager::getTimestamp(const char* functionName)
 {
-	time_t* timestampPointer = functionNameToTimestamp->retrieve(functionName);
-	time_t timestamp = timestampPointer ? *timestampPointer : 0;
+	time_t timestampPointer;
+	functionNameToTimestamp.retrieve(functionName, &timestampPointer);
+	time_t timestamp = timestampPointer ? timestampPointer : 0;
 	return timestamp;
 }
 
 unsigned short int FunctionManager::addFunction(const char* functionName, Function* function, time_t timestamp)
 {
-	unsigned short int* idPointer;
-
 	unsigned short int id;
 
-	if (functionName[0] && (idPointer = functionNameToFunctionID->retrieve(functionName)))
+	if (functionName[0] && functionNameToFunctionID.retrieve(functionName, &id))
 	{
-		id = *idPointer;
 		//delete functions->at(id);
 		functions->at(id) = function;
 	}
@@ -37,8 +33,8 @@ unsigned short int FunctionManager::addFunction(const char* functionName, Functi
 
 	function->setID(id);
 
-	functionNameToFunctionID->replace(functionName, id);
-	functionNameToTimestamp->replace(functionName, timestamp);
+	functionNameToFunctionID.replace(functionName, id);
+	functionNameToTimestamp.replace(functionName, timestamp);
 
 	return id;
 }
@@ -55,11 +51,11 @@ Function* FunctionManager::getFunction(unsigned short int functionID)
 
 unsigned short int FunctionManager::getFunctionID(const char* functionName)
 {
-	unsigned short int* idPointer = functionNameToFunctionID->retrieve(functionName);
-
-	if (idPointer)
+	unsigned short int id;
+	
+	if (functionNameToFunctionID.retrieve(functionName, &id))
 	{
-		return *idPointer;
+		return id;
 	}
 
 	return 0;
@@ -73,26 +69,32 @@ long FunctionManager::addHook(AMX* amx, const char* functionName, Function* func
 	hookReferenceData->phase = phase;
 	hookReferenceData->hookFunctionPhaseID = function->addHook(amx, functionName, hookReferenceData->phase);
 
-	this->hookReferences[currentHookID] = hookReferenceData;
+	HookTableMap::Insert i = this->hookReferences.findForAdd(currentHookID);
+	if (!i.found())
+	{
+		if (this->hookReferences.add(i))
+		{
+			i->key = currentHookID;
+		}
+	}
+	i->value = hookReferenceData;
 
 	return currentHookID++;
 }
 
 bool FunctionManager::removeHook(long hookID)
 {
-	map<long, HookReferenceData*>::iterator iterator = this->hookReferences.find(hookID);
+	HookTableMap::Result r = this->hookReferences.find(hookID);
 
-	if (iterator != this->hookReferences.end())
+	if (r.found())
 	{
-		pair<long, HookReferenceData*> hookPair = *iterator;
-
-		HookReferenceData* hookReferenceData = hookPair.second;
+		HookReferenceData* hookReferenceData = r->value;
 
 		hookReferenceData->function->removeHook(hookReferenceData->phase, hookReferenceData->hookFunctionPhaseID);
 
 		delete hookReferenceData;
 
-		this->hookReferences.erase(iterator);
+		this->hookReferences.remove(r);
 
 		return true;
 	}
@@ -102,11 +104,9 @@ bool FunctionManager::removeHook(long hookID)
 
 void FunctionManager::removeAllHooks()
 {
-	for (map<long, HookReferenceData*>::iterator iterator = this->hookReferences.begin(); iterator != this->hookReferences.end(); iterator++)
+	for (HookTableMap::iterator iter = this->hookReferences.iter(); !iter.empty(); iter.next())
 	{
-		pair<long, HookReferenceData*> hookPair = *iterator;
-
-		HookReferenceData* hookReferenceData = hookPair.second;
+		HookReferenceData* hookReferenceData = iter->value;
 
 		hookReferenceData->function->removeHook(hookReferenceData->phase, hookReferenceData->hookFunctionPhaseID);
 
@@ -120,12 +120,12 @@ void FunctionManager::removeAllHooks()
 
 void FunctionManager::tryToRemove(const char* functionName)
 {
-	unsigned short int* idPointer = functionNameToFunctionID->retrieve(functionName);
-
-	if (idPointer)
+	unsigned short int id;
+	
+	if (functionNameToFunctionID.retrieve(functionName, &id))
 	{
-		functionNameToFunctionID->remove(functionName);
-		functionNameToTimestamp->remove(functionName);
-		this->functions->remove(*idPointer);
+		functionNameToFunctionID.remove(functionName);
+		functionNameToTimestamp.remove(functionName);
+		this->functions->remove(id);
 	}
 }

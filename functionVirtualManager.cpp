@@ -5,22 +5,20 @@
 
 time_t FunctionVirtualManager::getTimestamp(char* functionName)
 {
-	time_t* timestampPointer = functionVirtualNameToTimestamp.retrieve(functionName);
-	time_t timestamp = timestampPointer ? *timestampPointer : 0;
-	return timestamp;
+	time_t timestamp;
+	functionVirtualNameToTimestamp.retrieve(functionName, &timestamp);
+
+	return timestamp ? timestamp : 0;
 }
 
 void FunctionVirtualManager::add(FunctionStructure* functionStructure, time_t timestamp)
 {
 	char* functionName = (char*)functionStructure->name.chars();
 
-	unsigned int* idPointer = functionVirtualNameToFunctionStructureID.retrieve(functionName);
-
 	unsigned int id;
-
-	if (idPointer)
+	
+	if (functionVirtualNameToFunctionStructureID.retrieve(functionName, &id))
 	{
-		id = *idPointer;
 		//delete functionsStructures->at(id);
 		functionStructures.at(id) = functionStructure;
 	}
@@ -47,20 +45,25 @@ unsigned short int FunctionVirtualManager::makeFunction(FunctionStructure* funct
 
 		void* address = (void*)ivtable[functionStructure->virtualTableIndex];
 
-		map<void*, Function*>::iterator iterator = functionStructure->virtualFunctionsCreated.find(address);
+		FunctionStructure::VFTableMap::Insert i = functionStructure->virtualFunctionsCreated.findForAdd(address);
 
 		Function* function;
 
-		if (iterator == functionStructure->virtualFunctionsCreated.end())
+		if (!i.found())
 		{
 			function = new Function(address, functionStructure->argumentsHandlers, functionStructure->argumentsCount, functionStructure->returnHandler, functionStructure->library, functionStructure->isMethod);
 			Global::FunctionManagerObj->addFunction("", function, 0);
 
-			functionStructure->virtualFunctionsCreated[address] = function;
+			if (functionStructure->virtualFunctionsCreated.add(i))
+			{
+				i->key = address;
+			}
+
+			i->value = function;
 		}
 		else
 		{
-			function = (*iterator).second;
+			function = i->value;
 		}
 
 		return function->getID();
@@ -71,11 +74,10 @@ unsigned short int FunctionVirtualManager::makeFunction(FunctionStructure* funct
 
 FunctionStructure* FunctionVirtualManager::get(char* functionName)
 {
-	unsigned int* idPointer = functionVirtualNameToFunctionStructureID.retrieve(functionName);
+	unsigned int id; 
 
-	if (idPointer)
+	if (functionVirtualNameToFunctionStructureID.retrieve(functionName, &id))
 	{
-		unsigned int id = *idPointer;
 		return functionStructures.at(id);
 	}
 

@@ -147,7 +147,6 @@ namespace LibrariesManager
 				libraryInfo->length = moduleInfo.SizeOfImage;
 				libraryInfo->handle = module;
 
-				printf("addLibrary : %s\n", libraryName);
 				LibraryNameToLibraryInfo.insert(libraryName, libraryInfo);
 
 				return true;

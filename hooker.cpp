@@ -8,11 +8,10 @@ namespace Hooker
 
 	void HookerCvarRegister::hooker(cvar_t *cvar)
 	{
-		char **libraryNamePtr = Global::LibrariesCvarToName->retrieve(cvar->name);
+		char *libraryName;
 
-		if (libraryNamePtr)
+		if (Global::LibrariesCvarToName->retrieve(cvar->name, &libraryName))
 		{
-			char* libraryName = *libraryNamePtr;
 			LibrariesManager::addLibrary(libraryName, (void*)cvar);
 		}
 
@@ -43,7 +42,7 @@ namespace Hooker
 		}
 		else
 		{
-			Global::ConfigManagerObj->ModuleConfig.append("PATCHING FAILED\n");
+			Global::ConfigManagerObj->ModuleConfig.append(ke::AString("PATCHING FAILED\n"));
 		}
 	}
 	void HookerCvarRegister::undoPatch()

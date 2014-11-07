@@ -1,9 +1,9 @@
 
 #include "typeHandlerManager.h"
 
-TypeHandlerManager::TypeHandlerManager(KTrie<ke::Vector<char*>*>* typeAliases)
+TypeHandlerManager::TypeHandlerManager(StringHashMap<ke::Vector<char*>*>* typeAliases)
 {
-	registeredTypeHandlers = new KTrie<TypeHandler*>();
+	registeredTypeHandlers = new StringHashMap<TypeHandler*>();
 	this->typeAliases = typeAliases;
 }
 
@@ -11,12 +11,10 @@ void TypeHandlerManager::registerTypeHandler(const char* label, TypeHandler* han
 {
 	registeredTypeHandlers->insert(label, handler);
 
-	ke::Vector<char*>** aliasesPointer = typeAliases->retrieve(label);
+	ke::Vector<char*>* aliases;
 
-	if (aliasesPointer)
+	if (typeAliases->retrieve(label, &aliases))
 	{
-		ke::Vector<char*>* aliases = *aliasesPointer;
-
 		for (unsigned int i=0; i < aliases->length(); i++)
 		{
 			registeredTypeHandlers->insert(aliases->at(i), handler);
@@ -25,14 +23,17 @@ void TypeHandlerManager::registerTypeHandler(const char* label, TypeHandler* han
 }
 bool TypeHandlerManager::typeHandlerExists(char* label)
 {
-	return registeredTypeHandlers->retrieve(label) != NULL;
+	return registeredTypeHandlers->contains(label);
 }
+
 TypeHandler* TypeHandlerManager::getTypeHandler(char* label)
 {
-	TypeHandler** handlerPointer = registeredTypeHandlers->retrieve(label);
+	TypeHandler* handler;
 
-	if (handlerPointer)
-		return *handlerPointer;
+	if (registeredTypeHandlers->retrieve(label, &handler))
+	{
+		return handler;
+	}
 
 	return NULL;
 }

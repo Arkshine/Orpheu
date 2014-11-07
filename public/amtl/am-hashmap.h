@@ -196,6 +196,16 @@ struct PointerPolicy
   }
 };
 
+template <typename T>
+struct IntegerPolicy
+{
+  static inline uint32_t hash(T p) {
+    return HashInteger<4>(p);
+  }
+  static inline bool matches(T p1, T p2) {
+    return p1 == p2;
+  }
+};
 }
 
 #endif // _include_amtl_hashmap_h_

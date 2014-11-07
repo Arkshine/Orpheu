@@ -135,9 +135,6 @@ Function::Function(void* address, TypeHandler** argumentsHandlers, unsigned int 
 
 	this->currentHookID[OrpheuHookPre] = this->currentHookID[OrpheuHookPost] = 0;
 
-	hooks[OrpheuHookPre] = new map < long, long > ;
-	hooks[OrpheuHookPost] = new map < long, long > ;
-
 	shouldCallHooks = true;
 }
 
@@ -182,7 +179,7 @@ void Function::doPatch()
 		}
 		else
 		{
-			Global::ConfigManagerObj->ModuleConfig.append("Memory patching failed\n");
+			Global::ConfigManagerObj->ModuleConfig.append(ke::AString("Memory patching failed\n"));
 		}
 	}
 }
@@ -198,7 +195,7 @@ void Function::undoPatch()
 		}
 		else
 		{
-			Global::ConfigManagerObj->ModuleConfig.append("Memory patching failed\n");
+			Global::ConfigManagerObj->ModuleConfig.append(ke::AString("Memory patching failed\n"));
 		}
 	}
 }
@@ -419,7 +416,17 @@ long Function::addHook(AMX* amx, const char* functionName, OrpheuHookPhase phase
 		:"=r"(forward) : "m"(parameters), "m"(argumentsCount), "r"(functionName), "r"(amx), "m"(MF_RegisterSPForwardByName), "m"(espDislocationAddHook) : "eax", "ebx", "ecx");
 #endif
 
-	this->hooks[phase]->operator[](hookID) = forward;
+	HooksDataMap::Insert i = hooks[phase].findForAdd(hookID);
+
+	if (!i.found())
+	{
+		if (hooks[phase].add(i))
+		{
+			i->key = hookID;
+		}
+	}
+
+	i->value = forward;
 
 	return hookID;
 }
@@ -428,13 +435,10 @@ void Function::removeAllHooks()
 {
 	for (int i=0; i <= 1; i++)
 	{
-		for (map<long, long>::iterator iterator = this->hooks[i]->begin(); iterator != this->hooks[i]->end(); iterator++)
+		for (Function::HooksDataMap::iterator iter = hooks[i].iter(); !iter.empty(); iter.next())
 		{
-			std::pair<long, long> pair = *iterator;
-
-			MF_UnregisterSPForward(pair.second);
-
-			this->hooks[i]->erase(iterator);
+			MF_UnregisterSPForward(iter->value);
+			iter.erase();
 		}
 	}
 
@@ -443,21 +447,19 @@ void Function::removeAllHooks()
 }
 void Function::removeHook(OrpheuHookPhase phase, long functionHookPhaseID)
 {
-	map<long, long>::iterator iterator = this->hooks[phase]->find(functionHookPhaseID);
+	Function::HooksDataMap::Result r = hooks[phase].find(functionHookPhaseID);
 
-	if (iterator != this->hooks[phase]->end())
+	if (r.found())
 	{
-		std::pair<long, long> pair = *iterator;
+		MF_UnregisterSPForward(r->value);
 
-		MF_UnregisterSPForward(pair.second);
+		hooks[phase].remove(r);
 
-		this->hooks[phase]->erase(iterator);
-
-		if (this->hooks[phase]->empty())
+		if (!hooks[phase].elements())
 		{
-			this->currentHookID[phase] = 0;
+			currentHookID[phase] = 0;
 
-			if (this->hooks[!phase]->empty())
+			if (!hooks[!phase].elements())
 			{
 				undoPatch();
 			}
@@ -477,10 +479,9 @@ OrpheuHookReturn Function::callHooks(OrpheuHookPhase phase)
 {
 	OrpheuHookReturn hookReturnStatus = OrpheuIgnored;
 
-	for (map<long, long>::iterator iterator = this->hooks[phase]->begin(); iterator != this->hooks[phase]->end(); iterator++)
+	for (HooksDataMap::iterator iter = hooks[phase].iter(); !iter.empty(); iter.next())
 	{
-		std::pair<long, long> pair = *iterator;
-		long forward = pair.second;
+		long forward = iter->value;
 
 		OrpheuHookReturn newHookReturnStatus = callForward(forward);
 

@@ -5,22 +5,20 @@
 
 time_t FunctionStructuresManager::getTimestamp(char* functionName)
 {
-	time_t* timestampPointer = functionStructureNameToTimestamp.retrieve(functionName);
-	time_t timestamp = timestampPointer ? *timestampPointer : 0;
-	return timestamp;
+	time_t timestamp;
+	functionStructureNameToTimestamp.retrieve(functionName, &timestamp);
+
+	return timestamp ? timestamp : 0;;
 }
 
 void FunctionStructuresManager::addFunctionStructure(FunctionStructure* functionStructure, time_t timestamp)
 {
 	char* functionName = (char*)functionStructure->name.chars();
 
-	unsigned int* idPointer = functionStructureNameToFunctionStructureID.retrieve(functionName);
-
 	unsigned int id;
 
-	if (idPointer)
+	if (functionStructureNameToFunctionStructureID.retrieve(functionName, &id))
 	{
-		id = *idPointer;
 		//delete functionsStructures->at(id);
 		functionStructures.at(id) = functionStructure;
 
@@ -45,11 +43,10 @@ unsigned short int FunctionStructuresManager::makeFunction(FunctionStructure* fu
 
 FunctionStructure* FunctionStructuresManager::getFunctionStructure(char* functionName)
 {
-	unsigned int* idPointer = functionStructureNameToFunctionStructureID.retrieve(functionName);
-
-	if (idPointer)
+	unsigned int id;
+	
+	if (functionStructureNameToFunctionStructureID.retrieve(functionName, &id))
 	{
-		unsigned int id = *idPointer;
 		return functionStructures.at(id);
 	}
 

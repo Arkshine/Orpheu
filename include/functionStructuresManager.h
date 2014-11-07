@@ -2,7 +2,7 @@
 #ifndef _INCLUDE_FUNCTION_STRUCTURES_MANAGER_
 #define _INCLUDE_FUNCTION_STRUCTURES_MANAGER_
 
-#include <sm_trie_tpl.h>
+#include <sm_stringhashmap.h>
 #include <am-vector.h>
 
 #include <ctime>
@@ -13,8 +13,8 @@ class FunctionStructuresManager
 {
 private:
 
-	KTrie<time_t> functionStructureNameToTimestamp;
-	KTrie<unsigned int> functionStructureNameToFunctionStructureID;
+	StringHashMap<time_t> functionStructureNameToTimestamp;
+	StringHashMap<unsigned int> functionStructureNameToFunctionStructureID;
 	ke::Vector<FunctionStructure*> functionStructures;
 
 public:

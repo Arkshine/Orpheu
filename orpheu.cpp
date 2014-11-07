@@ -1382,41 +1382,44 @@ AMX_NATIVE_INFO OrpheuNatives[] =
 #ifdef __linux__
 static int addLibraryRecursive(struct dl_phdr_info *info, size_t size, void *data)
 {
-	static char msg[100];
-	ke::AString modname = "";
+	char msg[100];
+	char process[260];
+	char library[32];
 
-	modname.append(info->dlpi_name, strlen(info->dlpi_name));
-	if(modname.find("addons") != ke::AString::npos)
+	strncpy(process, info->dlpi_name, strlen(info->dlpi_name));
+	
+	if (strstr(process, "addons"))
 	{
-		unsigned int pos = modname.rfind("/");
-		if(pos != ke::AString::npos) modname.erase(0, pos+1);
+		size_t length = strlen(process);
+		size_t i = length;
 
-		pos = modname.find("_");
-		if(pos != ke::AString::npos) modname.erase(pos);
+		while (process[--i] != '.') {}; process[i] = '\0';
+		while (process[--i] != '\\') {};
 
-		//printf("Found module %s (address: 0x%x)\n", modname.chars(), info->dlpi_addr);
-		if(!LibrariesManager::addLibrary((char*)modname.chars(), (void *)info->dlpi_addr))
+		strcpy(library, &process[i + 1]);
+
+		if (!LibrariesManager::addLibrary(library, info.lpBaseOfDll))
 		{
-			sprintf(msg, "\tERROR adding library %s (0x%x)\n", (char*)modname.chars(), info->dlpi_addr);
+			UTIL_Format(msg, sizeof(msg) - 1, "\tERROR adding library %s (0x%p)\n", library, info->dlpi_addr);
 			Global::ConfigManagerObj->ModuleConfig.append(msg);
 		}
 		else
 		{
-			sprintf(msg, "\tAdding library %s (0x%x)\n", (char*)modname.chars(), info->dlpi_addr);
+			UTIL_Format(msg, sizeof(msg) - 1, "\tAdding library %s (0x%p)\n", library, info->dlpi_addr);
 			Global::ConfigManagerObj->ModuleConfig.append(msg);
 		}
-	}
 
 	return 0;
 }
 #else
+
 void addLibraries() // IM THE KING OF EXAMPLE COPYPASTING!
 {
 	HMODULE hMods[1024];
 	HANDLE hProcess;
 	DWORD cbNeeded;
 	unsigned int i;
-	static char msg[100];
+	char msg[100];
 
 	hProcess = GetCurrentProcess();
 
@@ -1425,52 +1428,36 @@ void addLibraries() // IM THE KING OF EXAMPLE COPYPASTING!
 
 	if (EnumProcessModules(hProcess, hMods, sizeof(hMods), &cbNeeded))
 	{
-		TCHAR szModName[MAX_PATH];
+		TCHAR process[MAX_PATH];
+		char library[32];
 
 		for (i = 0; i < (cbNeeded / sizeof(HMODULE)); i++)
 		{
-			if (GetModuleFileNameEx(hProcess, hMods[i], szModName, sizeof(szModName) / sizeof(TCHAR)))
+			if (GetModuleFileNameEx(hProcess, hMods[i], process, sizeof(process) / sizeof(TCHAR)))
 			{
-				string modname;
-				string AMXXModule;
 				_MODULEINFO info;
-
 				GetModuleInformation(hProcess, hMods[i], &info, sizeof(info));
-				//printf("Module Information: %s 0x%x\n", szModName, info.lpBaseOfDll);
-				modname.append((char*)szModName, strlen((char*)szModName));
-				if (modname.find("addons") != string::npos)
+
+				if (strstr(process, "addons"))
 				{
-					unsigned int pos = modname.rfind("\\");
-					if (pos != string::npos) modname.erase(0, pos + 1);
+					size_t length = strlen(process);
+					size_t i = length;
 
-					pos = modname.rfind(".");
-					if (pos != string::npos) modname.erase(pos);
+					while (process[--i] != '.') {}; process[i] = '\0';
+					while (process[--i] != '\\') {};
 
-					pos = modname.rfind("_");
-					if (pos != string::npos)
+					strcpy(library, &process[i + 1]);
+
+					if (!LibrariesManager::addLibrary(library, info.lpBaseOfDll))
 					{
-						if (modname.rfind("_amxx") != string::npos)
-							AMXXModule.append(modname.c_str());
-
-						modname.erase(pos);
-					}
-
-					//printf("Found module %s (address: 0x%x)\n", modname.c_str(), info.lpBaseOfDll);
-
-					if (!LibrariesManager::addLibrary((char*)modname.c_str(), info.lpBaseOfDll) || (AMXXModule.size() &&
-						!LibrariesManager::addLibrary((char*)AMXXModule.c_str(), info.lpBaseOfDll)))
-					{
-						sprintf(msg, "\tERROR adding library %s%s (0x%x)\n", (char*)modname.c_str(), AMXXModule.size() ? "[_amxx]" : "", info.lpBaseOfDll);
+						UTIL_Format(msg, sizeof(msg) - 1, "\tERROR adding library %s (0x%p)\n", library, info.lpBaseOfDll);
 						Global::ConfigManagerObj->ModuleConfig.append(msg);
 					}
 					else
 					{
-						sprintf(msg, "\tAdding library %s%s (0x%x)\n", (char*)modname.c_str(), AMXXModule.size() ? "[_amxx]" : "", info.lpBaseOfDll);
+						UTIL_Format(msg, sizeof(msg) - 1, "\tAdding library %s (0x%p)\n", library, info.lpBaseOfDll);
 						Global::ConfigManagerObj->ModuleConfig.append(msg);
 					}
-
-					modname.clear();
-					AMXXModule.clear();
 				}
 			}
 		}

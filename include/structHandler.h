@@ -7,13 +7,13 @@
 
 
 #include <structInfo.h>
-#include <sm_trie_tpl.h>
+#include <sm_stringhashmap.h>
 
 class StructHandler : public LongHandler
 {
 protected:
 	ke::AString name;
-	KTrie<int> memberNameToMember;
+	StringHashMap<int> memberNameToMember;
 	StructInfo structInfo;
 
 public:

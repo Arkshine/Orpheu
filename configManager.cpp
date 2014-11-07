@@ -61,28 +61,28 @@ void ConfigManager::obtainPaths()
 
 void ConfigManager::loadFunctions()
 {
-	Global::ConfigManagerObj->ModuleConfig.append("\nOrpheu functions search started.\n");
+	Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\nOrpheu functions search started.\n"));
 
-	Global::ConfigManagerObj->ModuleConfig.append("\n\tParsing functions started.\n");
+	Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\n\tParsing functions started.\n"));
 
 	parseFunctionsInfo();
 
-	Global::ConfigManagerObj->ModuleConfig.append("\n\tParsing functions ended.\n");
+	Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\n\tParsing functions ended.\n"));
 
-	Global::ConfigManagerObj->ModuleConfig.append("\nOrpheu functions search ended.\n");
+	Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\nOrpheu functions search ended.\n"));
 }
 
 void ConfigManager::loadVirtualFunctions()
 {
-	Global::ConfigManagerObj->ModuleConfig.append("\nOrpheu virtual functions search started.\n");
+	Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\nOrpheu virtual functions search started.\n"));
 
-	Global::ConfigManagerObj->ModuleConfig.append("\n\tParsing virtual functions started.\n");
+	Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\n\tParsing virtual functions started.\n"));
 
 	parseVirtualFunctionsInfo();
 
-	Global::ConfigManagerObj->ModuleConfig.append("\n\tParsing virtual functions ended.\n");
+	Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\n\tParsing virtual functions ended.\n"));
 
-	Global::ConfigManagerObj->ModuleConfig.append("\nOrpheu virtual functions search ended.\n");
+	Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\nOrpheu virtual functions search ended.\n"));
 }
 
 void ConfigManager::parseModsInfo()
@@ -93,14 +93,14 @@ void ConfigManager::parseModsInfo()
 	ke::Vector<ke::AString>* files = FilesManager::getFiles(orpheuPaths.mods.chars());
 
 	UTIL_Format(msg, sizeof(msg) - 1, "\t\tCurrent mod : \"%s\"\n\n", Global::Modname.chars());
-	Global::ConfigManagerObj->ModuleConfig.append(msg);
+	Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 
 	for (unsigned i=0; i < files->length(); i++)
 	{
 		UTIL_Format(filepath, sizeof(filepath) - 1, "%s/%s", orpheuPaths.mods.chars(), files->at(i).chars());
 
 		UTIL_Format(msg, sizeof(msg) - 1, "\t\tParsing mod file \"%s\"\n", files->at(i).chars());
-		Global::ConfigManagerObj->ModuleConfig.append(msg);
+		Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 
 		json_error_t error;
 		json_t *root = json_load_file(filepath, 0, &error);
@@ -115,7 +115,7 @@ void ConfigManager::parseModsInfo()
 			if (!json_is_string(name))
 			{
 				UTIL_Format(msg, sizeof(msg) - 1, "\t\tFile must have a \"name\" field");
-				Global::ConfigManagerObj->ModuleConfig.append(msg);
+				Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 			}
 			else
 			{
@@ -130,14 +130,14 @@ void ConfigManager::parseModsInfo()
 							if (!json_is_string(json_array_get(aliases, j)))
 							{
 								UTIL_Format(msg, sizeof(msg) - 1, "\t\tAll aliases must be strings");
-								Global::ConfigManagerObj->ModuleConfig.append(msg);
+								Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 								break;
 							}
 
 							if (Global::Modname.compare(json_string_value(json_array_get(aliases, j))) == 0)
 							{
 								UTIL_Format(msg, sizeof(msg) - 1, "\t\t\tFound an alias.\n");
-								Global::ConfigManagerObj->ModuleConfig.append(msg);
+								Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 								Global::Modname = json_string_value(name);
 								foundMod = true;
 								break;
@@ -147,13 +147,13 @@ void ConfigManager::parseModsInfo()
 					else
 					{
 						UTIL_Format(msg, sizeof(msg) - 1, "\t\tAliases must be an array");
-						Global::ConfigManagerObj->ModuleConfig.append(msg);
+						Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 					}
 				}
 				else
 				{
 					UTIL_Format(msg, sizeof(msg) - 1, "\t\t\tFound.\n");
-					Global::ConfigManagerObj->ModuleConfig.append(msg);
+					Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 
 					foundMod = true;
 					Global::Modname = json_string_value(name);
@@ -180,33 +180,33 @@ void ConfigManager::parseModsInfo()
 		else
 		{
 			UTIL_Format(msg, sizeof(msg) - 1, "\t\t\tFile incorrectly formatted\"%s\"\n", files->at(i).chars());
-			Global::ConfigManagerObj->ModuleConfig.append(msg);
+			Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 		}
 	}
 }
 
 void ConfigManager::loadBaseData()
 {
-	Global::ConfigManagerObj->ModuleConfig.append("\nOrpheu configuration started.\n");
+	Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\nOrpheu configuration started.\n"));
 
-	Global::ConfigManagerObj->ModuleConfig.append("\n\tParsing mods configuration started.\n\n");
+	Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\n\tParsing mods configuration started.\n\n"));
 
 	parseModsInfo();
 
-	Global::ConfigManagerObj->ModuleConfig.append("\n\tParsing mods configuration ended.\n");
+	Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\n\tParsing mods configuration ended.\n"));
 
-	Global::ConfigManagerObj->ModuleConfig.append("\n\tParsing libraries configuration started.\n\n");
+	Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\n\tParsing libraries configuration started.\n\n"));
 
 	Global::LibrariesCvarToName = parseExternalLibrariesInfo();
 
-	Global::ConfigManagerObj->ModuleConfig.append("\n\tParsing libraries configuration ended.\n");
+	Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\n\tParsing libraries configuration ended.\n"));
 
-	Global::ConfigManagerObj->ModuleConfig.append("\n\tParsing type aliases started.\n\n");
+	Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\n\tParsing type aliases started.\n\n"));
 
-	KTrie<long> typeNameToVirtualTableOffset;
-	KTrie<ke::Vector<char*>*>* typeAliasesInfo = parseTypeAliasesInfo(typeNameToVirtualTableOffset);
+	StringHashMap<long> typeNameToVirtualTableOffset;
+	StringHashMap<ke::Vector<char*>*>* typeAliasesInfo = parseTypeAliasesInfo(typeNameToVirtualTableOffset);
 
-	Global::ConfigManagerObj->ModuleConfig.append("\tParsing type aliases ended.\n");
+	Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\tParsing type aliases ended.\n"));
 
 	Global::TypeHandlerManagerObj = new TypeHandlerManager(typeAliasesInfo);
 
@@ -214,19 +214,20 @@ void ConfigManager::loadBaseData()
 	{
 		Global::TypeHandlerManagerObj->registerTypeHandler(Global::Types[i]->getName(), Global::Types[i]);
 
-		long* virtualTableOffsetPointer = typeNameToVirtualTableOffset.retrieve(Global::Types[i]->getName());
+		long virtualTableOffset;
 
-		if (virtualTableOffsetPointer)
+		if  (typeNameToVirtualTableOffset.retrieve(Global::Types[i]->getName(), &virtualTableOffset))
 		{
-			long virtualTableOffset = *virtualTableOffsetPointer;
 			Global::Types[i]->setVirtualTableOffset(virtualTableOffset);
 		}
 	}
 
 	for (unsigned int i=0; i < Global::StructuresCount; i++)
+	{
 		Global::TypeHandlerManagerObj->registerTypeHandler(Global::Structures[i]->getName(), Global::Structures[i]);
+	}
 
-	Global::ConfigManagerObj->ModuleConfig.append("\nOrpheu configuration ended.\n");
+	Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\nOrpheu configuration ended.\n"));
 }
 
 bool validateFile(ke::AString folder, ke::AString filename, ke::AString classname, json_t **root)
@@ -259,13 +260,13 @@ bool validateFile(ke::AString folder, ke::AString filename, ke::AString classnam
 
 						if (!Global::TypeHandlerManagerObj->typeHandlerExists(classtype))
 						{
-							Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tClass type not registered\n");
+							Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\t\t\t\tClass type not registered\n"));
 							return false;
 						}
 					}
 					else
 					{
-						Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tClass name must be equal to the folder name\n");
+						Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\t\t\t\tClass name must be equal to the folder name\n"));
 						return false;
 					}
 				}
@@ -292,27 +293,27 @@ bool validateFile(ke::AString folder, ke::AString filename, ke::AString classnam
 										if (!Global::TypeHandlerManagerObj->typeHandlerExists((char *)json_string_value(type)))
 										{
 											UTIL_Format(msg, sizeof(msg) - 1, "\t\t\t\tArgument has invalid type \"%s\"\n", json_string_value(type));
-											Global::ConfigManagerObj->ModuleConfig.append(msg);
+											Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 											return false;
 										}
 #ifndef _ERRORS_ONLY_
 										else
 										{
 											UTIL_Format(msg, sizeof(msg) - 1, "\t\t\t\tArgument type \"%s\" validated\n", json_string_value(type));
-											Global::ConfigManagerObj->ModuleConfig.append(msg);
+											Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 										}
 #endif
 									}
 									else
 									{
-										Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tArguments must have a type and it must be a string\n");
+										Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\t\t\t\tArguments must have a type and it must be a string\n"));
 										return false;
 									}
 								}
 							}
 							else
 							{
-								Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tArguments must be an array\n");
+								Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\t\t\t\tArguments must be an array\n"));
 								return false;
 							}
 						}
@@ -328,20 +329,20 @@ bool validateFile(ke::AString folder, ke::AString filename, ke::AString classnam
 								if (!Global::TypeHandlerManagerObj->typeHandlerExists((char *)json_string_value(type)))
 								{
 									UTIL_Format(msg, sizeof(msg) - 1, "\t\t\t\tReturn has invalid type \"%s\"\n", json_string_value(type));
-									Global::ConfigManagerObj->ModuleConfig.append(msg);
+									Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 									return false;
 								}
 #ifndef _ERRORS_ONLY_
 								else
 								{
 									UTIL_Format(msg, sizeof(msg) - 1, "\t\t\t\tReturn type \"%s\" validated\n", json_string_value(type));
-									Global::ConfigManagerObj->ModuleConfig.append(msg);
+									Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 								}
 #endif
 							}
 							else
 							{
-								Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tReturn must have a type and it must be a string\n");
+								Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\t\t\t\tReturn must have a type and it must be a string\n"));
 								return false;
 							}
 						}
@@ -357,8 +358,7 @@ bool validateFile(ke::AString folder, ke::AString filename, ke::AString classnam
 
 								if (!json_is_string(os) || (strcmp(json_string_value(os), OperativeSystems[0]) != 0 && strcmp(json_string_value(os), OperativeSystems[1]) != 0))
 								{
-									UTIL_Format(msg, sizeof(msg) - 1, "\t\t\t\tIdentifier empty or containing an invalid operative system\n");
-									Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tIdentifier empty or containing an invalid operative system\n");
+									Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\t\t\t\tIdentifier empty or containing an invalid operative system\n"));
 									return false;
 								}
 
@@ -368,7 +368,7 @@ bool validateFile(ke::AString folder, ke::AString filename, ke::AString classnam
 
 									if (!json_is_string(mod) && !json_is_array(mod))
 									{
-										Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tMods field must be either a string or an array\n");
+										Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\t\t\t\tMods field must be either a string or an array\n"));
 										return false;
 									}
 								}
@@ -407,7 +407,7 @@ bool validateFile(ke::AString folder, ke::AString filename, ke::AString classnam
 
 								if (!validValue)
 								{
-									Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tThe value of the identifier must be a string or an array with bytes or question marks or asterisks, or an number\n");
+									Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\t\t\t\tThe value of the identifier must be a string or an array with bytes or question marks or asterisks, or an number\n"));
 									return false;
 								}
 							}
@@ -436,13 +436,13 @@ bool validateFile(ke::AString folder, ke::AString filename, ke::AString classnam
 										{
 											if (!((!libraryIsMod || json_is_string(mod)) && json_is_number(value)))
 											{
-												Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tInvalid index data\n");
+												Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\t\t\t\tInvalid index data\n"));
 												return false;
 											}
 										}
 										else
 										{
-											Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tInvalid index data\n");
+											Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\t\t\t\tInvalid index data\n"));
 											return false;
 										}
 									}
@@ -455,27 +455,27 @@ bool validateFile(ke::AString folder, ke::AString filename, ke::AString classnam
 					else
 					{
 						UTIL_Format(msg, sizeof(msg) - 1, "\t\t\t\tLibrary \"%s\" is not registered\n", json_string_value(library));
-						Global::ConfigManagerObj->ModuleConfig.append(msg);
+						Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 					}
 				}
 				else
 				{
-					Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tThe function must have a \"library\"\n");
+					Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\t\t\t\tThe function must have a \"library\"\n"));
 				}
 			}
 			else
 			{
-				Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tFunction name must be equal to the filename\n");
+				Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\t\t\t\tFunction name must be equal to the filename\n"));
 			}
 		}
 		else
 		{
-			Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tFunction name must be a string\n");
+			Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\t\t\t\tFunction name must be a string\n"));
 		}
 	}
 	else
 	{
-		Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tFile incorrectly formatted\n");
+		Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\t\t\t\tFile incorrectly formatted\n"));
 	}
 
 	return false;
@@ -507,7 +507,7 @@ void parseFile(ke::AString folder, ke::AString filename, ke::AString classname =
 
 	if (timestamp == newTimestamp)
 	{
-		Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tFunction structure is updated\n");
+		Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\t\t\t\tFunction structure is updated\n"));
 		return;
 	}
 
@@ -515,7 +515,7 @@ void parseFile(ke::AString folder, ke::AString filename, ke::AString classname =
 
 	if (timestamp == newTimestamp)
 	{
-		Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tFunction is updated\n");
+		Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\t\t\t\tFunction is updated\n"));
 		return;
 	}
 
@@ -523,7 +523,7 @@ void parseFile(ke::AString folder, ke::AString filename, ke::AString classname =
 
 	if (timestamp == newTimestamp)
 	{
-		Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tVirtual function is updated\n");
+		Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\t\t\t\tVirtual function is updated\n"));
 		return;
 	}
 
@@ -624,7 +624,7 @@ void parseFile(ke::AString folder, ke::AString filename, ke::AString classname =
 					if (json_is_string(value))
 					{
 						UTIL_Format(msg, sizeof(msg) - 1, "\t\t\t\tSearching for name \"%s\"... ", json_string_value(value));
-						Global::ConfigManagerObj->ModuleConfig.append(msg);
+						Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 
 						functionAddress = LibrariesManager::findFunction(json_string_value(library), json_string_value(value));
 					}
@@ -661,7 +661,7 @@ void parseFile(ke::AString folder, ke::AString filename, ke::AString classname =
 							min = 5;
 
 						UTIL_Format(msg, sizeof(msg) - 1, "\t\t\t\tSearching for signature \"");
-						Global::ConfigManagerObj->ModuleConfig.append(msg);
+						Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 
 						for (size_t j = 0; j < min; ++j)
 						{
@@ -678,15 +678,15 @@ void parseFile(ke::AString folder, ke::AString filename, ke::AString classname =
 								UTIL_Format(msg, sizeof(msg) - 1, "[0x%.2x]", signature[j]);
 							}
 
-							Global::ConfigManagerObj->ModuleConfig.append(msg);
+							Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 						}
 
 						if (json_array_size(value) > min)
 						{
-							Global::ConfigManagerObj->ModuleConfig.append("(...)");
+							Global::ConfigManagerObj->ModuleConfig.append(ke::AString("(...)"));
 						}
 
-						Global::ConfigManagerObj->ModuleConfig.append("\" ... ");
+						Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\" ... "));
 
 						functionAddress = LibrariesManager::findFunction(json_string_value(library), signature, signatureData, json_array_size(value));
 
@@ -705,7 +705,7 @@ void parseFile(ke::AString folder, ke::AString filename, ke::AString classname =
 						if (!functionAddress)
 						{
 							UTIL_Format(msg, sizeof(msg) - 1, "\t\t\t\t Offset not contained within the library %s (0x%lx)\n", json_string_value(library), offset);
-							Global::ConfigManagerObj->ModuleConfig.append(msg);
+							Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 							break;
 						}
 					}
@@ -742,7 +742,7 @@ void parseFile(ke::AString folder, ke::AString filename, ke::AString classname =
 
 						Function* function = new Function(functionAddress, arguments, size, returnValue, ke::AString(json_string_value(library)), isMethod);
 
-						Global::ConfigManagerObj->ModuleConfig.append("FOUND\n");
+						Global::ConfigManagerObj->ModuleConfig.append(ke::AString("FOUND\n"));
 
 						Global::FunctionManagerObj->addFunction(name, function, newTimestamp);
 
@@ -750,7 +750,7 @@ void parseFile(ke::AString folder, ke::AString filename, ke::AString classname =
 					}
 					else
 					{
-						Global::ConfigManagerObj->ModuleConfig.append("NOT FOUND\n");
+						Global::ConfigManagerObj->ModuleConfig.append(ke::AString("NOT FOUND\n"));
 					}
 				}
 			}
@@ -758,7 +758,7 @@ void parseFile(ke::AString folder, ke::AString filename, ke::AString classname =
 	}
 	else
 	{
-		Global::ConfigManagerObj->ModuleConfig.append("\t\t\t\tFAILED\n");
+		Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\t\t\t\tFAILED\n"));
 	}
 }
 
@@ -773,12 +773,12 @@ void ConfigManager::parseFunctionsInfo()
 	for (unsigned int i=0; i < files->length(); i++)
 	{
 		UTIL_Format(msg, sizeof(msg) - 1, "\n\t\tParsing file \"%s\" started\n", files->at(i).chars());
-		Global::ConfigManagerObj->ModuleConfig.append(msg);
+		Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 
 		parseFile(orpheuPaths.functions, files->at(i));
 
 		UTIL_Format(msg, sizeof(msg) - 1, "\t\tParsing file \"%s\" ended\n", files->at(i).chars());
-		Global::ConfigManagerObj->ModuleConfig.append(msg);
+		Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 	}
 
 	for (unsigned int i=0; i < folders->length(); i++)
@@ -787,39 +787,39 @@ void ConfigManager::parseFunctionsInfo()
 		UTIL_Format(path, sizeof(path) - 1, "%s%s/", orpheuPaths.functions.chars(), classname.chars());
 
 		UTIL_Format(msg, sizeof(msg) - 1, "\n\t\tParsing folder \"%s\" started\n", folders->at(i).chars());
-		Global::ConfigManagerObj->ModuleConfig.append(msg);
+		Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 
 		ke::Vector<ke::AString>* filesInFolder = FilesManager::getFiles(path);
 
 		for (unsigned int j=0; j < filesInFolder->length(); j++)
 		{
 			UTIL_Format(msg, sizeof(msg) - 1, "\n\t\t\tParsing file \"%s\" started\n", filesInFolder->at(j).chars());
-			Global::ConfigManagerObj->ModuleConfig.append(msg);
+			Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 
 			parseFile(ke::AString(path), filesInFolder->at(j), classname);
 
 			UTIL_Format(msg, sizeof(msg) - 1, "\t\t\tParsing file \"%s\" ended\n", filesInFolder->at(j).chars());
-			Global::ConfigManagerObj->ModuleConfig.append(msg);
+			Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 		}
 
 		UTIL_Format(msg, sizeof(msg) - 1, "\t\tParsing folder \"%s\" ended\n", folders->at(i).chars());
-		Global::ConfigManagerObj->ModuleConfig.append(msg);
+		Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 	}
 }
 
-KTrie<ke::Vector<char*>*>* ConfigManager::parseTypeAliasesInfo(KTrie<long>& typeNameToVirtualTableOffset)
+StringHashMap<ke::Vector<char*>*>* ConfigManager::parseTypeAliasesInfo(StringHashMap<long>& typeNameToVirtualTableOffset)
 {
 	static char msg[100];
 	char path[256];
 
-	KTrie<ke::Vector<char*>*>* typeAliasesInfo = new KTrie<ke::Vector<char*>*>();
+	StringHashMap<ke::Vector<char*>*>* typeAliasesInfo = new StringHashMap<ke::Vector<char*>*>();
 
 	ke::Vector<ke::AString>* folders = FilesManager::getFolders(orpheuPaths.typeAliases.chars());
 
 	for (unsigned int i=0; i < folders->length(); i++)
 	{
 		UTIL_Format(msg, sizeof(msg) - 1, "\t\tParsing folder \"%s\"\n", folders->at(i).chars());
-		Global::ConfigManagerObj->ModuleConfig.append(msg);
+		Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 
 		UTIL_Format(path, sizeof(path) - 1, "%s%s/data", orpheuPaths.typeAliases.chars(), folders->at(i).chars());
 
@@ -853,7 +853,7 @@ KTrie<ke::Vector<char*>*>* ConfigManager::parseTypeAliasesInfo(KTrie<long>& type
 						}
 						else
 						{
-							Global::ConfigManagerObj->ModuleConfig.append("\t\tValue must be numeric\n");
+							Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\t\tValue must be numeric\n"));
 						}
 					}
 
@@ -896,26 +896,26 @@ KTrie<ke::Vector<char*>*>* ConfigManager::parseTypeAliasesInfo(KTrie<long>& type
 										else
 										{
 											UTIL_Format(msg, sizeof(msg) - 1, "\t\t\tFile \"%s\" must have a \"vtableOffsets\" entry and it must be an object\n", files->at(fileID).chars());
-											Global::ConfigManagerObj->ModuleConfig.append(msg);
+											Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 										}
 									}
 								}
 								else
 								{
 									UTIL_Format(msg, sizeof(msg) - 1, "\t\t\tFile \"%s\" must have a \"name\" entry\n", files->at(fileID).chars());
-									Global::ConfigManagerObj->ModuleConfig.append(msg);
+									Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 								}
 							}
 							else
 							{
 								UTIL_Format(msg, sizeof(msg) - 1, "\t\t\tFile \"%s\" incorrectly formatted\n", files->at(fileID).chars());
-								Global::ConfigManagerObj->ModuleConfig.append(msg);
+								Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 							}
 						}
 						else
 						{
 							UTIL_Format(msg, sizeof(msg) - 1, "\t\t\tFile \"%s\" incorrectly formatted\n", files->at(fileID).chars());
-							Global::ConfigManagerObj->ModuleConfig.append(msg);
+							Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 						}
 					}
 
@@ -950,26 +950,26 @@ KTrie<ke::Vector<char*>*>* ConfigManager::parseTypeAliasesInfo(KTrie<long>& type
 								else
 								{
 									UTIL_Format(msg, sizeof(msg) - 1, "File \"%s\" incorrectly formatted\n", files->at(fileID).chars());
-									Global::ConfigManagerObj->ModuleConfig.append(msg);
+									Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 								}
 							}
 							else
 							{
 								UTIL_Format(msg, sizeof(msg) - 1, "File \"%s\" incorrectly formatted\n", files->at(fileID).chars());
-								Global::ConfigManagerObj->ModuleConfig.append(msg);
+								Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 							}
 						}
 						else
 						{
 							UTIL_Format(msg, sizeof(msg) - 1, "File \"%s\" incorrectly formatted\n", files->at(fileID).chars());
-							Global::ConfigManagerObj->ModuleConfig.append(msg);
+							Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 						}
 					}
 
 					if (aliasesForName->length())
 					{
 						UTIL_Format(msg, sizeof(msg) - 1, "\t\t\tAdding alias\"%s\"\n", json_string_value(name));
-						Global::ConfigManagerObj->ModuleConfig.append(msg);
+						Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 
 						typeAliasesInfo->insert(json_string_value(name), aliasesForName);
 					}
@@ -982,16 +982,17 @@ KTrie<ke::Vector<char*>*>* ConfigManager::parseTypeAliasesInfo(KTrie<long>& type
 		}
 
 		if (!correctlyFormated)
-			Global::ConfigManagerObj->ModuleConfig.append("\t\t\tFailed. File is incorrectly formated.\n");
+			Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\t\t\tFailed. File is incorrectly formated.\n"));
 	}
 
-	Global::ConfigManagerObj->ModuleConfig.append("\n");
+	Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\n"));
 
 	return typeAliasesInfo;
 }
-KTrie<char*>* ConfigManager::parseExternalLibrariesInfo()
+
+StringHashMap<char*>* ConfigManager::parseExternalLibrariesInfo()
 {
-	KTrie<char*>* externalLibrariesInfo = new KTrie<char*>();
+	StringHashMap<char*>* externalLibrariesInfo = new StringHashMap<char*>();
 
 	ke::Vector<ke::AString>* files = FilesManager::getFiles(orpheuPaths.libraries.chars());
 
@@ -1008,7 +1009,7 @@ KTrie<char*>* ConfigManager::parseExternalLibrariesInfo()
 		bool parsingSuccessful = !json_is_null(root);
 
 		UTIL_Format(msg, sizeof(msg) - 1, "\t\tParsing file \"%s\"\n", files->at(i).chars());
-		Global::ConfigManagerObj->ModuleConfig.append(msg);
+		Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 
 		bool correctlyFormated = false;
 
@@ -1034,14 +1035,14 @@ KTrie<char*>* ConfigManager::parseExternalLibrariesInfo()
 						externalLibrariesInfo->insert(cvarString, nameString);
 
 						UTIL_Format(msg, sizeof(msg) - 1, "\t\t\tAdded library %s identified by cvar %s\n", json_string_value(name), json_string_value(cvar));
-						Global::ConfigManagerObj->ModuleConfig.append(msg);
+						Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 					}
 				}
 			}
 		}
 
 		if (!correctlyFormated)
-			Global::ConfigManagerObj->ModuleConfig.append("\t\t\tFailed. File is incorrectly formated.\n");
+			Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\t\t\tFailed. File is incorrectly formated.\n"));
 	}
 
 	return externalLibrariesInfo;
@@ -1060,23 +1061,23 @@ void ConfigManager::parseVirtualFunctionsInfo()
 		UTIL_Format(path, sizeof(path) - 1, "%s%s/", orpheuPaths.virtualFunctions.chars(), classname.chars());
 
 		UTIL_Format(msg, sizeof(msg) - 1, "\t\tParsing folder \"%s\" started\n", folders->at(i).chars());
-		Global::ConfigManagerObj->ModuleConfig.append(msg);
+		Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 
 		ke::Vector<ke::AString>* filesInFolder = FilesManager::getFiles(path);
 
 		for (unsigned int j=0; j < filesInFolder->length(); j++)
 		{
 			UTIL_Format(msg, sizeof(msg) - 1, "\t\t\tParsing file \"%s\" started\n", filesInFolder->at(j).chars());
-			Global::ConfigManagerObj->ModuleConfig.append(msg);
+			Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 
 			parseFile(ke::AString(path), filesInFolder->at(j), classname);
 
 			UTIL_Format(msg, sizeof(msg) - 1, "\t\t\tParsing file \"%s\" ended\n", filesInFolder->at(j).chars());
-			Global::ConfigManagerObj->ModuleConfig.append(msg);
+			Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 		}
 
 		UTIL_Format(msg, sizeof(msg) - 1, "\t\tParsing folder \"%s\" ended\n", folders->at(i).chars());
-		Global::ConfigManagerObj->ModuleConfig.append(msg);
+		Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 	}
 }
 
@@ -1094,7 +1095,7 @@ void ConfigManager::parseMemoryObject(json_t *root)
 		name = json_string_value(nameValue);
 
 		UTIL_Format(msg, sizeof(msg) - 1, "\t\t\tProcessing memory structure \"%s\"\n", json_string_value(nameValue));
-		Global::ConfigManagerObj->ModuleConfig.append(msg);
+		Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 
 		json_t *libraryValue = json_object_get(root, "library");
 
@@ -1116,14 +1117,14 @@ void ConfigManager::parseMemoryObject(json_t *root)
 			if (!typeHandler)
 			{
 				UTIL_Format(msg, sizeof(msg) - 1, "\t\t\tMemory object identifier type \"%s\" is invalid\n", json_string_value(type));
-				Global::ConfigManagerObj->ModuleConfig.append(msg);
+				Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 				return;
 			}
 		}
 		else
 		{
 			UTIL_Format(msg, sizeof(msg) - 1, "\t\t\tMemory object identifier field \"type\" must be a string\n");
-			Global::ConfigManagerObj->ModuleConfig.append(msg);
+			Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 			return;
 		}
 
@@ -1155,14 +1156,14 @@ void ConfigManager::parseMemoryObject(json_t *root)
 			if (!valid)
 			{
 				UTIL_Format(msg, sizeof(msg) - 1, "\t\t\tMemory object \"memoryType\" has invalid value. Valid: [\"%s\",\"%s\",\"%s\"]\n", memoryTypes[0], memoryTypes[1], memoryTypes[2]);
-				Global::ConfigManagerObj->ModuleConfig.append(msg);
+				Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 				return;
 			}
 		}
 		else
 		{
 			UTIL_Format(msg, sizeof(msg) - 1, "\t\t\tMemory object \"memoryType\" field is invalid\n");
-			Global::ConfigManagerObj->ModuleConfig.append(msg);
+			Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 			return;
 		}
 
@@ -1190,7 +1191,7 @@ void ConfigManager::parseMemoryObject(json_t *root)
 						if (!json_is_string(mod))
 						{
 							UTIL_Format(msg, sizeof(msg) - 1, "\t\t\tMemory object identifier must have a \"mod\" field\n");
-							Global::ConfigManagerObj->ModuleConfig.append(msg);
+							Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 
 							return;
 						}
@@ -1205,7 +1206,7 @@ void ConfigManager::parseMemoryObject(json_t *root)
 					if (!json_is_string(os))
 					{
 						UTIL_Format(msg, sizeof(msg) - 1, "\t\t\tMemory object identifier must have a \"os\" field\n");
-						Global::ConfigManagerObj->ModuleConfig.append(msg);
+						Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 						return;
 					}
 					else
@@ -1243,7 +1244,7 @@ void ConfigManager::parseMemoryObject(json_t *root)
 								else
 								{
 									UTIL_Format(msg, sizeof(msg) - 1, "\t\t\t\tDisplacement must be numeric\n");
-									Global::ConfigManagerObj->ModuleConfig.append(msg);
+									Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 									return;
 								}
 							}
@@ -1305,7 +1306,7 @@ void ConfigManager::parseMemoryObject(json_t *root)
 							if (!validSignature)
 							{
 								UTIL_Format(msg, sizeof(msg) - 1, "\t\t\tInvalid signature data\n");
-								Global::ConfigManagerObj->ModuleConfig.append(msg);
+								Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 
 								delete[] signatureEntryData;
 								delete[] signature;
@@ -1320,20 +1321,20 @@ void ConfigManager::parseMemoryObject(json_t *root)
 						Global::MemoryStructManagerObj->add(memoryStructure);
 
 						UTIL_Format(msg, sizeof(msg) - 1, "\t\t\t\tAdded memory search structure \"%s\"\n", memoryStructure->name.chars());
-						Global::ConfigManagerObj->ModuleConfig.append(msg);
+						Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 						return;
 					}
 					else
 					{
 						UTIL_Format(msg, sizeof(msg) - 1, "\t\t\tMemory object identifier must have a \"value\" field that contains a signature or an offset\n");
-						Global::ConfigManagerObj->ModuleConfig.append(msg);
+						Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 						return;
 					}
 				}
 				else
 				{
 					UTIL_Format(msg, sizeof(msg) - 1, "\t\t\tMemory identifiers must be objects\n");
-					Global::ConfigManagerObj->ModuleConfig.append(msg);
+					Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 				}
 			}
 		}
@@ -1343,48 +1344,49 @@ void ConfigManager::parseMemoryObject(json_t *root)
 			Global::MemoryStructManagerObj->add(memoryStructure);
 
 			UTIL_Format(msg, sizeof(msg) - 1, "\t\t\t\tAdded memory search structure \"%s\"\n", memoryStructure->name.chars());
-			Global::ConfigManagerObj->ModuleConfig.append(msg);
+			Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 			return;
 		}
 	}
 	else
 	{
 		UTIL_Format(msg, sizeof(msg) - 1, "\t\t\tMemory object must have a name\n");
-		Global::ConfigManagerObj->ModuleConfig.append(msg);
+		Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 	}
 }
 
-static KTrie<time_t> memoryStructureNameToTimestamp;
+static StringHashMap<time_t> memoryStructureNameToTimestamp;
 
 void ConfigManager::loadMemoryStructures()
 {
 	char static msg[100];
 	char path[256];
 
-	Global::ConfigManagerObj->ModuleConfig.append("\nOrpheu memory structures search started.\n");
+	Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\nOrpheu memory structures search started.\n"));
 
-	Global::ConfigManagerObj->ModuleConfig.append("\n\tParsing memory structures started.\n\n");
+	Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\n\tParsing memory structures started.\n\n"));
 
 	ke::Vector<ke::AString>* files = FilesManager::getFiles(orpheuPaths.memory.chars());
 
 	for (unsigned int i=0; i < files->length(); i++)
 	{
 		UTIL_Format(msg, sizeof(msg) - 1, "\t\tParsing memory file \"%s\"\n", files->at(i).chars());
-		Global::ConfigManagerObj->ModuleConfig.append(msg);
+		Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 
 		UTIL_Format(path, sizeof(path) - 1, "%s%s", orpheuPaths.memory.chars(), files->at(i).chars());
 
-		time_t* timestampPointer = memoryStructureNameToTimestamp.retrieve((char*)files->at(i).chars());
+		time_t timestamp;
+		memoryStructureNameToTimestamp.retrieve((char*)files->at(i).chars(), &timestamp);
 
 		struct stat tempStat; stat(path, &tempStat);
 		time_t newTimestamp = tempStat.st_mtime;
 
-		if (timestampPointer)
+		if (timestamp)
 		{
-			if (*timestampPointer == newTimestamp)
+			if (timestamp == newTimestamp)
 			{
 				UTIL_Format(msg, sizeof(msg) - 1, "\t\t\tFile \"%s\" is updated\n", files->at(i).chars());
-				Global::ConfigManagerObj->ModuleConfig.append(msg);
+				Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 				continue;
 			}
 			else
@@ -1419,13 +1421,13 @@ void ConfigManager::loadMemoryStructures()
 		else
 		{
 			UTIL_Format(msg, sizeof(msg) - 1, "\t\tFile incorrectly formatted\n");
-			Global::ConfigManagerObj->ModuleConfig.append(msg);
+			Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 		}
 	}
 
-	Global::ConfigManagerObj->ModuleConfig.append("\n\tParsing memory structures ended.\n");
+	Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\n\tParsing memory structures ended.\n"));
 
-	Global::ConfigManagerObj->ModuleConfig.append("\nOrpheu memory structures search ended.\n");
+	Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\nOrpheu memory structures search ended.\n"));
 }
 
 size_t UTIL_Format(char *buffer, size_t maxlength, const char *fmt, ...)

@@ -2,15 +2,12 @@
 #ifndef _INCLUDE_FUNCTION_MANAGER_
 #define _INCLUDE_FUNCTION_MANAGER_
 
-#include <sm_trie_tpl.h>
 #include <am-vector.h>
+#include <am-hashmap.h>
+#include <sm_stringhashmap.h>
 
 #include <ctime>
 #include <function.h>
-
-#include <map>
-
-
 
 typedef struct
 {
@@ -22,10 +19,10 @@ typedef struct
 class FunctionManager
 {
 private:
-
-	map<long, HookReferenceData*> hookReferences;
-	KTrie<time_t>* functionNameToTimestamp;
-	KTrie<unsigned short int>* functionNameToFunctionID;
+	typedef ke::HashMap<long, HookReferenceData*, ke::IntegerPolicy<long>> HookTableMap;
+	HookTableMap hookReferences;
+	StringHashMap<time_t> functionNameToTimestamp;
+	StringHashMap<unsigned short int> functionNameToFunctionID;
 	long currentHookID;
 	ke::Vector<Function*>* functions;
 
@@ -42,5 +39,4 @@ public:
 	void tryToRemove(const char* functionName);
 };
 
-#endif
-
+#endif // _INCLUDE_FUNCTION_MANAGER_

@@ -4,8 +4,7 @@
 
 #include <orpheu.h>
 #include <am-vector.h>
-#include "CString.h"
-#include <sm_trie_tpl.h>
+#include <sm_stringhashmap.h>
 #include <am-string.h>
 #include "jansson.h"
 
@@ -20,15 +19,15 @@ public:
 	void loadMemoryStructures();
 	void parseMemoryObject(json_t *root);
 
-	String ModuleConfig;
+	ke::Vector<ke::AString> ModuleConfig;
 
 private:
 
 	Folders orpheuPaths;
 
 	void obtainPaths();
-	KTrie<char*>* parseExternalLibrariesInfo();
-	KTrie<ke::Vector<char*>*>* parseTypeAliasesInfo(KTrie<long>& typeNameToVirtualTableOffset);
+	StringHashMap<char*>* parseExternalLibrariesInfo();
+	StringHashMap<ke::Vector<char*>*>* parseTypeAliasesInfo(StringHashMap<long>& typeNameToVirtualTableOffset);
 	void parseFunctionsInfo();
 	void parseVirtualFunctionsInfo();
 	void parseModsInfo();
