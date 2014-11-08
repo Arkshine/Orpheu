@@ -5,8 +5,8 @@
 ### EDIT THESE PATHS FOR YOUR OWN SETUP ###
 ###########################################
 
-HLSDK   = ../hlsdk/multiplayer
-MM_ROOT = ../metamod/metamod
+HLSDK   = ../hlsdk
+MM_ROOT = ../metamod-am/metamod
 
 #####################################
 ### EDIT BELOW FOR OTHER PROJECTS ###
@@ -14,7 +14,7 @@ MM_ROOT = ../metamod/metamod
 
 PROJECT = orpheu
 
-OBJECTS = sdk/amxxmodule.cpp CDetourDis.cpp orpheu.cpp memory.cpp memoryStructureManager.cpp functionStructuresManager.cpp functionVirtualManager.cpp functionManager.cpp function.cpp filesManager.cpp hooker.cpp json/json_value.cpp json/json_reader.cpp global.cpp librariesManager.cpp typeHandlerManager.cpp configManager.cpp structHandler.cpp typeHandlerImplementations/boolHandler.cpp typeHandlerImplementations/byteHandler.cpp typeHandlerImplementations/longHandler.cpp typeHandlerImplementations/CBaseEntityHandler.cpp typeHandlerImplementations/charPtrHandler.cpp typeHandlerImplementations/edict_sPtrHandler.cpp typeHandlerImplementations/floatHandler.cpp typeHandlerImplementations/VectorHandler.cpp typeHandlerImplementations/CMBaseMonsterHandler.cpp typeHandlerImplementations/entvarHandler.cpp typeHandlerImplementations/short.cpp typeHandlerImplementations/charArrHandler.cpp typeHandlerImplementations/VectorPointerHandler.cpp typeHandlerImplementations/charHandler.cpp
+OBJECTS = sdk/amxxmodule.cpp CDetourDis.cpp orpheu.cpp memoryUtil.cpp memoryStructureManager.cpp functionStructuresManager.cpp functionVirtualManager.cpp functionManager.cpp function.cpp filesManager.cpp hooker.cpp jansson/dump.c jansson/error.c jansson/hashtable.c jansson/hashtable_seed.c jansson/load.c jansson/memory.c jansson/pack_unpack.c jansson/strbuffer.c jansson/strconv.c jansson/utf.c jansson/value.c global.cpp librariesManager.cpp typeHandlerManager.cpp configManager.cpp structHandler.cpp typeHandlerImplementations/boolHandler.cpp typeHandlerImplementations/byteHandler.cpp typeHandlerImplementations/longHandler.cpp typeHandlerImplementations/CBaseEntityHandler.cpp typeHandlerImplementations/charPtrHandler.cpp typeHandlerImplementations/edict_sPtrHandler.cpp typeHandlerImplementations/floatHandler.cpp typeHandlerImplementations/VectorHandler.cpp typeHandlerImplementations/CMBaseMonsterHandler.cpp typeHandlerImplementations/entvarHandler.cpp typeHandlerImplementations/short.cpp typeHandlerImplementations/charArrHandler.cpp typeHandlerImplementations/VectorPointerHandler.cpp typeHandlerImplementations/charHandler.cpp
 
 
 ##############################################
@@ -30,7 +30,7 @@ CPP_OSX         = clang
 
 LINK =
 
-INCLUDE = -I. -Isdk -Iinclude -I$(HLSDK) -I$(HLSDK)/common -I$(HLSDK)/dlls -I$(HLSDK)/engine -I$(HLSDK)/game_shared -I$(HLSDK)/pm_shared \
+INCLUDE = -I. -Isdk -Iinclude -Ijansson -Ipublic -Ipublic/amtl -I$(HLSDK) -I$(HLSDK)/public -I$(HLSDK)/common -I$(HLSDK)/dlls -I$(HLSDK)/engine -I$(HLSDK)/game_shared -I$(HLSDK)/pm_shared \
 		  -I$(MM_ROOT)
 
 ################################################
@@ -108,11 +108,11 @@ all:
 	mkdir -p $(BIN_DIR)
 	mkdir -p $(BIN_DIR)/sdk
 	mkdir -p $(BIN_DIR)/typeHandlerImplementations
-	mkdir -p $(BIN_DIR)/json
+	mkdir -p $(BIN_DIR)/jansson
 	$(MAKE) -f $(MAKEFILE_NAME) $(PROJECT)
 
 $(PROJECT): $(OBJ_BIN)
-	$(CPP) $(INCLUDE) $(OBJ_BIN) $(LINK) -o $(BIN_DIR)/$(BINARY) libboost_system-gcc44.a libboost_filesystem-gcc44.a
+	$(CPP) $(INCLUDE) $(OBJ_BIN) $(LINK) -o $(BIN_DIR)/$(BINARY)
 
 debug:
 	$(MAKE) -f $(MAKEFILE_NAME) all DEBUG=true
@@ -123,7 +123,7 @@ clean:
 	rm -rf $(BIN_DIR)/*.o
 	rm -rf $(BIN_DIR)/sdk/*.o
 	rm -rf $(BIN_DIR)/typeHandlerImplementations/*.o
-	rm -rf $(BIN_DIR)/json
+	rm -rf $(BIN_DIR)/jansson
 	rm -f $(BIN_DIR)/$(BINARY)
 
  
