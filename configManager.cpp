@@ -1285,7 +1285,7 @@ void ConfigManager::parseMemoryObject(json_t *root)
 								{
 									size_t entryValue = (size_t)json_integer_value(entry);
 
-									if ((entryValue >= 0) && (entryValue <= 0xFF))
+									if (entryValue <= 0xFF)
 									{
 										signatureEntryData[j] = SpecificByte;
 										signature[j] = (byte)entryValue;
