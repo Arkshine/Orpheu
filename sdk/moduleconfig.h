@@ -1,9 +1,30 @@
-// Configuration
+// vim: set ts=4 sw=4 tw=99 noet:
+//
+// AMX Mod X, based on AMX Mod by Aleksander Naszko ("OLO").
+// Copyright (C) The AMX Mod X Development Team.
+//
+// This software is licensed under the GNU General Public License, version 3 or higher.
+// Additional exceptions apply. For full license details, see LICENSE.txt or visit:
+//     https://alliedmods.net/amxmodx-license
+
+//
+// Module Config
+//
 
 #ifndef __MODULECONFIG_H__
 #define __MODULECONFIG_H__
 
-// Module info
+/** Module info
+ * -The logtag is the tag that the module's log messages will be
+ *   prepended with.
+ * -The library is the name that the #pragma library
+ *   message will have prepended.
+ * -The library class is the class of libraries that 
+ *   a module belongs to (like DBI).  Keep it "" to 
+ *   ignore.
+ * -For both library and library class, you can use a comma
+ *   to add multiple entries.
+ */
 #define MODULE_NAME "Orpheu"
 #define MODULE_VERSION "2.5.4"
 #define MODULE_AUTHOR "joaquimandrade & Arkshine"
@@ -34,7 +55,7 @@
 // #define NO_ALLOC_OVERRIDES
 
 // Uncomment this if you are using MSVC8 or greater and want to fix some of the compatibility issues yourself 
-//#define NO_MSVC8_AUTO_COMPAT
+// #define NO_MSVC8_AUTO_COMPAT
 
 /** 
  * AMXX Init functions
@@ -43,6 +64,12 @@
 
 /** AMXX query */
 //#define FN_AMXX_QUERY OnAmxxQuery
+
+/** AMXX Check Game - module API is NOT available here.
+ * Return AMXX_GAME_OK if this module can load on the game, AMXX_GAME_BAD if it cannot.
+ * syntax: int AmxxCheckGame(const char *game)
+ */
+//#define FN_AMXX_CHECKGAME AmxxCheckGame
 
 /** AMXX attach
  * Do native functions init here (MF_AddNatives)
@@ -63,7 +90,6 @@
 /** All plugins are now unloaded */
 #define FN_AMXX_PLUGINSUNLOADED OnPluginsUnloaded
 
-
 /**** METAMOD ****/
 // If your module doesn't use metamod, you may close the file now :)
 #ifdef USE_METAMOD
@@ -78,7 +104,7 @@
 //#define FN_META_QUERY OnMetaQuery
 // Meta attach
 #define FN_META_ATTACH OnMetaAttach
-// Meta dettach
+// Meta detach
 //#define FN_META_DETACH OnMetaDetach
 
 // (wd) are Will Day's notes
@@ -490,5 +516,3 @@
 #endif // USE_METAMOD
 
 #endif // __MODULECONFIG_H__
-
-
