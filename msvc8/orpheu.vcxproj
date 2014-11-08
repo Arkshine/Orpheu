@@ -156,7 +156,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\CDetourDis.cpp" />
     <ClCompile Include="..\configManager.cpp" />
     <ClCompile Include="..\filesManager.cpp" />
     <ClCompile Include="..\function.cpp">
@@ -201,7 +200,6 @@
     <ClCompile Include="..\sdk\amxxmodule.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\CDetourDis.h" />
     <ClInclude Include="..\include\configManager.h" />
     <ClInclude Include="..\include\filesManager.h" />
     <ClInclude Include="..\include\function.h" />

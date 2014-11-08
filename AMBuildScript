@@ -143,6 +143,7 @@ class AMXXConfig(object):
         'uuid.lib',
         'odbc32.lib',
         'odbccp32.lib',
+        'psapi.lib',
       ] 
 
     # Optimization
@@ -308,7 +309,6 @@ binary = AMXX.MetaModule(builder, 'orpheu')
 
 binary.sources = [
   'sdk/amxxmodule.cpp',
-  'CDetourDis.cpp',
   'orpheu.cpp',
   'memoryUtil.cpp',
   'memoryStructureManager.cpp',

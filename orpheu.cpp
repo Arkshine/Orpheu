@@ -701,7 +701,7 @@ cell AMX_NATIVE_CALL Orpheu::GetFunctionOffset(AMX* amx, cell* params)
 
 cell AMX_NATIVE_CALL Orpheu::GetNextCallAtAddress(AMX* amx, cell* params)
 {
-	unsigned char* address = (unsigned char*)params[1];
+	/*unsigned char* address = (unsigned char*)params[1];
 
 	int call = params[2];
 	int currentCall = 0;
@@ -721,7 +721,7 @@ cell AMX_NATIVE_CALL Orpheu::GetNextCallAtAddress(AMX* amx, cell* params)
 		}
 
 		address += len;
-	} while (true);
+	} while (true);*/
 
 	return 0;
 }
