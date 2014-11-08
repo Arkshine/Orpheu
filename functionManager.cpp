@@ -3,6 +3,7 @@
 
 FunctionManager::FunctionManager()
 {
+	hookReferences.init();
 	functions = new ke::Vector < Function* > ;
 	functions->append(NULL);
 	currentHookID = 1;

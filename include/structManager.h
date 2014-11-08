@@ -13,6 +13,11 @@ class StructManager
 
 public:
 
+	StructManager()
+	{
+		structAddressToHandler.init();
+	}
+
 	void add(long structureAddress, StructHandler* structureHandler)
 	{
 		StructTableMap::Insert i = structAddressToHandler.findForAdd(structureAddress);

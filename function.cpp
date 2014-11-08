@@ -80,6 +80,9 @@ Function::Function(void* address, TypeHandler** argumentsHandlers, unsigned int 
 
 	this->library = library;
 
+	hooks[OrpheuHookPre].init();
+	hooks[OrpheuHookPost].init();
+
 	ifReturnByRefParamsCount = returnHandler ? returnHandler->getIfByRefParamsCount() : 0;
 
 	normalArguments = new long[argumentsCount];

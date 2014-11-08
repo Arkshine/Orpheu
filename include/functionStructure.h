@@ -15,6 +15,11 @@
 
 struct FunctionStructure
 {
+	FunctionStructure()
+	{
+		virtualFunctionsCreated.init();
+	}
+
 	void* address;
 	TypeHandler** argumentsHandlers;
 	unsigned int argumentsCount;
