@@ -45,7 +45,7 @@
 #define USE_METAMOD
 
 // use memory manager/tester?
-// note that if you use this, you cannot construct/allocate 
+// note that if you use this, you cannot construct/allocate
 // anything before the module attached (OnAmxxAttach).
 // be careful of default constructors using new/malloc!
 // #define MEMORY_TEST
@@ -57,7 +57,7 @@
 // Uncomment this if you are using MSVC8 or greater and want to fix some of the compatibility issues yourself 
 // #define NO_MSVC8_AUTO_COMPAT
 
-/** 
+/**
  * AMXX Init functions
  * Also consider using FN_META_*
  */
@@ -504,14 +504,13 @@
 // #define FN_Voice_SetClientListening_Post		Voice_SetClientListening_Post
 // #define FN_GetPlayerAuthId_Post				GetPlayerAuthId_Post
 
-// #define FN_OnFreeEntPrivateData				OnFreeEntPrivateData				
+// #define FN_OnFreeEntPrivateData				OnFreeEntPrivateData
 // #define FN_GameShutdown						GameShutdown
 // #define FN_ShouldCollide						ShouldCollide
 
 // #define FN_OnFreeEntPrivateData_Post			OnFreeEntPrivateData_Post
 // #define FN_GameShutdown_Post					GameShutdown_Post
 // #define FN_ShouldCollide_Post				ShouldCollide_Post
-
 
 #endif // USE_METAMOD
 

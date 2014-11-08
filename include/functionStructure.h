@@ -6,24 +6,30 @@
 #include <function.h>
 
 #undef min
-#undef max 
+#undef max
 
-#include <string>
-#include <CVector.h>
+#include <am-string.h>
+#include <am-vector.h>
 
-using namespace std;
+
 
 struct FunctionStructure
 {
+	FunctionStructure()
+	{
+		virtualFunctionsCreated.init();
+	}
+
 	void* address;
 	TypeHandler** argumentsHandlers;
 	unsigned int argumentsCount;
 	TypeHandler* returnHandler;
 	bool isMethod;
-	string library;
-	string name;
+	ke::AString library;
+	ke::AString name;
 	unsigned int virtualTableIndex;
-	map<void*,Function*> virtualFunctionsCreated;
+	typedef ke::HashMap< void*, Function*, ke::PointerPolicy<void> > VFTableMap;
+	VFTableMap virtualFunctionsCreated;
 };
 
 #endif

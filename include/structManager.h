@@ -4,46 +4,63 @@
 #undef min
 #undef max
 
-#include <map>
- 
-using namespace std;
+#include <am-hashmap.h>
 
 class StructManager
 {
-	map<long,StructHandler*> structAddressToHandler;
+	typedef ke::HashMap< long, StructHandler*, ke::IntegerPolicy<long> > StructTableMap;
+	StructTableMap structAddressToHandler;
 
-	public:
+public:
 
-		void add(long structureAddress,StructHandler* structureHandler)
+	StructManager()
+	{
+		structAddressToHandler.init();
+	}
+
+	void add(long structureAddress, StructHandler* structureHandler)
+	{
+		StructTableMap::Insert i = structAddressToHandler.findForAdd(structureAddress);
+
+		if (!i.found())
 		{
-			structAddressToHandler[structureAddress] = structureHandler;
-		}
-		long clone(long structureAddress,StructHandler* structureHandler)
-		{
-			long newStructureAddress = createStructure(structureHandler);
-
-			add(newStructureAddress,structureHandler);
-
-			memcpy((void*)newStructureAddress,(void*)structureAddress,structureHandler->getSize());
-
-			return newStructureAddress;
-		}
-		StructHandler* getHandler(long structureAddress)
-		{
-			map<long,StructHandler*>::iterator iterator = structAddressToHandler.find(structureAddress);
-
-			if(iterator != structAddressToHandler.end())
+			if (structAddressToHandler.add(i))
 			{
-				return (*iterator).second;
+				i->key = structureAddress;
 			}
+		}
 
-			return NULL;
-		}
-		long createStructure(StructHandler* structureHandler)
+		i->value = structureHandler;
+	}
+
+	long clone(long structureAddress, StructHandler* structureHandler)
+	{
+		long newStructureAddress = createStructure(structureHandler);
+
+		add(newStructureAddress, structureHandler);
+
+		memcpy((void*)newStructureAddress, (void*)structureAddress, structureHandler->getStructSize());
+
+		return newStructureAddress;
+	}
+
+	StructHandler* getHandler(long structureAddress)
+	{
+		StructTableMap::Result r = structAddressToHandler.find(structureAddress);
+
+		if (r.found())
 		{
-			long structureAddress = structureHandler->allocate();
-			add(structureAddress,structureHandler);
-			return structureAddress;
+			return r->value;
 		}
+
+		return NULL;
+	}
+
+	long createStructure(StructHandler* structureHandler)
+	{
+		long structureAddress = structureHandler->allocate();
+		add(structureAddress, structureHandler);
+		return structureAddress;
+	}
 };
 

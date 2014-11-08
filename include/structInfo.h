@@ -4,7 +4,7 @@
 
 struct Member
 {
-	string name;
+	ke::AString name;
 	long offset;
 	TypeHandler* type;
 };
@@ -13,7 +13,7 @@ struct StructInfo
 {
 	Member* members;
 	int membersCount;
-	string type;
+	ke::AString type;
 	unsigned int size;
 };
 

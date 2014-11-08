@@ -8,18 +8,12 @@
     <Filter Include="Source Files\typeHandlerImplementations">
       <UniqueIdentifier>{8210a605-edee-44c2-b036-a600a7d31e09}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\json">
-      <UniqueIdentifier>{c45ad260-8375-42fd-afe3-fc3dbb61bcae}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{8a16189a-d918-471b-b8b7-f8362a6c141b}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl</Extensions>
     </Filter>
     <Filter Include="Header Files\typeHandlerImplementations">
       <UniqueIdentifier>{05afe7bd-3f21-42f7-ad4e-045f451a67d2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\json">
-      <UniqueIdentifier>{f299e195-f357-4d7a-9dd8-51efc42a848f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\structures">
       <UniqueIdentifier>{de4f7a9e-8769-43a1-830e-3d83159bc3cf}</UniqueIdentifier>
@@ -32,6 +26,9 @@
     </Filter>
     <Filter Include="Module SDK\SDK Base">
       <UniqueIdentifier>{ff0e634a-3314-4777-bf3f-b2d581fe9560}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Jansson">
+      <UniqueIdentifier>{3e5e1452-1b7b-4af0-947c-b5290884b2f2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -63,9 +60,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\librariesManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\memory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\memoryStructureManager.cpp">
@@ -122,14 +116,44 @@
     <ClCompile Include="..\typeHandlerImplementations\VectorPointerHandler.cpp">
       <Filter>Source Files\typeHandlerImplementations</Filter>
     </ClCompile>
-    <ClCompile Include="..\json\json_reader.cpp">
-      <Filter>Source Files\json</Filter>
-    </ClCompile>
-    <ClCompile Include="..\json\json_value.cpp">
-      <Filter>Source Files\json</Filter>
-    </ClCompile>
     <ClCompile Include="..\sdk\amxxmodule.cpp">
       <Filter>Module SDK\SDK Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jansson\dump.c">
+      <Filter>Jansson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jansson\error.c">
+      <Filter>Jansson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jansson\hashtable.c">
+      <Filter>Jansson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jansson\hashtable_seed.c">
+      <Filter>Jansson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jansson\load.c">
+      <Filter>Jansson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jansson\memory.c">
+      <Filter>Jansson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jansson\pack_unpack.c">
+      <Filter>Jansson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jansson\strbuffer.c">
+      <Filter>Jansson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jansson\strconv.c">
+      <Filter>Jansson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jansson\utf.c">
+      <Filter>Jansson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\jansson\value.c">
+      <Filter>Jansson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\memoryUtil.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -137,12 +161,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\configManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\CVector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\filesManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\function.h">
@@ -172,9 +190,6 @@
     <ClInclude Include="..\include\librariesManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\memory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\memoryStructure.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -185,9 +200,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\signatureEntry.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\sm_trie_tpl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\structData.h">
@@ -203,9 +215,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\structManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\svn_version.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\typeHandler.h">
@@ -261,30 +270,6 @@
     </ClInclude>
     <ClInclude Include="..\include\typeHandlerImplementations\VectorPointerHandler.h">
       <Filter>Header Files\typeHandlerImplementations</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\json\autolink.h">
-      <Filter>Header Files\json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\json\config.h">
-      <Filter>Header Files\json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\json\features.h">
-      <Filter>Header Files\json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\json\forwards.h">
-      <Filter>Header Files\json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\json\json.h">
-      <Filter>Header Files\json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\json\reader.h">
-      <Filter>Header Files\json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\json\value.h">
-      <Filter>Header Files\json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\json\writer.h">
-      <Filter>Header Files\json</Filter>
     </ClInclude>
     <ClInclude Include="..\include\structures\ammoInfo.h">
       <Filter>Header Files\structures</Filter>
@@ -346,7 +331,31 @@
     <ClInclude Include="..\sdk\amxxmodule.h">
       <Filter>Module SDK\SDK Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CString.h">
+    <ClInclude Include="..\jansson\hashtable.h">
+      <Filter>Jansson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\jansson\jansson.h">
+      <Filter>Jansson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\jansson\jansson_private.h">
+      <Filter>Jansson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\jansson\lookup3.h">
+      <Filter>Jansson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\jansson\strbuffer.h">
+      <Filter>Jansson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\jansson\utf.h">
+      <Filter>Jansson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\jansson\jansson_config.h">
+      <Filter>Jansson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\memoryUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\filesManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

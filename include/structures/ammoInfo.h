@@ -3,24 +3,23 @@
 
 typedef struct
 {
-    const char *pszName;
-    int iId;
+	const char *pszName;
+	int iId;
 } AmmoInfo_;
 
-class AmmoInfo : public StructData<AmmoInfo_>
+class AmmoInfo : public StructData < AmmoInfo_ >
 {
-	public:
+public:
 
-		AmmoInfo()
-		{	
-			addMember("iId",&structure->iId,Types[TypeLong]);
-			addMember("pszName",&structure->pszName,Types[TypeString]);
-		}
+	AmmoInfo()
+	{
+		addMember("iId", &structure->iId, Types[TypeLong]);
+		addMember("pszName", &structure->pszName, Types[TypeString]);
+	}
 
-		string getName() 
-		{
-			return "AmmoInfo *";
-		};
+	const char *getName()
+	{
+		return "AmmoInfo *";
+	};
 };
-
 

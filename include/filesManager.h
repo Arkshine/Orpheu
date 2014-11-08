@@ -2,20 +2,14 @@
 #ifndef _INCLUDE_FILES_MANAGER_
 #define _INCLUDE_FILES_MANAGER_
 
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/fstream.hpp>
+#include <am-vector.h>
 
-using namespace boost::filesystem; 
-
-#include <CVector.h>
-
-#include <string>
-using namespace std;
+#include <am-string.h>
 
 namespace FilesManager
 {
-	CVector<string>* getFolders(const path& directory);
-	CVector<string>* getFiles(const path& directory);
+	ke::Vector<ke::AString>* getFolders(const char *directory);
+	ke::Vector<ke::AString>* getFiles(const char *directory);
 }
 
 #endif

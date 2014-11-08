@@ -6,20 +6,20 @@
 
 class StructHandlerDirect : public StructHandler
 {
-	public :
-		StructHandlerDirect(StructInfo structInfo):
+public:
+	StructHandlerDirect(StructInfo structInfo) :
 		StructHandler(structInfo){}
 
-		void convertFromAmxToStructure(AMX* amx,cell param,void* address)
-		{
-			memcpy(address,(void*)param,this->getSize());
-		}
-		cell convertToAmxFromStructure(AMX* amx,cell* params,void* address)
-		{
-			cell value;
-			this->convertToAmx(value,(long)address);
-			return value;
-		}
+	void convertFromAmxToStructure(AMX* amx, cell param, void* address)
+	{
+		memcpy(address, (void*)param, this->getStructSize());
+	}
+	cell convertToAmxFromStructure(AMX* amx, cell* params, void* address)
+	{
+		cell value;
+		this->convertToAmx(value, (long)address);
+		return value;
+	}
 };
 
 #endif

@@ -2,20 +2,19 @@
 #include <structData.h>
 #include <structuresDump/monsterevent.h>
 
-class MonsterEvent : public StructData<MonsterEvent_t>
+class MonsterEvent : public StructData < MonsterEvent_t >
 {
-	public:
+public:
 
-		MonsterEvent()
-		{
-			addMember("event",&structure->event,Types[TypeLong]);
-			addMember("options",&structure->options,Types[TypeString]);
-		}
+	MonsterEvent()
+	{
+		addMember("event", &structure->event, Types[TypeLong]);
+		addMember("options", &structure->options, Types[TypeString]);
+	}
 
-		string getName() 
-		{
-			return "MonsterEvent_t *";
-		};
+	const char *getName()
+	{
+		return "MonsterEvent_t *";
+	};
 };
-
 

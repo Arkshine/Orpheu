@@ -2,28 +2,28 @@
 #ifndef _INCLUDE_FUNCTION_STRUCTURES_MANAGER_
 #define _INCLUDE_FUNCTION_STRUCTURES_MANAGER_
 
-#include <sm_trie_tpl.h>
-#include <CVector.h>
+#include <sm_stringhashmap.h>
+#include <am-vector.h>
 
-#include <ctime> 
+#include <ctime>
 #include <functionStructure.h>
 #include <function.h>
 
 class FunctionStructuresManager
 {
-	private:
+private:
 
-		KTrie<time_t> functionStructureNameToTimestamp;
-		KTrie<unsigned int> functionStructureNameToFunctionStructureID;
-		CVector<FunctionStructure*> functionStructures;
+	StringHashMap<time_t> functionStructureNameToTimestamp;
+	StringHashMap<unsigned int> functionStructureNameToFunctionStructureID;
+	ke::Vector<FunctionStructure*> functionStructures;
 
-	public:
+public:
 
-		time_t getTimestamp(char* functionStructureName);
+	time_t getTimestamp(char* functionStructureName);
 
-		FunctionStructure* getFunctionStructure(char* functionStructureName);
-		void addFunctionStructure(FunctionStructure* functionStructure,time_t timestamp);
-		unsigned short int makeFunction(FunctionStructure* functionStructure,void* address);
+	FunctionStructure* getFunctionStructure(char* functionStructureName);
+	void addFunctionStructure(FunctionStructure* functionStructure, time_t timestamp);
+	unsigned short int makeFunction(FunctionStructure* functionStructure, void* address);
 };
 
 #endif

@@ -47,18 +47,18 @@ namespace Global
 	FunctionVirtualManager* FunctionVirtualManagerObj = new FunctionVirtualManager();
 	MemoryStructManager* MemoryStructManagerObj = new MemoryStructManager();
 
-	Folders OrpheuFolders = 
+	Folders OrpheuFolders =
 	{
-		"orpheu",
-		"libraries",
-		"functions",
-		"types",
-		"virtualFunctions",
-		"mods",
-		"memory"
+		ke::AString("orpheu"),
+		ke::AString("libraries"),
+		ke::AString("functions"),
+		ke::AString("types"),
+		ke::AString("virtualFunctions"),
+		ke::AString("mods"),
+		ke::AString("memory")
 	};
 
-	TypeHandler* Types[] = 
+	TypeHandler* Types[] =
 	{
 		new BoolHandler(),
 		new ByteHandler(),
@@ -78,55 +78,55 @@ namespace Global
 		new CharArrHandler()
 	};
 
-	StructHandlerDirect* StructuresDirect[] = 
+	StructHandlerDirect* StructuresDirect[] =
 	{
-		new StructHandlerDirect( (new movevarsStructData())->getStructInfo() ),
-		new StructHandlerDirect( (new usercmdStructData())->getStructInfo() ),
-		new StructHandlerDirect( (new MonsterEvent())->getStructInfo() ),
-		new StructHandlerDirect( (new DLL_FUNCTIONS_StructData())->getStructInfo() ),
-		new StructHandlerDirect( (new PlayerMove())->getStructInfo() ),
-		new StructHandlerDirect( (new enginefuncsStructData())->getStructInfo() ),
-		new StructHandlerDirect( (new TraceResultStructData())->getStructInfo() ),
-		new StructHandlerDirect( (new PhysentStructData())->getStructInfo() ),
-		new StructHandlerDirect( (new PmplaneStructData())->getStructInfo() ),
-		new StructHandlerDirect( (new PmtraceStructData())->getStructInfo() ),
-		new StructHandlerDirect( (new WeaponData())->getStructInfo() ),
-		new StructHandlerDirect( (new AmmoInfo())->getStructInfo() ),
-		new StructHandlerDirect( (new ItemInfo())->getStructInfo() ),
-		new StructHandlerDirect( (new Task())->getStructInfo() ),
-		new StructHandlerDirect( (new Schedule())->getStructInfo() ),
-		new StructHandlerDirect( (new KeyValueData_StructData())->getStructInfo() ),
-		new StructHandlerDirect( (new cvarStructData())->getStructInfo() )
+		new StructHandlerDirect((new movevarsStructData())->getStructInfo()),
+		new StructHandlerDirect((new usercmdStructData())->getStructInfo()),
+		new StructHandlerDirect((new MonsterEvent())->getStructInfo()),
+		new StructHandlerDirect((new DLL_FUNCTIONS_StructData())->getStructInfo()),
+		new StructHandlerDirect((new PlayerMove())->getStructInfo()),
+		new StructHandlerDirect((new enginefuncsStructData())->getStructInfo()),
+		new StructHandlerDirect((new TraceResultStructData())->getStructInfo()),
+		new StructHandlerDirect((new PhysentStructData())->getStructInfo()),
+		new StructHandlerDirect((new PmplaneStructData())->getStructInfo()),
+		new StructHandlerDirect((new PmtraceStructData())->getStructInfo()),
+		new StructHandlerDirect((new WeaponData())->getStructInfo()),
+		new StructHandlerDirect((new AmmoInfo())->getStructInfo()),
+		new StructHandlerDirect((new ItemInfo())->getStructInfo()),
+		new StructHandlerDirect((new Task())->getStructInfo()),
+		new StructHandlerDirect((new Schedule())->getStructInfo()),
+		new StructHandlerDirect((new KeyValueData_StructData())->getStructInfo()),
+		new StructHandlerDirect((new cvarStructData())->getStructInfo())
 	};
 
-	StructHandler* Structures[] = 
+	StructHandler* Structures[] =
 	{
-		new StructHandler( (new movevarsStructData())->getStructInfo() ),
-		new StructHandler( (new usercmdStructData())->getStructInfo() ),
-		new StructHandler( (new MonsterEvent())->getStructInfo() ),
-		new StructHandler( (new DLL_FUNCTIONS_StructData())->getStructInfo() ),
-		new StructHandler( (new PlayerMove())->getStructInfo() ),
-		new StructHandler( (new enginefuncsStructData())->getStructInfo() ),
-		new StructHandler( (new TraceResultStructData())->getStructInfo() ),
-		new StructHandler( (new PhysentStructData())->getStructInfo() ),
-		new StructHandler( (new PmplaneStructData())->getStructInfo() ),
-		new StructHandler( (new PmtraceStructData())->getStructInfo() ),
-		new StructHandler( (new WeaponData())->getStructInfo() ),
-		new StructHandler( (new AmmoInfo())->getStructInfo() ),
-		new StructHandler( (new ItemInfo())->getStructInfo() ),
-		new StructHandler( (new Task())->getStructInfo() ),
-		new StructHandler( (new Schedule())->getStructInfo() ),
-		new StructHandler( (new cvarStructData())->getStructInfo() )
+		new StructHandler((new movevarsStructData())->getStructInfo()),
+		new StructHandler((new usercmdStructData())->getStructInfo()),
+		new StructHandler((new MonsterEvent())->getStructInfo()),
+		new StructHandler((new DLL_FUNCTIONS_StructData())->getStructInfo()),
+		new StructHandler((new PlayerMove())->getStructInfo()),
+		new StructHandler((new enginefuncsStructData())->getStructInfo()),
+		new StructHandler((new TraceResultStructData())->getStructInfo()),
+		new StructHandler((new PhysentStructData())->getStructInfo()),
+		new StructHandler((new PmplaneStructData())->getStructInfo()),
+		new StructHandler((new PmtraceStructData())->getStructInfo()),
+		new StructHandler((new WeaponData())->getStructInfo()),
+		new StructHandler((new AmmoInfo())->getStructInfo()),
+		new StructHandler((new ItemInfo())->getStructInfo()),
+		new StructHandler((new Task())->getStructInfo()),
+		new StructHandler((new Schedule())->getStructInfo()),
+		new StructHandler((new KeyValueData_StructData())->getStructInfo()),
+		new StructHandler((new cvarStructData())->getStructInfo())
 	};
 
 	unsigned int TypesCount = sizeof(Types) / sizeof(TypeHandler*);
 	unsigned int StructuresCount = sizeof(Structures) / sizeof(StructHandler*);
 
-	string Modname = "";
+	ke::AString Modname;
 
 	int pev = 0;
 
-	KTrie<char*>* LibrariesCvarToName = NULL;
+	StringHashMap<char*>* LibrariesCvarToName = NULL;
 	Function* FunctionBeingHooked = NULL;
 }
-

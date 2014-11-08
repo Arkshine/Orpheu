@@ -5,23 +5,21 @@
 #include <amxxmodule.h>
 #include <typeHandler.h>
 #include <memory.h>
-#include <CVector.h>
+#include <am-vector.h>
 
 #undef min
 #undef max
 
-#include <map>
-#include <string>
+#include <am-hashmap.h>
+#include <am-string.h>
 
-using namespace std;
-
-typedef enum 
+typedef enum
 {
 	OrpheuHookPre,
 	OrpheuHookPost
 }OrpheuHookPhase;
 
-typedef enum 
+typedef enum
 {
 	OrpheuIgnored,
 	OrpheuOverride,
@@ -30,136 +28,143 @@ typedef enum
 
 class Function
 {
-	private:
+private:
 
-		static unsigned char patch[];
-		static int patchSize;
-		static unsigned short int* patchFunctionIDAddress;
-		static long* patchFunctionJumpAddress;
-		unsigned char* originalBytes;
-		unsigned char* patchedBytes;
+	static unsigned char patch[];
+	static int patchSize;
+	static unsigned short int* patchFunctionIDAddress;
+	static long* patchFunctionJumpAddress;
+	unsigned char* originalBytes;
+	unsigned char* patchedBytes;
 
-		int argumentsPassLoopStart;
-		int argumentsPassLoopEnd;
+	int argumentsPassLoopStart;
+	int argumentsPassLoopEnd;
 
-		unsigned int ifReturnByRefParamsCount;
-		cell* argumentsToAmx;
-		long* normalArguments;
+	unsigned int ifReturnByRefParamsCount;
+	cell* argumentsToAmx;
+	long* normalArguments;
 
-		cell hookReturnValueConverted;
+	cell hookReturnValueConverted;
 
-		long hookReturnValue;
+	long hookReturnValue;
 
-		ForwardParam* parameters;
-		TypeHandler** argumentsHandlers;
+	ForwardParam* parameters;
+	TypeHandler** argumentsHandlers;
 
-		TypeHandler** argumentsByRef;
-		unsigned int* argumentsByRefPosition;
-		unsigned int argumentsByRefCount;
-	
-		unsigned int argumentsCount;
-		TypeHandler *returnHandler;
-		void* address;
-		bool isMethod;
+	TypeHandler** argumentsByRef;
+	unsigned int* argumentsByRefPosition;
+	unsigned int argumentsByRefCount;
 
-		unsigned int id;
+	unsigned int argumentsCount;
+	TypeHandler *returnHandler;
+	void* address;
+	bool isMethod;
 
-		bool isPatched;
+	unsigned int id;
 
-		bool shouldCallHooks;
+	bool isPatched;
 
-		map<long,long>* hooks[OrpheuHookPost+1];
-		long currentHookID[OrpheuHookPost+1];
+	bool shouldCallHooks;
 
-		OrpheuHookPhase hookPhase;
-		OrpheuHookReturn hookReturnStatus;
+	typedef ke::HashMap< long, long, ke::IntegerPolicy<long> > HooksDataMap;
+	HooksDataMap hooks[OrpheuHookPost + 1];
+	long currentHookID[OrpheuHookPost + 1];
 
-#if defined WIN32
-		void (__thiscall Function::* passObject)();
-		
-		void inline passObjectMethod()
-		{ 
-			long object = normalArguments[0];
-			_asm mov ecx, object; 
-		}
-
-		void inline passObjectNonMethod(){}
-#endif
-		long espDislocation;
-		long espDislocationAddHook;
-		long espDislocationCallForward;
+	OrpheuHookPhase hookPhase;
+	OrpheuHookReturn hookReturnStatus;
 
 #if defined WIN32
-		long espDislocationCall;
+	void(__thiscall Function::* passObject)();
+
+	void inline passObjectMethod()
+	{
+		long object = normalArguments[0];
+		_asm mov ecx, object;
+	}
+
+	void inline passObjectNonMethod(){}
 #endif
-		long callOriginal();
+	long espDislocation;
+	long espDislocationAddHook;
+	long espDislocationCallForward;
 
-		string library;
+#if defined WIN32
+	long espDislocationCall;
+#endif
+	long callOriginal();
 
-	public:
-		Function(void* address,TypeHandler** argumentsHandlers,unsigned int argumentsCount,TypeHandler* returnHandler,string library,bool isMethod = false);
-		~Function();
-		unsigned int& getIfReturnByRefParamsCount();
-		unsigned int& getArgumentsCount();
-		cell call(AMX* amx,cell* params);
+	ke::AString library;
 
-		void setID(unsigned short int id);
+public:
+	Function(void* address, TypeHandler** argumentsHandlers, unsigned int argumentsCount, TypeHandler* returnHandler, ke::AString library, bool isMethod = false);
+	~Function();
 
-		void preparePatch();
-		void doPatch();
-		void undoPatch();
+	unsigned int& getIfReturnByRefParamsCount();
+	unsigned int& getArgumentsCount();
 
-		long* getHookArgumentsHolder()
-		{
-			return normalArguments;
-		}
+	cell call(AMX* amx, cell* params);
 
-		long hook();
+	void setID(unsigned short int id);
 
-		long addHook(AMX* amx,const char* functionName,OrpheuHookPhase phase);
-		void removeHook(OrpheuHookPhase phase,long functionHookPhaseID);
-		void removeAllHooks();
+	void preparePatch();
+	void doPatch();
+	void undoPatch();
 
-		void convertArgumentsToAmx();
-		OrpheuHookReturn callHooks(OrpheuHookPhase phase);
-		OrpheuHookReturn callForward(long forward);
+	long* getHookArgumentsHolder()
+	{
+		return normalArguments;
+	}
 
-		cell getReturnToAmx(AMX* amx,cell* params);
-		void setReturnFromAmx(AMX* amx,cell* params);
-		bool setParamFromAmx(AMX* amx,cell* params);
-		TypeHandler* getArgumentHandler(unsigned int argumentID);
-		long getArgumentValue(unsigned int argumentID);
+	long hook();
 
-		bool hasReturn()
-		{
-			return returnHandler != NULL;
-		}
-		void blockHooks()
-		{
-			shouldCallHooks = false;
-		}
-		OrpheuHookPhase getHookPhase()
-		{
-			return hookPhase;
-		}
-		OrpheuHookReturn getHookReturnStatus()
-		{
-			return hookReturnStatus;
-		}
-		string getLibrary()
-		{
-			return this->library;
-		}
+	long addHook(AMX* amx, const char* functionName, OrpheuHookPhase phase);
+	void removeHook(OrpheuHookPhase phase, long functionHookPhaseID);
+	void removeAllHooks();
 
-		long getAddress()
-		{
-			return (long) address;
-		}
+	void convertArgumentsToAmx();
+	OrpheuHookReturn callHooks(OrpheuHookPhase phase);
+	OrpheuHookReturn callForward(long forward);
 
-		unsigned int getID()
-		{
-			return id;
-		}
+	cell getReturnToAmx(AMX* amx, cell* params);
+	void setReturnFromAmx(AMX* amx, cell* params);
+	bool setParamFromAmx(AMX* amx, cell* params);
+	TypeHandler* getArgumentHandler(unsigned int argumentID);
+	long getArgumentValue(unsigned int argumentID);
+
+	bool hasReturn()
+	{
+		return returnHandler != NULL;
+	}
+
+	void blockHooks()
+	{
+		shouldCallHooks = false;
+	}
+
+	OrpheuHookPhase getHookPhase()
+	{
+		return hookPhase;
+	}
+
+	OrpheuHookReturn getHookReturnStatus()
+	{
+		return hookReturnStatus;
+	}
+
+	const char *getLibrary()
+	{
+		return library.chars();
+	}
+
+	long getAddress()
+	{
+		return (long)address;
+	}
+
+	unsigned int getID()
+	{
+		return id;
+	}
 };
 
 #endif

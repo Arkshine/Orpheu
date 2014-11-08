@@ -2,23 +2,23 @@
 #ifndef _INCLUDE_MEMORY_STRUCT_MANAGER_
 #define _INCLUDE_MEMORY_STRUCT_MANAGER_
 
-#include <sm_trie_tpl.h>
-#include <CVector.h>
+#include <sm_stringhashmap.h>
+#include <am-vector.h>
 
-#include <ctime> 
+#include <ctime>
 #include <memoryStructure.h>
 
 class MemoryStructManager
 {
-	private:
+private:
 
-		KTrie<unsigned int> memoryStructureNameToMemoryStructureID;
-		CVector<MemoryStructure*> memoryStructures;
+	StringHashMap<unsigned int> memoryStructureNameToMemoryStructureID;
+	ke::Vector<MemoryStructure*> memoryStructures;
 
-	public:
-		//FunctionStructure* get(char* memoryStructureName);
-		void add(MemoryStructure* memoryStructure);
-		MemoryStructure* get(char* name);
+public:
+	//FunctionStructure* get(char* memoryStructureName);
+	void add(MemoryStructure* memoryStructure);
+	MemoryStructure* get(char* name);
 };
 
 #endif

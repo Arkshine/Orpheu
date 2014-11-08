@@ -6,12 +6,10 @@
 #include <signatureEntry.h>
 
 #undef min
-#undef max 
+#undef max
 
-#include <string>
-#include <CVector.h>
-
-using namespace std;
+#include <am-string.h>
+#include <am-vector.h>
 
 enum MemoryStructureType
 {
@@ -22,8 +20,8 @@ enum MemoryStructureType
 
 struct MemoryStructure
 {
-	string library;
-	string name;
+	ke::AString library;
+	ke::AString name;
 	MemoryStructureType type;
 	long offset;
 	byte* signature;
