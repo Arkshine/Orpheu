@@ -405,7 +405,7 @@ cell AMX_NATIVE_CALL Orpheu::CreateStruct(AMX* amx, cell* params)
 {
 	unsigned int id = params[1];
 
-	if ((id >= 0) && (id < Global::StructuresCount))
+	if (id < Global::StructuresCount)
 	{
 		StructHandler* structHandler = Global::Structures[id];
 
@@ -423,7 +423,7 @@ cell AMX_NATIVE_CALL Orpheu::GetStructFromAddress(AMX* amx, cell* params)
 {
 	unsigned int id = params[1];
 
-	if ((id >= 0) && (id < Global::StructuresCount))
+	if (id < Global::StructuresCount)
 	{
 		long address = params[2];
 		StructHandler* structHandler = Global::Structures[id];
