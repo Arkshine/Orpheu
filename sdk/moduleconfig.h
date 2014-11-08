@@ -26,7 +26,7 @@
  *   to add multiple entries.
  */
 #define MODULE_NAME "Orpheu"
-#define MODULE_VERSION "2.5.4"
+#define MODULE_VERSION "2.6-beta"
 #define MODULE_AUTHOR "joaquimandrade & Arkshine"
 #define MODULE_URL "http://forums.alliedmods.net/showthread.php?t=116393"
 #define MODULE_LOGTAG "ORPHEU"

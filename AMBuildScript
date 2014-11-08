@@ -9,7 +9,7 @@ class AMXXConfig(object):
     self.metamod_path = None
     self.hlsdk_path = None
     self.stdcxx_path = None
-    self.productVersion = '2.5.4'
+    self.productVersion = '2.6-beta'
 
   def detectMetamod(self):
     metamod_path = builder.options.metamod_path
