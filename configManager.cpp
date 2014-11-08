@@ -418,7 +418,7 @@ bool validateFile(ke::AString folder, ke::AString filename, ke::AString classnam
 						{
 							json_t *indexes = json_object_get(*root, "indexes");
 
-							if (!json_is_null(indexes) && json_is_array(indexes))
+							if (json_is_array(indexes))
 							{
 								bool libraryIsMod = (strcmp(json_string_value(library), "mod") == 0);
 
@@ -532,7 +532,7 @@ void parseFile(ke::AString folder, ke::AString filename, ke::AString classname =
 		json_t *library = json_object_get(root, "library");
 		json_t *identifiers = json_object_get(root, "identifiers");
 
-		if (json_is_null(identifiers))
+		if (!identifiers || json_is_null(identifiers))
 		{
 			json_t * argumentsJson = json_object_get(root, "arguments");
 			json_t * returnJson = json_object_get(root, "return");
@@ -574,7 +574,7 @@ void parseFile(ke::AString folder, ke::AString filename, ke::AString classname =
 
 			json_t *indexes = json_object_get(root, "indexes");
 
-			if (!json_is_null(indexes) && json_is_array(indexes))
+			if (json_is_array(indexes))
 			{
 				bool libraryIsMod = (strcmp(json_string_value(library), "mod") == 0);
 
@@ -843,7 +843,7 @@ StringHashMap<ke::Vector<char*>*>* ConfigManager::parseTypeAliasesInfo(StringHas
 
 					correctlyFormated = true;
 
-					if (!json_is_null(virtualTableOffsets) && json_is_object(virtualTableOffsets))
+					if (json_is_object(virtualTableOffsets))
 					{
 						json_t *value = json_object_get(virtualTableOffsets, OperativeSystem);
 
@@ -1176,7 +1176,7 @@ void ConfigManager::parseMemoryObject(json_t *root)
 
 		json_t *identifiers = json_object_get(root, "identifiers");
 
-		if (!json_is_null(identifiers) && json_is_array(identifiers))
+		if (json_is_array(identifiers))
 		{
 			for (unsigned int i=0; i < json_array_size(identifiers); i++)
 			{
@@ -1235,7 +1235,7 @@ void ConfigManager::parseMemoryObject(json_t *root)
 
 							int displacementValue = 0;
 
-							if (!json_is_null(displacement))
+							if (displacement)
 							{
 								if (json_is_integer(displacement))
 								{

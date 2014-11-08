@@ -202,9 +202,6 @@
     <ClInclude Include="..\include\signatureEntry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\sm_trie_tpl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\structData.h">
       <Filter>Header Files</Filter>
     </ClInclude>

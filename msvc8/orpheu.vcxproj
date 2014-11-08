@@ -218,7 +218,6 @@
     <ClInclude Include="..\include\memoryStructureManager.h" />
     <ClInclude Include="..\include\orpheu.h" />
     <ClInclude Include="..\include\signatureEntry.h" />
-    <ClInclude Include="..\include\sm_trie_tpl.h" />
     <ClInclude Include="..\include\structData.h" />
     <ClInclude Include="..\include\structHandler.h" />
     <ClInclude Include="..\include\structHandlerDirect.h" />
