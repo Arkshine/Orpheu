@@ -19,7 +19,7 @@ typedef struct
 class FunctionManager
 {
 private:
-	typedef ke::HashMap<long, HookReferenceData*, ke::IntegerPolicy<long>> HookTableMap;
+	typedef ke::HashMap< long, HookReferenceData*, ke::IntegerPolicy<long> > HookTableMap;
 	HookTableMap hookReferences;
 	StringHashMap<time_t> functionNameToTimestamp;
 	StringHashMap<unsigned short int> functionNameToFunctionID;

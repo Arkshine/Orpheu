@@ -23,7 +23,7 @@ struct FunctionStructure
 	ke::AString library;
 	ke::AString name;
 	unsigned int virtualTableIndex;
-	typedef ke::HashMap<void*, Function*, ke::PointerPolicy<void>> VFTableMap;
+	typedef ke::HashMap< void*, Function*, ke::PointerPolicy<void> > VFTableMap;
 	VFTableMap virtualFunctionsCreated;
 };
 

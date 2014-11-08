@@ -928,7 +928,7 @@ const CDetourDis::COPYENTRY CDetourDis::s_rceCopyTable0F[257] =
 };
 
 BOOL CDetourDis::SanityCheckSystem(){
-	for (ULONG n = 0; n < 256; n++){
+	for (unsigned long n = 0; n < 256; n++){
 		REFCOPYENTRY pEntry = &s_rceCopyTable[n];
 
 		if (n != pEntry->nOpcode){
@@ -944,7 +944,7 @@ BOOL CDetourDis::SanityCheckSystem(){
 		return FALSE;
 	}
 
-	for (ULONG n = 0; n < 256; n++){
+	for (unsigned long n = 0; n < 256; n++){
 		REFCOPYENTRY pEntry = &s_rceCopyTable0F[n];
 
 		if (n != pEntry->nOpcode){

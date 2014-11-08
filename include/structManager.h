@@ -8,7 +8,7 @@
 
 class StructManager
 {
-	typedef ke::HashMap<long, StructHandler*, ke::IntegerPolicy<long>> StructTableMap;
+	typedef ke::HashMap< long, StructHandler*, ke::IntegerPolicy<long> > StructTableMap;
 	StructTableMap structAddressToHandler;
 
 public:

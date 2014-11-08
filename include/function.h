@@ -66,7 +66,7 @@ private:
 
 	bool shouldCallHooks;
 
-	typedef ke::HashMap<long, long, ke::IntegerPolicy<long>> HooksDataMap;
+	typedef ke::HashMap< long, long, ke::IntegerPolicy<long> > HooksDataMap;
 	HooksDataMap hooks[OrpheuHookPost + 1];
 	long currentHookID[OrpheuHookPost + 1];
 

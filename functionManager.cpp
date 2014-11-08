@@ -4,7 +4,7 @@
 FunctionManager::FunctionManager()
 {
 	functions = new ke::Vector < Function* > ;
-	functions->append(nullptr);
+	functions->append(NULL);
 	currentHookID = 1;
 }
 

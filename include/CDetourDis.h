@@ -31,7 +31,6 @@ typedef char* PCHAR;
 typedef void* PVOID;
 typedef uint32_t UINT32;
 typedef int32_t INT32;
-typedef unsigned long ULONG;
 typedef long DWORD;
 
 typedef int BOOL;
@@ -80,12 +79,12 @@ public:
 	};
 
 	struct COPYENTRY {
-		ULONG 		nOpcode : 8;				// Opcode
-		ULONG		nFixedSize : 3;				// Fixed size of opcode
-		ULONG		nFixedSize16 : 3;				// Fixed size when 16 bit operand
-		ULONG		nModOffset : 3;				// Offset to mod/rm byte (0=none)
+		unsigned long 		nOpcode : 8;				// Opcode
+		unsigned long		nFixedSize : 3;				// Fixed size of opcode
+		unsigned long		nFixedSize16 : 3;				// Fixed size when 16 bit operand
+		unsigned long		nModOffset : 3;				// Offset to mod/rm byte (0=none)
 		LONG		nRelOffset : 3;				// Offset to relative target.
-		ULONG		nFlagBits : 4;				// Flags for DYNAMIC, etc.
+		unsigned long		nFlagBits : 4;				// Flags for DYNAMIC, etc.
 		COPYFUNC	pfCopy;								// Function pointer.
 	};
 

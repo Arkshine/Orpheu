@@ -163,12 +163,6 @@
     <ClInclude Include="..\include\configManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CVector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\filesManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\function.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -340,9 +334,6 @@
     <ClInclude Include="..\sdk\amxxmodule.h">
       <Filter>Module SDK\SDK Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CString.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\jansson\hashtable.h">
       <Filter>Jansson</Filter>
     </ClInclude>
@@ -365,6 +356,9 @@
       <Filter>Jansson</Filter>
     </ClInclude>
     <ClInclude Include="..\include\memoryUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\filesManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

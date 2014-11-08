@@ -1398,16 +1398,17 @@ static int addLibraryRecursive(struct dl_phdr_info *info, size_t size, void *dat
 
 		strcpy(library, &process[i + 1]);
 
-		if (!LibrariesManager::addLibrary(library, info.lpBaseOfDll))
+		if (!LibrariesManager::addLibrary(library, (void *)info->dlpi_addr))
 		{
 			UTIL_Format(msg, sizeof(msg) - 1, "\tERROR adding library %s (0x%p)\n", library, info->dlpi_addr);
-			Global::ConfigManagerObj->ModuleConfig.append(msg);
+			Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 		}
 		else
 		{
 			UTIL_Format(msg, sizeof(msg) - 1, "\tAdding library %s (0x%p)\n", library, info->dlpi_addr);
-			Global::ConfigManagerObj->ModuleConfig.append(msg);
+			Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 		}
+	}
 
 	return 0;
 }
@@ -1451,12 +1452,12 @@ void addLibraries() // IM THE KING OF EXAMPLE COPYPASTING!
 					if (!LibrariesManager::addLibrary(library, info.lpBaseOfDll))
 					{
 						UTIL_Format(msg, sizeof(msg) - 1, "\tERROR adding library %s (0x%p)\n", library, info.lpBaseOfDll);
-						Global::ConfigManagerObj->ModuleConfig.append(msg);
+						Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 					}
 					else
 					{
 						UTIL_Format(msg, sizeof(msg) - 1, "\tAdding library %s (0x%p)\n", library, info.lpBaseOfDll);
-						Global::ConfigManagerObj->ModuleConfig.append(msg);
+						Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 					}
 				}
 			}
@@ -1474,12 +1475,15 @@ void CommandOrpheu(void)
 		printf("\n %s %s\n -\n", Plugin_info.name, Plugin_info.version);
 		printf(" Support  : %s\n", Plugin_info.url);
 		printf(" Author   : %s\n", Plugin_info.author);
-		printf(" Compiled : %s\n\n", __DATE__, __TIME__);
+		printf(" Compiled : %s %s\n\n", __DATE__, __TIME__);
 		return;
 	}
 	else if (!strcasecmp(cmd, "config"))
 	{
-		printf("%s", Global::ConfigManagerObj->ModuleConfig.c_str());
+		for (size_t i = 0; i < Global::ConfigManagerObj->ModuleConfig.length(); ++i)
+		{
+			printf("%s", Global::ConfigManagerObj->ModuleConfig.at(i).chars());
+		}
 
 		char file[512];
 		char date[32];
@@ -1489,7 +1493,10 @@ void CommandOrpheu(void)
 		MF_BuildPathnameR(file, sizeof file - 1, "%s/orpheu-%s.log", MF_GetLocalInfo("amxx_logs", "addons/amxmodx/logs"), date);
 
 		FILE* h = fopen(file, "w");
-		fputs(Global::ConfigManagerObj->ModuleConfig.c_str(), h);
+		for (size_t i = 0; i < Global::ConfigManagerObj->ModuleConfig.length(); ++i)
+		{
+			fputs(Global::ConfigManagerObj->ModuleConfig.at(i).chars(), h);
+		}
 		fclose(h);
 
 		return;
@@ -1526,7 +1533,7 @@ void OnAmxxAttach()
 
 void OnPluginsLoaded()
 {
-	Global::ConfigManagerObj->ModuleConfig.append("\nOrpheu libraries search started.\n\n");
+	Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\nOrpheu libraries search started.\n\n"));
 
 #ifdef __linux__
 	dl_iterate_phdr(addLibraryRecursive, NULL);
@@ -1534,7 +1541,7 @@ void OnPluginsLoaded()
 	addLibraries();
 #endif
 
-	Global::ConfigManagerObj->ModuleConfig.append("\nOrpheu libraries search ended.\n");
+	Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\nOrpheu libraries search ended.\n"));
 
 	Global::ConfigManagerObj->loadFunctions();
 	Global::ConfigManagerObj->loadVirtualFunctions();

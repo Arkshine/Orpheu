@@ -72,13 +72,13 @@ namespace FilesManager
 			char path[256];
 			UTIL_Format(path, sizeof(path) - 1, "%s", directory);
 
-			DIR *dp = opendir(dirname);
+			DIR *dp = opendir(path);
 
 			if (dp != 0)
 			{
 				struct dirent *ep;
 
-				while ((ep = readdir(dp))
+				while ((ep = readdir(dp)))
 				{
 					if (ep->d_name[0] == '.')
 					{
@@ -136,13 +136,13 @@ namespace FilesManager
 			char path[256];
 			UTIL_Format(path, sizeof(path) - 1, "%s", directory);
 
-			DIR *dp = opendir(dirname);
+			DIR *dp = opendir(path);
 
 			if (dp != 0)
 			{
 				struct dirent *ep;
 
-				while ((ep = readdir(dp))
+				while ((ep = readdir(dp)))
 				{
 					if (ep->d_name[0] == '.')
 					{
