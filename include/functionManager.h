@@ -24,7 +24,7 @@ private:
 	StringHashMap<time_t> functionNameToTimestamp;
 	StringHashMap<unsigned short int> functionNameToFunctionID;
 	long currentHookID;
-	ke::Vector<Function*>* functions;
+	ke::Vector<Function*> functions;
 
 public:
 

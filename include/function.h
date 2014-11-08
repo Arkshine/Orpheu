@@ -98,8 +98,10 @@ private:
 public:
 	Function(void* address, TypeHandler** argumentsHandlers, unsigned int argumentsCount, TypeHandler* returnHandler, ke::AString library, bool isMethod = false);
 	~Function();
+
 	unsigned int& getIfReturnByRefParamsCount();
 	unsigned int& getArgumentsCount();
+
 	cell call(AMX* amx, cell* params);
 
 	void setID(unsigned short int id);
@@ -133,21 +135,25 @@ public:
 	{
 		return returnHandler != NULL;
 	}
+
 	void blockHooks()
 	{
 		shouldCallHooks = false;
 	}
+
 	OrpheuHookPhase getHookPhase()
 	{
 		return hookPhase;
 	}
+
 	OrpheuHookReturn getHookReturnStatus()
 	{
 		return hookReturnStatus;
 	}
-	ke::AString getLibrary()
+
+	const char *getLibrary()
 	{
-		return this->library;
+		return library.chars();
 	}
 
 	long getAddress()

@@ -4,8 +4,7 @@
 FunctionManager::FunctionManager()
 {
 	hookReferences.init();
-	functions = new ke::Vector < Function* > ;
-	functions->append(NULL);
+	functions.append(NULL);
 	currentHookID = 1;
 }
 
@@ -23,13 +22,13 @@ unsigned short int FunctionManager::addFunction(const char* functionName, Functi
 
 	if (functionName[0] && functionNameToFunctionID.retrieve(functionName, &id))
 	{
-		//delete functions->at(id);
-		functions->at(id) = function;
+		//delete functions.at(id);
+		functions.at(id) = function;
 	}
 	else
 	{
-		id = functions->length();
-		functions->append(function);
+		id = functions.length();
+		functions.append(function);
 	}
 
 	function->setID(id);
@@ -42,9 +41,9 @@ unsigned short int FunctionManager::addFunction(const char* functionName, Functi
 
 Function* FunctionManager::getFunction(unsigned short int functionID)
 {
-	if (functionID >= 1 && functionID < (unsigned short int)functions->length())
+	if (functionID >= 1 && functionID < (unsigned short int)functions.length())
 	{
-		return functions->at(functionID);
+		return functions.at(functionID);
 	}
 
 	return NULL;
@@ -127,6 +126,6 @@ void FunctionManager::tryToRemove(const char* functionName)
 	{
 		functionNameToFunctionID.remove(functionName);
 		functionNameToTimestamp.remove(functionName);
-		this->functions->remove(id);
+		this->functions.remove(id);
 	}
 }

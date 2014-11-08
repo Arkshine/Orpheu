@@ -11,8 +11,6 @@
 #include <am-string.h>
 #include <am-vector.h>
 
-
-
 enum MemoryStructureType
 {
 	MemTypeOffset,

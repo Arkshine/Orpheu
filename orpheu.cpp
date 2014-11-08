@@ -694,7 +694,7 @@ cell AMX_NATIVE_CALL Orpheu::GetFunctionOffset(AMX* amx, cell* params)
 
 	if (function)
 	{
-		return LibrariesManager::getAddressOffset(function->getAddress(), (char*)function->getLibrary().chars());
+		return LibrariesManager::getAddressOffset(function->getAddress(), function->getLibrary());
 	}
 
 	return 0;
@@ -788,6 +788,7 @@ cell AMX_NATIVE_CALL Orpheu::GetFunctionFromClass(AMX* amx, cell* params)
 
 	return 0;
 }
+
 cell AMX_NATIVE_CALL Orpheu::GetFunctionFromEntity(AMX* amx, cell* params)
 {
 	CheckEntity(amx, params[1]);
