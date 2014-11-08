@@ -39,7 +39,7 @@ public:
 
 		add(newStructureAddress, structureHandler);
 
-		memcpy((void*)newStructureAddress, (void*)structureAddress, structureHandler->getSize());
+		memcpy((void*)newStructureAddress, (void*)structureAddress, structureHandler->getStructSize());
 
 		return newStructureAddress;
 	}

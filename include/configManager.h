@@ -33,7 +33,5 @@ private:
 	void parseModsInfo();
 };
 
-size_t UTIL_Format(char *buffer, size_t maxlength, const char *fmt, ...);
-
 #endif
 

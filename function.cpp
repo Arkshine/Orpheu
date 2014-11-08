@@ -578,7 +578,7 @@ bool Function::setParamFromAmx(AMX* amx, cell* params)
 {
 	unsigned int argumentID = params[0] - 1;
 
-	if ((argumentID >= 0) && (argumentID < argumentsCount))
+	if (argumentID < argumentsCount)
 	{
 		normalArguments[argumentID] = (long)argumentsHandlers[argumentID]->convertFromAmx(amx, params[1]);
 
@@ -590,7 +590,7 @@ bool Function::setParamFromAmx(AMX* amx, cell* params)
 
 TypeHandler* Function::getArgumentHandler(unsigned int argumentID)
 {
-	if ((argumentID >= 0) && (argumentID < argumentsCount))
+	if (argumentID < argumentsCount)
 	{
 		return argumentsHandlers[argumentID];
 	}
@@ -600,7 +600,7 @@ TypeHandler* Function::getArgumentHandler(unsigned int argumentID)
 
 long Function::getArgumentValue(unsigned int argumentID)
 {
-	if ((argumentID >= 0) && (argumentID < argumentsCount))
+	if (argumentID < argumentsCount)
 	{
 		return normalArguments[argumentID];
 	}

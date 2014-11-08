@@ -1,5 +1,4 @@
 
-
 #include <orpheu.h>
 
 #include <global.h>
@@ -1565,4 +1564,3 @@ void OnPluginsUnloaded()
 
 	Global::ConfigManagerObj->ModuleConfig.clear();
 }
-
