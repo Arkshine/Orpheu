@@ -71,7 +71,7 @@
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>..\;..\include;..\sdk;$(METAMOD)\metamod;$(HLSDK)\common;$(HLSDK)\engine;$(HLSDK)\dlls;$(HLSDK)\pm_shared;$(HLSDK)\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\;..\include;..\public\sdk;$(METAMOD)\metamod;$(HLSDK)\common;$(HLSDK)\engine;$(HLSDK)\dlls;$(HLSDK)\pm_shared;$(HLSDK)\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;ORPHEU_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
@@ -121,7 +121,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\;..\include;..\sdk;$(METAMOD)\metamod;$(HLSDK)\common;$(HLSDK)\engine;$(HLSDK)\dlls;$(HLSDK)\pm_shared;$(HLSDK)\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\;..\include;..\public\sdk;$(METAMOD)\metamod;$(HLSDK)\common;$(HLSDK)\engine;$(HLSDK)\dlls;$(HLSDK)\pm_shared;$(HLSDK)\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;ORPHEU_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -189,7 +189,7 @@
     <ClCompile Include="..\typeHandlerImplementations\VectorPointerHandler.cpp" />
     <ClCompile Include="..\json\json_reader.cpp" />
     <ClCompile Include="..\json\json_value.cpp" />
-    <ClCompile Include="..\sdk\amxxmodule.cpp" />
+    <ClCompile Include="..\public\sdk\amxxmodule.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\CDetourDis.h" />
@@ -262,8 +262,8 @@
     <ClInclude Include="..\include\structures\usercmdStruct.h" />
     <ClInclude Include="..\include\structures\weapon_data.h" />
     <ClInclude Include="..\include\structuresDump\monsterevent.h" />
-    <ClInclude Include="..\sdk\moduleconfig.h" />
-    <ClInclude Include="..\sdk\amxxmodule.h" />
+    <ClInclude Include="..\include\moduleconfig.h" />
+    <ClInclude Include="..\public\sdk\amxxmodule.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
