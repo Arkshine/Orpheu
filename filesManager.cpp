@@ -52,6 +52,11 @@ namespace FilesManager
 				{
 					do 
 					{
+						if (fd.cFileName[0] == '.')
+						{
+							continue;
+						}
+
 						UTIL_Format(path, sizeof(path) - 1, "%s%s", directory, fd.cFileName);
 
 						if (dirExists(path))
@@ -75,6 +80,11 @@ namespace FilesManager
 
 					while ((ep = readdir(dp)))
 					{
+						if (ep->d_name[0] == '.')
+						{
+							continue;
+						}
+
 						UTIL_Format(path, sizeof(path) - 1, "%s%s", directory, ep->d_name);
 
 						if (dirExists(path))
@@ -108,6 +118,11 @@ namespace FilesManager
 				{
 					do 
 					{
+						if (fd.cFileName[0] == '.')
+						{
+							continue;
+						}
+
 						UTIL_Format(path, sizeof(path) - 1, "%s%s", directory, fd.cFileName);
 
 						if (!dirExists(path))
@@ -131,6 +146,11 @@ namespace FilesManager
 
 					while ((ep = readdir(dp)))
 					{
+						if (ep->d_name[0] == '.')
+						{
+							continue;
+						}
+
 						UTIL_Format(path, sizeof(path) - 1, "%s%s", directory, ep->d_name);
 
 						if (!dirExists(path))

@@ -71,7 +71,7 @@
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>..\;..\include;..\public\sdk;$(METAMOD)\metamod;$(HLSDK)\common;$(HLSDK)\engine;$(HLSDK)\dlls;$(HLSDK)\pm_shared;$(HLSDK)\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\;..\jansson;..\include;..\public\sdk;$(METAMOD)\metamod;$(HLSDK)\common;$(HLSDK)\engine;$(HLSDK)\dlls;$(HLSDK)\pm_shared;$(HLSDK)\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;ORPHEU_EXPORTS;HAVE_STDINT_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
@@ -121,7 +121,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\;..\include;..\public\sdk;$(METAMOD)\metamod;$(HLSDK)\common;$(HLSDK)\engine;$(HLSDK)\dlls;$(HLSDK)\pm_shared;$(HLSDK)\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\;..\jansson;..\include;..\public\sdk;$(METAMOD)\metamod;$(HLSDK)\common;$(HLSDK)\engine;$(HLSDK)\dlls;$(HLSDK)\pm_shared;$(HLSDK)\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;ORPHEU_EXPORTS;HAVE_STDINT_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -166,6 +166,17 @@
     <ClCompile Include="..\functionVirtualManager.cpp" />
     <ClCompile Include="..\global.cpp" />
     <ClCompile Include="..\hooker.cpp" />
+    <ClCompile Include="..\jansson\dump.c" />
+    <ClCompile Include="..\jansson\error.c" />
+    <ClCompile Include="..\jansson\hashtable.c" />
+    <ClCompile Include="..\jansson\hashtable_seed.c" />
+    <ClCompile Include="..\jansson\load.c" />
+    <ClCompile Include="..\jansson\memory.c" />
+    <ClCompile Include="..\jansson\pack_unpack.c" />
+    <ClCompile Include="..\jansson\strbuffer.c" />
+    <ClCompile Include="..\jansson\strconv.c" />
+    <ClCompile Include="..\jansson\utf.c" />
+    <ClCompile Include="..\jansson\value.c" />
     <ClCompile Include="..\librariesManager.cpp" />
     <ClCompile Include="..\memoryUtil.cpp" />
     <ClCompile Include="..\memoryStructureManager.cpp" />
@@ -186,8 +197,6 @@
     <ClCompile Include="..\typeHandlerImplementations\short.cpp" />
     <ClCompile Include="..\typeHandlerImplementations\VectorHandler.cpp" />
     <ClCompile Include="..\typeHandlerImplementations\VectorPointerHandler.cpp" />
-    <ClCompile Include="..\json\json_reader.cpp" />
-    <ClCompile Include="..\json\json_value.cpp" />
     <ClCompile Include="..\public\sdk\amxxmodule.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -215,6 +224,13 @@
     <ClInclude Include="..\include\structHandlerDirect.h" />
     <ClInclude Include="..\include\structInfo.h" />
     <ClInclude Include="..\include\structManager.h" />
+    <ClInclude Include="..\jansson\hashtable.h" />
+    <ClInclude Include="..\jansson\jansson.h" />
+    <ClInclude Include="..\jansson\jansson_config.h" />
+    <ClInclude Include="..\jansson\jansson_private.h" />
+    <ClInclude Include="..\jansson\lookup3.h" />
+    <ClInclude Include="..\jansson\strbuffer.h" />
+    <ClInclude Include="..\jansson\utf.h" />
     <ClInclude Include="..\svn_version.h" />
     <ClInclude Include="..\include\typeHandler.h" />
     <ClInclude Include="..\include\typeHandlerManager.h" />
@@ -234,14 +250,6 @@
     <ClInclude Include="..\include\typeHandlerImplementations\VectorHandler.h" />
     <ClInclude Include="..\include\typeHandlerImplementations\VectorPointerByRefHandler.h" />
     <ClInclude Include="..\include\typeHandlerImplementations\VectorPointerHandler.h" />
-    <ClInclude Include="..\include\json\autolink.h" />
-    <ClInclude Include="..\include\json\config.h" />
-    <ClInclude Include="..\include\json\features.h" />
-    <ClInclude Include="..\include\json\forwards.h" />
-    <ClInclude Include="..\include\json\json.h" />
-    <ClInclude Include="..\include\json\reader.h" />
-    <ClInclude Include="..\include\json\value.h" />
-    <ClInclude Include="..\include\json\writer.h" />
     <ClInclude Include="..\include\structures\ammoInfo.h" />
     <ClInclude Include="..\include\structures\cvar.h" />
     <ClInclude Include="..\include\structures\DLL_FUNCTIONS.h" />
@@ -262,6 +270,9 @@
     <ClInclude Include="..\include\structuresDump\monsterevent.h" />
     <ClInclude Include="..\include\moduleconfig.h" />
     <ClInclude Include="..\public\sdk\amxxmodule.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\jansson\jansson_config.h.in" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

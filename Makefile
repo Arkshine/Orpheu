@@ -14,7 +14,7 @@ MM_ROOT = ../metamod-am/metamod
 
 PROJECT = orpheu
 
-OBJECTS = public/sdk/amxxmodule.cpp orpheu.cpp memoryUtil.cpp memoryStructureManager.cpp functionStructuresManager.cpp functionVirtualManager.cpp functionManager.cpp function.cpp filesManager.cpp hooker.cpp json/json_value.cpp json/json_reader.cpp global.cpp librariesManager.cpp typeHandlerManager.cpp configManager.cpp structHandler.cpp typeHandlerImplementations/boolHandler.cpp typeHandlerImplementations/byteHandler.cpp typeHandlerImplementations/longHandler.cpp typeHandlerImplementations/CBaseEntityHandler.cpp typeHandlerImplementations/charPtrHandler.cpp typeHandlerImplementations/edict_sPtrHandler.cpp typeHandlerImplementations/floatHandler.cpp typeHandlerImplementations/VectorHandler.cpp typeHandlerImplementations/CMBaseMonsterHandler.cpp typeHandlerImplementations/entvarHandler.cpp typeHandlerImplementations/short.cpp typeHandlerImplementations/charArrHandler.cpp typeHandlerImplementations/VectorPointerHandler.cpp typeHandlerImplementations/charHandler.cpp
+OBJECTS = public/sdk/amxxmodule.cpp orpheu.cpp memoryUtil.cpp memoryStructureManager.cpp functionStructuresManager.cpp functionVirtualManager.cpp functionManager.cpp function.cpp filesManager.cpp hooker.cpp jansson/dump.c jansson/error.c jansson/hashtable.c jansson/hashtable_seed.c jansson/load.c jansson/memory.c jansson/pack_unpack.c jansson/strbuffer.c jansson/strconv.c jansson/utf.c jansson/value.c global.cpp librariesManager.cpp typeHandlerManager.cpp configManager.cpp structHandler.cpp typeHandlerImplementations/boolHandler.cpp typeHandlerImplementations/byteHandler.cpp typeHandlerImplementations/longHandler.cpp typeHandlerImplementations/CBaseEntityHandler.cpp typeHandlerImplementations/charPtrHandler.cpp typeHandlerImplementations/edict_sPtrHandler.cpp typeHandlerImplementations/floatHandler.cpp typeHandlerImplementations/VectorHandler.cpp typeHandlerImplementations/CMBaseMonsterHandler.cpp typeHandlerImplementations/entvarHandler.cpp typeHandlerImplementations/short.cpp typeHandlerImplementations/charArrHandler.cpp typeHandlerImplementations/VectorPointerHandler.cpp typeHandlerImplementations/charHandler.cpp
 
 
 ##############################################
@@ -25,12 +25,12 @@ C_OPT_FLAGS     = -DNDEBUG -O2 -funroll-loops -fomit-frame-pointer -pipe
 C_DEBUG_FLAGS   = -D_DEBUG -DDEBUG -g -ggdb3
 C_GCC4_FLAGS    = -fvisibility=hidden
 CPP_GCC4_FLAGS  = -fvisibility-inlines-hidden
-CPP             = gcc
+CPP             = gcc-4.4
 CPP_OSX         = clang
 
 LINK =
 
-INCLUDE =   -I. -Isdk -Iinclude \
+INCLUDE =   -I. -Isdk -Iinclude -Ijansson \
 			-Ipublic -Ipublic/sdk \
 			-I$(HLSDK) -I$(HLSDK)/public -I$(HLSDK)/common -I$(HLSDK)/dlls -I$(HLSDK)/engine -I$(HLSDK)/game_shared -I$(HLSDK)/pm_shared \
 			-I$(MM_ROOT)
@@ -97,6 +97,7 @@ ifeq "$(shell expr $(OS) \= Linux \& $(IS_CLANG) \= 0)" "1"
 endif
 
 OBJ_BIN := $(OBJECTS:%.cpp=$(BIN_DIR)/%.o)
+OBJ_BIN := $(OBJ_BIN:%.c=$(BIN_DIR)/%.o)
 
 # This will break if we include other Makefiles, but is fine for now. It allows
 #  us to make a copy of this file that uses altered paths (ie. Makefile.mine)
@@ -106,11 +107,14 @@ MAKEFILE_NAME := $(CURDIR)/$(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
 $(BIN_DIR)/%.o: %.cpp
 	$(CPP) $(INCLUDE) $(CFLAGS) $(CPPFLAGS) -o $@ -c $<
 
+$(BIN_DIR)/%.o: %.c
+	$(CPP) $(INCLUDE) $(CFLAGS) -o $@ -c $<
+    
 all:
 	mkdir -p $(BIN_DIR)
 	mkdir -p $(BIN_DIR)/public/sdk
 	mkdir -p $(BIN_DIR)/typeHandlerImplementations
-	mkdir -p $(BIN_DIR)/json
+	mkdir -p $(BIN_DIR)/jansson
 	$(MAKE) -f $(MAKEFILE_NAME) $(PROJECT)
 
 $(PROJECT): $(OBJ_BIN)
@@ -125,7 +129,7 @@ clean:
 	rm -rf $(BIN_DIR)/*.o
 	rm -rf $(BIN_DIR)/public/sdk/*.o
 	rm -rf $(BIN_DIR)/typeHandlerImplementations/*.o
-	rm -rf $(BIN_DIR)/json
+	rm -rf $(BIN_DIR)/jansson/*.o
 	rm -f $(BIN_DIR)/$(BINARY)
 
  

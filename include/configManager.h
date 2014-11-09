@@ -7,12 +7,7 @@
 #include "CString.h"
 #include <sm_trie_tpl.h>
 #include <string>
-
-#include <cstdlib>
-#include <iostream>
-#include <fstream>
-#include <json/reader.h>
-
+#include <jansson.h>
 #include <memoryUtil.h>
 
 using namespace std;
@@ -26,7 +21,7 @@ class ConfigManager
 		void loadFunctions();
 		void loadVirtualFunctions();
 		void loadMemoryStructures();
-		void parseMemoryObject(Json::Value root);
+		void parseMemoryObject(json_t *root);
 
 		String ModuleConfig;
 
