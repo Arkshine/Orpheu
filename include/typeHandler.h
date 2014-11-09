@@ -2,7 +2,7 @@
 #ifndef _INCLUDE_TYPE_HANDLER_
 #define _INCLUDE_TYPE_HANDLER_
 
-#include <memory.h>
+#include <memoryUtil.h>
 #include <amxxmodule.h>
 
 #include <CVector.h>

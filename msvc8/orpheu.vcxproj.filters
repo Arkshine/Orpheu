@@ -65,9 +65,6 @@
     <ClCompile Include="..\librariesManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\memory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\memoryStructureManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -131,6 +128,9 @@
     <ClCompile Include="..\public\sdk\amxxmodule.cpp">
       <Filter>Module SDK\SDK Base</Filter>
     </ClCompile>
+    <ClCompile Include="..\memoryUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\CDetourDis.h">
@@ -170,9 +170,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\librariesManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\memory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\memoryStructure.h">
@@ -348,6 +345,9 @@
     </ClInclude>
     <ClInclude Include="..\public\sdk\amxxmodule.h">
       <Filter>Module SDK\SDK Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\memoryUtil.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -168,7 +168,7 @@
     <ClCompile Include="..\global.cpp" />
     <ClCompile Include="..\hooker.cpp" />
     <ClCompile Include="..\librariesManager.cpp" />
-    <ClCompile Include="..\memory.cpp" />
+    <ClCompile Include="..\memoryUtil.cpp" />
     <ClCompile Include="..\memoryStructureManager.cpp" />
     <ClCompile Include="..\orpheu.cpp" />
     <ClCompile Include="..\structHandler.cpp" />
@@ -206,7 +206,7 @@
     <ClInclude Include="..\include\global.h" />
     <ClInclude Include="..\include\hooker.h" />
     <ClInclude Include="..\include\librariesManager.h" />
-    <ClInclude Include="..\include\memory.h" />
+    <ClInclude Include="..\include\memoryUtil.h" />
     <ClInclude Include="..\include\memoryStructure.h" />
     <ClInclude Include="..\include\memoryStructureManager.h" />
     <ClInclude Include="..\include\orpheu.h" />

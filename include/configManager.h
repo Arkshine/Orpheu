@@ -13,7 +13,7 @@
 #include <fstream>
 #include <json/reader.h>
 
-#include <memory.h>
+#include <memoryUtil.h>
 
 using namespace std;
 

@@ -4,7 +4,7 @@
 
 #include <amxxmodule.h>
 #include <typeHandler.h>
-#include <memory.h>
+#include <memoryUtil.h>
 #include <CVector.h>
 
 #undef min

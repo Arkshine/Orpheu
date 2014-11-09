@@ -5,7 +5,7 @@
 #include <amxxmodule.h>
 #include <global.h>
 #include <librariesManager.h>
-#include <memory.h>
+#include <memoryUtil.h>
 
 namespace Hooker
 {	
