@@ -78,7 +78,7 @@ void ConfigManager::parseModsInfo()
 {
 	static char msg[100];
 
-	CVector<string>* files = FilesManager::getFiles(orpheuPaths.mods);	
+	CVector<string>* files = FilesManager::getFiles(orpheuPaths.mods.c_str());
 
 	sprintf(msg,"\t\tCurrent mod : \"%s\"\n\n", Global::Modname.c_str() );
 	Global::ConfigManagerObj->ModuleConfig.append(msg);
@@ -490,8 +490,10 @@ void parseFile(string folder,string filename,string classname="")
 	Json::Value root;
 	static char msg[100];
 
-	boost::filesystem::path path(folder + filename);
-	std::time_t newTimestamp = boost::filesystem::last_write_time(path);
+	string path = folder + filename;
+
+	struct stat tempStat; stat(path.c_str(), &tempStat);
+	time_t newTimestamp = tempStat.st_mtime;
 
 	time_t timestamp = Global::FunctionStructuresManagerObj->getTimestamp((char*)name.c_str());
 		
@@ -755,8 +757,8 @@ void parseFile(string folder,string filename,string classname="")
 
 void ConfigManager::parseFunctionsInfo()
 {
-	CVector<string>* files = FilesManager::getFiles(orpheuPaths.functions);
-	CVector<string>* folders = FilesManager::getFolders(orpheuPaths.functions);
+	CVector<string>* files = FilesManager::getFiles(orpheuPaths.functions.c_str());
+	CVector<string>* folders = FilesManager::getFolders(orpheuPaths.functions.c_str());
 
 	static char msg[100];
 
@@ -778,7 +780,7 @@ void ConfigManager::parseFunctionsInfo()
 		sprintf(msg,"\t\tParsing folder \"%s\" started\n",folders->at(i).c_str());
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
 
-		CVector<string>* filesInFolder = FilesManager::getFiles(folder);
+		CVector<string>* filesInFolder = FilesManager::getFiles(folder.c_str());
 
 		for(unsigned int j=0;j<filesInFolder->size();j++)
 		{
@@ -802,7 +804,7 @@ KTrie<CVector<char*>*>* ConfigManager::parseTypeAliasesInfo(KTrie<long>& typeNam
 
 	KTrie<CVector<char*>*>* typeAliasesInfo = new KTrie<CVector<char*>*>();
 
-	CVector<string>* folders = FilesManager::getFolders(orpheuPaths.typeAliases);
+	CVector<string>* folders = FilesManager::getFolders(orpheuPaths.typeAliases.c_str());
 
 	for(unsigned int i=0;i<folders->size();i++)
 	{
@@ -851,7 +853,7 @@ KTrie<CVector<char*>*>* ConfigManager::parseTypeAliasesInfo(KTrie<long>& typeNam
 
 					string modsDataPath = orpheuPaths.typeAliases + folders->at(i) + "/modsData/";
 
-					CVector<string>* files = FilesManager::getFiles(modsDataPath);
+					CVector<string>* files = FilesManager::getFiles(modsDataPath.c_str());
 
 					for(unsigned int fileID=0;fileID < files->size();fileID++)
 					{
@@ -915,7 +917,7 @@ KTrie<CVector<char*>*>* ConfigManager::parseTypeAliasesInfo(KTrie<long>& typeNam
 
 					string aliasesPath = orpheuPaths.typeAliases + folders->at(i) + "/aliases/";
 
-					files = FilesManager::getFiles(aliasesPath);
+					files = FilesManager::getFiles(aliasesPath.c_str());
 
 					CVector<char*>* aliasesForName = new CVector<char*>();
 
@@ -990,7 +992,7 @@ KTrie<char*>* ConfigManager::parseExternalLibrariesInfo()
 {
 	KTrie<char*>* externalLibrariesInfo = new KTrie<char*>();
 
-	CVector<string>* files = FilesManager::getFiles(orpheuPaths.libraries);
+	CVector<string>* files = FilesManager::getFiles(orpheuPaths.libraries.c_str());
 
 	for(unsigned int i=0;i<files->size();i++)
 	{
@@ -1047,7 +1049,7 @@ KTrie<char*>* ConfigManager::parseExternalLibrariesInfo()
 
 void ConfigManager::parseVirtualFunctionsInfo()
 {
-	CVector<string>* folders = FilesManager::getFolders(orpheuPaths.virtualFunctions);
+	CVector<string>* folders = FilesManager::getFolders(orpheuPaths.virtualFunctions.c_str());
 
 	static char msg[100];
 
@@ -1059,7 +1061,7 @@ void ConfigManager::parseVirtualFunctionsInfo()
 		sprintf(msg,"\t\tParsing folder \"%s\" started\n",folders->at(i).c_str());
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
 
-		CVector<string>* filesInFolder = FilesManager::getFiles(folder);
+		CVector<string>* filesInFolder = FilesManager::getFiles(folder.c_str());
 
 		for(unsigned int j=0;j<filesInFolder->size();j++)
 		{
@@ -1361,7 +1363,7 @@ void ConfigManager::loadMemoryStructures()
 
 	Global::ConfigManagerObj->ModuleConfig.append("\n\tParsing memory structures started.\n\n");
 
-	CVector<string>* files = FilesManager::getFiles(orpheuPaths.memory);
+	CVector<string>* files = FilesManager::getFiles(orpheuPaths.memory.c_str());
 
 	for(unsigned int i=0;i<files->size();i++)
 	{
@@ -1371,7 +1373,9 @@ void ConfigManager::loadMemoryStructures()
 		string path = orpheuPaths.memory + files->at(i);
 
 		time_t* timestampPointer = memoryStructureNameToTimestamp.retrieve((char*)files->at(i).c_str());
-		time_t newTimestamp = boost::filesystem::last_write_time(path);
+
+		struct stat tempStat; stat(path.c_str(), &tempStat);
+		time_t newTimestamp = tempStat.st_mtime;
 
 		if(timestampPointer)
 		{

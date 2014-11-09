@@ -33,6 +33,7 @@
 #define __CVECTOR_H__
 
 #include <assert.h>
+#include <stddef.h>
 
 // Vector
 template <class T> class CVector
