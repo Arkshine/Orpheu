@@ -23,11 +23,11 @@ void TypeHandlerManager::registerTypeHandler(const char* label,TypeHandler* hand
 		}
 	}
 }
-bool TypeHandlerManager::typeHandlerExists(char* label)
+bool TypeHandlerManager::typeHandlerExists(const char* label)
 {
 	return registeredTypeHandlers->retrieve(label) != NULL;
 }
-TypeHandler* TypeHandlerManager::getTypeHandler(char* label)
+TypeHandler* TypeHandlerManager::getTypeHandler(const char* label)
 {
 	TypeHandler** handlerPointer = registeredTypeHandlers->retrieve(label);
 	

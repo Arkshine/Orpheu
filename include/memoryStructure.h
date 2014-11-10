@@ -8,7 +8,7 @@
 #undef min
 #undef max 
 
-#include <string>
+#include <am-string.h>
 #include <am-vector.h>
 
 using namespace std;
@@ -22,8 +22,8 @@ enum MemoryStructureType
 
 struct MemoryStructure
 {
-	string library;
-	string name;
+	ke::AString library;
+	ke::AString name;
 	MemoryStructureType type;
 	long offset;
 	byte* signature;

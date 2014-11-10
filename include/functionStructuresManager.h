@@ -19,9 +19,9 @@ class FunctionStructuresManager
 
 	public:
 
-		time_t getTimestamp(char* functionStructureName);
+		time_t getTimestamp(const char* functionStructureName);
 
-		FunctionStructure* getFunctionStructure(char* functionStructureName);
+		FunctionStructure* getFunctionStructure(const char* functionStructureName);
 		void addFunctionStructure(FunctionStructure* functionStructure,time_t timestamp);
 		unsigned short int makeFunction(FunctionStructure* functionStructure,void* address);
 };

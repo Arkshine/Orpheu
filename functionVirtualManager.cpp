@@ -3,7 +3,7 @@
 
 #include <global.h>
 
-time_t FunctionVirtualManager::getTimestamp(char* functionName)
+time_t FunctionVirtualManager::getTimestamp(const char* functionName)
 {
 	time_t* timestampPointer = functionVirtualNameToTimestamp.retrieve(functionName);
 	time_t timestamp = timestampPointer ? *timestampPointer : 0;
@@ -12,7 +12,7 @@ time_t FunctionVirtualManager::getTimestamp(char* functionName)
 
 void FunctionVirtualManager::add(FunctionStructure* functionStructure,time_t timestamp)
 {
-	char* functionName = (char*) functionStructure->name.c_str();
+	char* functionName = (char*) functionStructure->name.chars();
 
 	unsigned int* idPointer = functionVirtualNameToFunctionStructureID.retrieve(functionName);
 
@@ -69,7 +69,7 @@ unsigned short int FunctionVirtualManager::makeFunction(FunctionStructure* funct
 	return 0;
 }
 
-FunctionStructure* FunctionVirtualManager::get(char* functionName)
+FunctionStructure* FunctionVirtualManager::get(const char* functionName)
 {
 	unsigned int* idPointer = functionVirtualNameToFunctionStructureID.retrieve(functionName);
 

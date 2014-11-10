@@ -3,7 +3,7 @@
 
 #include <global.h>
 
-time_t FunctionStructuresManager::getTimestamp(char* functionName)
+time_t FunctionStructuresManager::getTimestamp(const char* functionName)
 {
 	time_t* timestampPointer = functionStructureNameToTimestamp.retrieve(functionName);
 	time_t timestamp = timestampPointer ? *timestampPointer : 0;
@@ -12,7 +12,7 @@ time_t FunctionStructuresManager::getTimestamp(char* functionName)
 
 void FunctionStructuresManager::addFunctionStructure(FunctionStructure* functionStructure,time_t timestamp)
 {
-	char* functionName = (char*) functionStructure->name.c_str();
+	const char* functionName = functionStructure->name.chars();
 
 	unsigned int* idPointer = functionStructureNameToFunctionStructureID.retrieve(functionName);
 
@@ -40,10 +40,10 @@ unsigned short int FunctionStructuresManager::makeFunction(FunctionStructure* fu
 {
 	Function* function = new Function(address,functionStructure->argumentsHandlers,functionStructure->argumentsCount,functionStructure->returnHandler,functionStructure->library,functionStructure->isMethod);
 
-	return Global::FunctionManagerObj->addFunction((char*)functionStructure->name.c_str(),function,0);
+	return Global::FunctionManagerObj->addFunction(functionStructure->name.chars(),function,0);
 }
 
-FunctionStructure* FunctionStructuresManager::getFunctionStructure(char* functionName)
+FunctionStructure* FunctionStructuresManager::getFunctionStructure(const char* functionName)
 {
 	unsigned int* idPointer = functionStructureNameToFunctionStructureID.retrieve(functionName);
 

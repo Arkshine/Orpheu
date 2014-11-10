@@ -36,7 +36,7 @@ class movevarsStructData : public StructData<movevars_s>
 			addMember("skyvec_z",&structure->skyvec_z,Types[TypeFloat]);
 		}
 
-		string getName() 
+		const char *getName() 
 		{
 			return "movevars_s *";
 		};

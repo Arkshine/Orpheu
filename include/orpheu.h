@@ -5,7 +5,7 @@
 //#define _ERRORS_ONLY_
 
 #include <amxxmodule.h>
-#include <string>
+#include <am-string.h>
 
 #if defined __linux__
 	#include <link.h>
@@ -20,13 +20,13 @@ using namespace std;
 
 struct Folders
 {
-	string config;
-	string libraries;
-	string functions;
-	string typeAliases;
-	string virtualFunctions;
-	string mods;
-	string memory;
+	ke::AString config;
+	ke::AString libraries;
+	ke::AString functions;
+	ke::AString typeAliases;
+	ke::AString virtualFunctions;
+	ke::AString mods;
+	ke::AString memory;
 };
 
 class Orpheu

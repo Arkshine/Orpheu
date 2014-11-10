@@ -3,7 +3,7 @@
 #define _INCLUDE_STRUCT_HANDLER_
 
 #include <typeHandlerImplementations/longHandler.h>
-#include <string>
+#include <am-string.h>
 using namespace std;
 
 #include <structInfo.h>
@@ -12,14 +12,14 @@ using namespace std;
 class StructHandler : public LongHandler
 {
 	protected:
-		string name;
+		ke::AString name;
 		KTrie<int> memberNameToMember;
 		StructInfo structInfo;
 
 	public:
  
 		StructHandler(StructInfo structInfo);
-		const char* getName() { return name.c_str(); }
+		const char* getName() { return name.chars(); }
 		bool isStructure(){ return true; }
 		int getMemberID(char* memberName);
 		TypeHandler* getMemberTypeHandler(unsigned int memberID);

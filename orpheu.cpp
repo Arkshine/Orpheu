@@ -8,8 +8,7 @@
 
 #include <function.h>
 
-#include <string>
-using namespace std;
+#include <am-string.h>
 
 #include <eiface.h>
 
@@ -21,9 +20,18 @@ cell AMX_NATIVE_CALL Orpheu::GetFunction(AMX* amx, cell* params)
 	char *functionName = g_fn_GetAmxString(amx,params[1],0,&len);
 	char *classname = g_fn_GetAmxString(amx,params[2],1,&len);
 
-	string name = classname[0] ? string(classname) + "::" + functionName : functionName;
-	
-	unsigned short int id = Global::FunctionManagerObj->getFunctionID((char*)name.c_str());
+	char name[256];
+
+	if (classname[0])
+	{
+		UTIL_Format(name, sizeof(name) - 1, "%s::%s", classname, functionName);
+	}
+	else
+	{
+		UTIL_Format(name, sizeof(name) - 1, "%s", functionName);
+	}
+
+	unsigned short int id = Global::FunctionManagerObj->getFunctionID(name);
 
 	if(id)
 	{
@@ -31,20 +39,30 @@ cell AMX_NATIVE_CALL Orpheu::GetFunction(AMX* amx, cell* params)
 	}
 	else
 	{
-		MF_LogError(amx, AMX_ERR_NATIVE, "Function \"%s\" not found",name.c_str());
+		MF_LogError(amx, AMX_ERR_NATIVE, "Function \"%s\" not found",name);
 	}
 
 	return 0;
 }
+
 cell AMX_NATIVE_CALL Orpheu::TryGetFunction(AMX* amx, cell* params)
 {
 	int len;
 	char *functionName = g_fn_GetAmxString(amx,params[1],0,&len);
 	char *classname = g_fn_GetAmxString(amx,params[2],1,&len);
 
-	string name = classname[0] ? string(classname) + "::" + functionName : functionName;
+	char name[256];
 
-	return Global::FunctionManagerObj->getFunctionID((char*)name.c_str());
+	if (classname[0])
+	{
+		UTIL_Format(name, sizeof(name) - 1, "%s::%s", classname, functionName);
+	}
+	else
+	{
+		UTIL_Format(name, sizeof(name) - 1, "%s", functionName);
+	}
+
+	return Global::FunctionManagerObj->getFunctionID(name);
 }
 
 cell AMX_NATIVE_CALL Orpheu::Call(AMX* amx, cell* params)
@@ -74,6 +92,7 @@ cell AMX_NATIVE_CALL Orpheu::Call(AMX* amx, cell* params)
 
 	return 0;
 }
+
 cell AMX_NATIVE_CALL Orpheu::CallSuper(AMX* amx, cell* params)
 {
 	unsigned int paramsCount = params[0] / sizeof(cell);
@@ -100,6 +119,7 @@ cell AMX_NATIVE_CALL Orpheu::CallSuper(AMX* amx, cell* params)
 
 	return 0;
 }
+
 cell AMX_NATIVE_CALL Orpheu::UnregisterHook(AMX* amx, cell* params)
 {
 	return Global::FunctionManagerObj->removeHook(params[1]);
@@ -593,9 +613,18 @@ cell AMX_NATIVE_CALL Orpheu::CreateFunction(AMX* amx,cell* params)
 	char *functionName = g_fn_GetAmxString(amx,params[2],0,&len);
 	char *classname = g_fn_GetAmxString(amx,params[3],1,&len);
 
-	string name = classname[0] ? string(classname) + "::" + functionName : functionName;
+	char name[256];
 
-	unsigned short int functionID = Global::FunctionManagerObj->getFunctionID((char*)name.c_str());
+	if (classname[0])
+	{
+		UTIL_Format(name, sizeof(name) - 1, "%s::%s", classname, functionName);
+	}
+	else
+	{
+		UTIL_Format(name, sizeof(name) - 1, "%s", functionName);
+	}
+
+	unsigned short int functionID = Global::FunctionManagerObj->getFunctionID(name);
 
 	if(functionID)
 	{
@@ -603,11 +632,11 @@ cell AMX_NATIVE_CALL Orpheu::CreateFunction(AMX* amx,cell* params)
 	}
 	else
 	{
-		FunctionStructure* functionStructure = Global::FunctionStructuresManagerObj->getFunctionStructure((char*)name.c_str());
+		FunctionStructure* functionStructure = Global::FunctionStructuresManagerObj->getFunctionStructure(name);
 
 		if(functionStructure)
 		{
-			if(LibrariesManager::libraryContainsAddress((char*)functionStructure->library.c_str(),structureAddress))
+			if(LibrariesManager::libraryContainsAddress((char*)functionStructure->library.chars(),structureAddress))
 			{
 				return Global::FunctionStructuresManagerObj->makeFunction(functionStructure,(void*)structureAddress);
 			}
@@ -618,7 +647,7 @@ cell AMX_NATIVE_CALL Orpheu::CreateFunction(AMX* amx,cell* params)
 		}
 		else
 		{
-			MF_LogError(amx, AMX_ERR_NATIVE, "Invalid function structure \"%s\"",(char*)name.c_str());
+			MF_LogError(amx, AMX_ERR_NATIVE, "Invalid function structure \"%s\"", name);
 		}
 	}
 
@@ -667,7 +696,7 @@ cell AMX_NATIVE_CALL Orpheu::GetFunctionOffset(AMX* amx,cell* params)
 
 	if(function)
 	{
-		return LibrariesManager::getAddressOffset(function->getAddress(),(char*)function->getLibrary().c_str());
+		return LibrariesManager::getAddressOffset(function->getAddress(), function->getLibrary());
 	}
 
 	return 0;
@@ -703,9 +732,18 @@ cell AMX_NATIVE_CALL Orpheu::GetNextCallAtAddress(AMX* amx,cell* params)
 
 cell GetFunctionFrom(AMX* amx,char* functionName,char* classname,long object)
 {
-	string name = classname[0] ? string(classname) + "::" + functionName : functionName;
+	char name[256];
 
-	FunctionStructure* functionStructure = Global::FunctionVirtualManagerObj->get((char*)name.c_str());
+	if (classname[0])
+	{
+		UTIL_Format(name, sizeof(name) - 1, "%s::%s", classname, functionName);
+	}
+	else
+	{
+		UTIL_Format(name, sizeof(name) - 1, "%s", functionName);
+	}
+
+	FunctionStructure* functionStructure = Global::FunctionVirtualManagerObj->get(name);
 
 	if(functionStructure)
 	{
@@ -720,7 +758,7 @@ cell GetFunctionFrom(AMX* amx,char* functionName,char* classname,long object)
 	}
 	else
 	{
-		MF_LogError(amx, AMX_ERR_NATIVE, "Invalid virtual function \"%s\"",(char*)name.c_str());
+		MF_LogError(amx, AMX_ERR_NATIVE, "Invalid virtual function \"%s\"", name);
 	}
 
 	return 0;
@@ -753,6 +791,7 @@ cell AMX_NATIVE_CALL Orpheu::GetFunctionFromClass(AMX* amx,cell* params)
 
 	return 0;
 }
+
 cell AMX_NATIVE_CALL Orpheu::GetFunctionFromEntity(AMX* amx,cell* params)
 {
 	CheckEntity(amx,params[1]);
@@ -831,7 +870,7 @@ cell MemoryReplace_(AMX* amx,cell* params,long address)
 		{
 			TypeHandler* typeHandler = memoryStructure->typeHandler;
 
-			LibraryInfo* libraryInfo = LibrariesManager::getLibrary((char*)memoryStructure->library.c_str());
+			LibraryInfo* libraryInfo = LibrariesManager::getLibrary((char*)memoryStructure->library.chars());
 
 			if(libraryInfo)
 			{
@@ -844,7 +883,7 @@ cell MemoryReplace_(AMX* amx,cell* params,long address)
 				
 				if(address)
 				{
-					if(!LibrariesManager::libraryContainsAddress((char*)memoryStructure->library.c_str(),address))
+					if(!LibrariesManager::libraryContainsAddress((char*)memoryStructure->library.chars(),address))
 					{
 						MF_LogError(amx, AMX_ERR_NATIVE, "Address isn't contained in the library");
 						return 0;
@@ -867,7 +906,7 @@ cell MemoryReplace_(AMX* amx,cell* params,long address)
 				{
 					if(typeHandler->isPointer())
 					{
-						if(!LibrariesManager::libraryContainsAddress((char*)memoryStructure->library.c_str(),*((long*)i)))
+						if(!LibrariesManager::libraryContainsAddress((char*)memoryStructure->library.chars(),*((long*)i)))
 							continue;
 					}
 
@@ -904,7 +943,7 @@ cell MemoryReplace_(AMX* amx,cell* params,long address)
 			}
 			else
 			{
-				MF_LogError(amx, AMX_ERR_NATIVE,"Invalid library \"%s\"",memoryStructure->library.c_str());
+				MF_LogError(amx, AMX_ERR_NATIVE,"Invalid library \"%s\"",memoryStructure->library.chars());
 			}
 		}
 		else
@@ -949,7 +988,7 @@ cell MemoryGet_(AMX* amx,cell* params,long address)
 
 			if((expectedParams == paramsCount) || ((expectedParams+1) == paramsCount))
 			{
-				LibraryInfo* libraryInfo = LibrariesManager::getLibrary((char*)memoryStructure->library.c_str());
+				LibraryInfo* libraryInfo = LibrariesManager::getLibrary((char*)memoryStructure->library.chars());
 
 				long position = 0;
 
@@ -957,7 +996,7 @@ cell MemoryGet_(AMX* amx,cell* params,long address)
 				{
 					if(libraryInfo)
 					{
-						if(!LibrariesManager::libraryContainsAddress((char*)memoryStructure->library.c_str(),address))
+						if(!LibrariesManager::libraryContainsAddress((char*)memoryStructure->library.chars(),address))
 						{
 							MF_LogError(amx, AMX_ERR_NATIVE, "Address isn't contained in the library");
 							return 0;
@@ -987,7 +1026,7 @@ cell MemoryGet_(AMX* amx,cell* params,long address)
 
 						if(libraryInfo)
 						{
-							if(!LibrariesManager::libraryContainsAddress((char*)memoryStructure->library.c_str(),position))
+							if(!LibrariesManager::libraryContainsAddress((char*)memoryStructure->library.chars(),position))
 							{
 								MF_LogError(amx, AMX_ERR_NATIVE, "Address with the offset isn't contained in the library");
 								return 0;
@@ -995,7 +1034,7 @@ cell MemoryGet_(AMX* amx,cell* params,long address)
 
 							if(typeHandler->isPointer())
 							{
-								if(!LibrariesManager::libraryContainsAddress((char*)memoryStructure->library.c_str(),*((long*)position)))
+								if(!LibrariesManager::libraryContainsAddress((char*)memoryStructure->library.chars(),*((long*)position)))
 								{
 									MF_LogError(amx, AMX_ERR_NATIVE, "Address with the offset doesn't contain a valid pointer");
 									return 0;
@@ -1015,7 +1054,7 @@ cell MemoryGet_(AMX* amx,cell* params,long address)
 					case MemTypeSignature:
 					{
 						if(address)
-							position = (long) LibrariesManager::findMemory((char*)memoryStructure->library.c_str(),memoryStructure->signature,memoryStructure->signatureEntryData,memoryStructure->signatureLength,position);
+							position = (long) LibrariesManager::findMemory((char*)memoryStructure->library.chars(),memoryStructure->signature,memoryStructure->signatureEntryData,memoryStructure->signatureLength,position);
 						else
 							position = (long) memoryStructure->basicAddress;
 
@@ -1025,7 +1064,7 @@ cell MemoryGet_(AMX* amx,cell* params,long address)
 
 							if(typeHandler->isPointer())
 							{
-								if(!LibrariesManager::libraryContainsAddress((char*)memoryStructure->library.c_str(),*((long*)position)))
+								if(!LibrariesManager::libraryContainsAddress((char*)memoryStructure->library.chars(),*((long*)position)))
 								{
 									MF_LogError(amx, AMX_ERR_NATIVE, "Address found with signature doesn't contain a valid pointer");
 									return 0;
@@ -1100,7 +1139,7 @@ cell MemorySet_(AMX* amx,cell* params,long address)
 			{
 				TypeHandler* typeHandler = memoryStructure->typeHandler;
 
-				LibraryInfo* libraryInfo = LibrariesManager::getLibrary((char*)memoryStructure->library.c_str());
+				LibraryInfo* libraryInfo = LibrariesManager::getLibrary((char*)memoryStructure->library.chars());
 
 				long position = 0;
 				
@@ -1108,7 +1147,7 @@ cell MemorySet_(AMX* amx,cell* params,long address)
 				{
 					if(libraryInfo)
 					{
-						if(!LibrariesManager::libraryContainsAddress((char*)memoryStructure->library.c_str(),address))
+						if(!LibrariesManager::libraryContainsAddress((char*)memoryStructure->library.chars(),address))
 						{
 							MF_LogError(amx, AMX_ERR_NATIVE, "Address isn't contained in the library");
 							return 0;
@@ -1138,7 +1177,7 @@ cell MemorySet_(AMX* amx,cell* params,long address)
 
 						if(libraryInfo)
 						{
-							if(!LibrariesManager::libraryContainsAddress((char*)memoryStructure->library.c_str(),position))
+							if(!LibrariesManager::libraryContainsAddress((char*)memoryStructure->library.chars(),position))
 							{
 								MF_LogError(amx, AMX_ERR_NATIVE, "Address with the offset isn't contained in the library");
 								return 0;
@@ -1146,7 +1185,7 @@ cell MemorySet_(AMX* amx,cell* params,long address)
 
 							if(typeHandler->isPointer())
 							{
-								if(!LibrariesManager::libraryContainsAddress((char*)memoryStructure->library.c_str(),*((long*)position)))
+								if(!LibrariesManager::libraryContainsAddress((char*)memoryStructure->library.chars(),*((long*)position)))
 								{
 									MF_LogError(amx, AMX_ERR_NATIVE, "Address with the offset doesn't contain a valid pointer");
 									return 0;
@@ -1182,7 +1221,7 @@ cell MemorySet_(AMX* amx,cell* params,long address)
 						if(max == 1)
 						{
 							if(address)
-								position = (long) LibrariesManager::findMemory((char*)memoryStructure->library.c_str(),memoryStructure->signature,memoryStructure->signatureEntryData,memoryStructure->signatureLength,position);
+								position = (long) LibrariesManager::findMemory((char*)memoryStructure->library.chars(),memoryStructure->signature,memoryStructure->signatureEntryData,memoryStructure->signatureLength,position);
 							else
 								position = (long) memoryStructure->basicAddress;
 					
@@ -1192,7 +1231,7 @@ cell MemorySet_(AMX* amx,cell* params,long address)
 
 								if(typeHandler->isPointer())
 								{
-									if(!LibrariesManager::libraryContainsAddress((char*)memoryStructure->library.c_str(),*((long*)position)))
+									if(!LibrariesManager::libraryContainsAddress((char*)memoryStructure->library.chars(),*((long*)position)))
 									{
 										MF_LogError(amx, AMX_ERR_NATIVE, "Address found with signature doesn't contain a valid pointer");
 										return 0;
@@ -1218,7 +1257,7 @@ cell MemorySet_(AMX* amx,cell* params,long address)
 						{
 							while(max--)
 							{
-								position = (long) LibrariesManager::findMemory((char*)memoryStructure->library.c_str(),memoryStructure->signature,memoryStructure->signatureEntryData,memoryStructure->signatureLength,position);
+								position = (long) LibrariesManager::findMemory((char*)memoryStructure->library.chars(),memoryStructure->signature,memoryStructure->signatureEntryData,memoryStructure->signatureLength,position);
 
 								if(position)
 								{
@@ -1226,7 +1265,7 @@ cell MemorySet_(AMX* amx,cell* params,long address)
 
 									if(typeHandler->isPointer())
 									{
-										if(!LibrariesManager::libraryContainsAddress((char*)memoryStructure->library.c_str(),*((long*)position)))
+										if(!LibrariesManager::libraryContainsAddress((char*)memoryStructure->library.chars(),*((long*)position)))
 										{
 											MF_LogError(amx, AMX_ERR_NATIVE, "Address found with signature doesn't contain a valid pointer");
 											return 0;
@@ -1348,27 +1387,36 @@ AMX_NATIVE_INFO OrpheuNatives[] =
 #ifdef __linux__
 static int addLibraryRecursive(struct dl_phdr_info *info, size_t size, void *data)
 {
-	static char msg[100];
-	string modname = "";
+	char msg[100];
+	char process[260];
+	char library[32];
 
-	modname.append(info->dlpi_name, strlen(info->dlpi_name));
-	if(modname.find("addons") != string::npos)
+	strncpy(process, info->dlpi_name, strlen(info->dlpi_name));
+
+	if (strstr(process, "addons"))
 	{
-		unsigned int pos = modname.rfind("/");
-		if(pos != string::npos) modname.erase(0, pos+1);
+		size_t length = strlen(process);
+		size_t i = length;
 
-		pos = modname.find("_");
-		if(pos != string::npos) modname.erase(pos);
+		while (process[--i] != '.') {}; process[i] = '\0';
+		while (process[--i] != '/') {};
 
-		//printf("Found module %s (address: 0x%x)\n", modname.c_str(), info->dlpi_addr);
-		if(!LibrariesManager::addLibrary((char*)modname.c_str(), (void *)info->dlpi_addr))
+		char *pLibrary = strcpy(library, &process[i + 1]);
+		char *ptr = strstr(pLibrary, "_i386");
+
+		if (ptr)
 		{
-			sprintf(msg, "\tERROR adding library %s (0x%x)\n", (char*)modname.c_str(), info->dlpi_addr);
+			library[ptr - pLibrary] = '\0';
+		}
+
+		if (!LibrariesManager::addLibrary(library, (void *)info->dlpi_addr))
+		{
+			UTIL_Format(msg, sizeof(msg) - 1, "\tERROR adding library %s (0x%p)\n", library, info->dlpi_addr);
 			Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 		}
 		else
 		{
-			sprintf(msg, "\tAdding library %s (0x%x)\n", (char*)modname.c_str(), info->dlpi_addr);
+			UTIL_Format(msg, sizeof(msg) - 1, "\tAdding library %s (0x%p)\n", library, info->dlpi_addr);
 			Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 		}
 	}
@@ -1382,8 +1430,8 @@ void addLibraries() // IM THE KING OF EXAMPLE COPYPASTING!
 	HANDLE hProcess;
 	DWORD cbNeeded;
 	unsigned int i;
-	static char msg[100];
-	
+	char msg[100];
+
 	hProcess = GetCurrentProcess();
 	
 	if (hProcess == NULL) // IS NOT POSSIBLE!
@@ -1391,52 +1439,36 @@ void addLibraries() // IM THE KING OF EXAMPLE COPYPASTING!
 		
 	if (EnumProcessModules(hProcess, hMods, sizeof(hMods), &cbNeeded))
 	{
-		TCHAR szModName[MAX_PATH];
+		TCHAR process[MAX_PATH];
+		char library[32];
 		
 		for ( i = 0; i < (cbNeeded / sizeof(HMODULE)); i++ )
 		{
-			if (GetModuleFileNameEx( hProcess, hMods[i], szModName, sizeof(szModName)/sizeof(TCHAR)))
+			if (GetModuleFileNameEx(hProcess, hMods[i], process, sizeof(process) / sizeof(TCHAR)))
 			{
-				string modname;
-				string AMXXModule;
 				_MODULEINFO info;
-
 				GetModuleInformation(hProcess, hMods[i], &info, sizeof(info));
-				//printf("Module Information: %s 0x%x\n", szModName, info.lpBaseOfDll);
-				modname.append((char*)szModName, strlen((char*)szModName));
-				if(modname.find("addons") != string::npos)
+
+				if (strstr(process, "addons"))
 				{
-					unsigned int pos = modname.rfind("\\");
-					if(pos != string::npos) modname.erase(0, pos+1);
+					size_t length = strlen(process);
+					size_t i = length;
 
-					pos = modname.rfind(".");
-					if(pos != string::npos) modname.erase( pos );
+					while (process[--i] != '.') {}; process[i] = '\0';
+					while (process[--i] != '\\') {};
 
-					pos = modname.rfind("_");
-					if(pos != string::npos)
+					strcpy(library, &process[i + 1]);
+
+					if (!LibrariesManager::addLibrary(library, info.lpBaseOfDll))
 					{
-						if(modname.rfind("_amxx") != string::npos)
-							AMXXModule.append(modname.c_str());
-
-						modname.erase( pos );
-					}
-
-					//printf("Found module %s (address: 0x%x)\n", modname.c_str(), info.lpBaseOfDll);
-
-					if(!LibrariesManager::addLibrary((char*)modname.c_str(), info.lpBaseOfDll) || (AMXXModule.size() && 
-					   !LibrariesManager::addLibrary((char*)AMXXModule.c_str(), info.lpBaseOfDll)))
-					{
-						sprintf(msg, "\tERROR adding library %s%s (0x%x)\n", (char*)modname.c_str(), AMXXModule.size() ? "[_amxx]" : "", info.lpBaseOfDll);
+						UTIL_Format(msg, sizeof(msg) - 1, "\tERROR adding library %s (0x%p)\n", library, info.lpBaseOfDll);
 						Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 					}
 					else
 					{
-						sprintf(msg, "\tAdding library %s%s (0x%x)\n", (char*)modname.c_str(), AMXXModule.size() ? "[_amxx]" : "", info.lpBaseOfDll);
+						UTIL_Format(msg, sizeof(msg) - 1, "\tAdding library %s (0x%p)\n", library, info.lpBaseOfDll);
 						Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 					}
-
-					modname.clear();
-					AMXXModule.clear();
 				}
 			}
 		}

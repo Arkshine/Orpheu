@@ -15,7 +15,7 @@ StructHandler::StructHandler(StructInfo structInfo):LongHandler()
 
 	for(int i=0;i<structInfo.membersCount;i++)
 	{
-		memberNameToMember.insert(structInfo.members[i].name.c_str(),i);
+		memberNameToMember.insert(structInfo.members[i].name.chars(),i);
 	}
 }
 

@@ -11,7 +11,7 @@ class PmplaneStructData : public StructData<pmplane_t>
 			addMember("dist",&structure->dist,Types[TypeFloat]);
 		}
 
-		string getName() 
+		const char *getName() 
 		{
 			return "pmplane_s *";
 		};

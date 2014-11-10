@@ -15,7 +15,7 @@ class Schedule : public StructData<Schedule_t>
 			addMember("pName",&structure->pName,Types[TypeString]);
 		}
 
-		string getName() 
+		const char *getName() 
 		{
 			return "Schedule_t *";
 		};

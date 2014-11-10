@@ -12,7 +12,7 @@ class Task : public StructData<Task_t>
 			addMember("flData",&structure->flData,Types[TypeFloat]);
 		}
 
-		string getName() 
+		const char *getName() 
 		{
 			return "Task_t *";
 		};

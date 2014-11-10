@@ -6,7 +6,6 @@
 #include <am-vector.h>
 #include <am-string.h>
 #include <sm_trie_tpl.h>
-#include <string>
 #include <jansson.h>
 #include <memoryUtil.h>
 

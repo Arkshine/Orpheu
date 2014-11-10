@@ -19,9 +19,9 @@ class FunctionVirtualManager
 
 	public:
 
-		time_t getTimestamp(char* functionVirtualName);
+		time_t getTimestamp(const char* functionVirtualName);
 
-		FunctionStructure* get(char* functionVirtualName);
+		FunctionStructure* get(const char* functionVirtualName);
 		void add(FunctionStructure* functionStructure,time_t timestamp);
 		unsigned short int makeFunction(FunctionStructure* functionStructure,long object);
 };

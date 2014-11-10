@@ -20,7 +20,7 @@ class PmtraceStructData : public StructData<pmtrace_t>
 			addMember("deltavelocity",&structure->deltavelocity,Types[TypeVector]);
 		}
 
-		string getName() 
+		const char *getName() 
 		{
 			return "pmtrace_s *";
 		};

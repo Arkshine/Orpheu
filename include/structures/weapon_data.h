@@ -32,7 +32,7 @@ class WeaponData : public StructData<weapon_data_s>
 			addMember("m_flTimeWeaponIdle",&structure->m_flTimeWeaponIdle,Types[TypeFloat]);
 		}
 
-		string getName() 
+		const char *getName() 
 		{
 			return "weapon_data_s *";
 		};

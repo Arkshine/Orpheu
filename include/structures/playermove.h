@@ -113,7 +113,7 @@ class PlayerMove : public StructData<playermove_t>
 			addMember("PM_TraceLineEx",&structure->PM_TraceLineEx,Types[TypeLong]);
 		}
 
-		string getName() 
+		const char *getName() 
 		{
 			return "playermove_s *";
 		};

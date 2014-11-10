@@ -22,7 +22,7 @@ class usercmdStructData : public StructData<usercmd_s>
 			addMember("impact_position",&structure->impact_position,Types[TypeVector]);
 		}
 
-		string getName() 
+		const char *getName() 
 		{
 			return "usercmd_s *";
 		};

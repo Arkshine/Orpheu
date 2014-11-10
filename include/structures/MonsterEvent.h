@@ -12,7 +12,7 @@ class MonsterEvent : public StructData<MonsterEvent_t>
 			addMember("options",&structure->options,Types[TypeString]);
 		}
 
-		string getName() 
+		const char *getName() 
 		{
 			return "MonsterEvent_t *";
 		};

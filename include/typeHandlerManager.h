@@ -13,8 +13,8 @@ class TypeHandlerManager
 
 		TypeHandlerManager(KTrie<ke::Vector<char*>*>* typeAliases);
 		void registerTypeHandler(const char* label,TypeHandler* handler);
-		bool typeHandlerExists(char* label);
-		TypeHandler* getTypeHandler(char *label);
+		bool typeHandlerExists(const char* label);
+		TypeHandler* getTypeHandler(const char *label);
 	
 	private:
 	
