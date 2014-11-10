@@ -31,7 +31,7 @@ CPP_OSX         = clang
 LINK =
 
 INCLUDE =   -I. -Isdk -Iinclude -Ijansson \
-			-Ipublic -Ipublic/sdk \
+			-Ipublic -Ipublic/sdk -Ipublic/amtl \
 			-I$(HLSDK) -I$(HLSDK)/public -I$(HLSDK)/common -I$(HLSDK)/dlls -I$(HLSDK)/engine -I$(HLSDK)/game_shared -I$(HLSDK)/pm_shared \
 			-I$(MM_ROOT)
 
