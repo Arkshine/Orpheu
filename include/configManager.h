@@ -4,7 +4,7 @@
 
 #include <orpheu.h>
 #include <am-vector.h>
-#include "CString.h"
+#include <am-string.h>
 #include <sm_trie_tpl.h>
 #include <string>
 #include <jansson.h>
@@ -23,7 +23,7 @@ class ConfigManager
 		void loadMemoryStructures();
 		void parseMemoryObject(json_t *root);
 
-		String ModuleConfig;
+		ke::Vector<ke::AString> ModuleConfig;
 
 	private:
 

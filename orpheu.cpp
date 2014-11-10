@@ -1364,12 +1364,12 @@ static int addLibraryRecursive(struct dl_phdr_info *info, size_t size, void *dat
 		if(!LibrariesManager::addLibrary((char*)modname.c_str(), (void *)info->dlpi_addr))
 		{
 			sprintf(msg, "\tERROR adding library %s (0x%x)\n", (char*)modname.c_str(), info->dlpi_addr);
-			Global::ConfigManagerObj->ModuleConfig.append(msg);
+			Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 		}
 		else
 		{
 			sprintf(msg, "\tAdding library %s (0x%x)\n", (char*)modname.c_str(), info->dlpi_addr);
-			Global::ConfigManagerObj->ModuleConfig.append(msg);
+			Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 		}
 	}
 
@@ -1427,12 +1427,12 @@ void addLibraries() // IM THE KING OF EXAMPLE COPYPASTING!
 					   !LibrariesManager::addLibrary((char*)AMXXModule.c_str(), info.lpBaseOfDll)))
 					{
 						sprintf(msg, "\tERROR adding library %s%s (0x%x)\n", (char*)modname.c_str(), AMXXModule.size() ? "[_amxx]" : "", info.lpBaseOfDll);
-						Global::ConfigManagerObj->ModuleConfig.append(msg);
+						Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 					}
 					else
 					{
 						sprintf(msg, "\tAdding library %s%s (0x%x)\n", (char*)modname.c_str(), AMXXModule.size() ? "[_amxx]" : "", info.lpBaseOfDll);
-						Global::ConfigManagerObj->ModuleConfig.append(msg);
+						Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 					}
 
 					modname.clear();
@@ -1458,7 +1458,10 @@ void CommandOrpheu( void )
 	}
 	else if( !strcasecmp( cmd, "config" ) )
 	{
-		printf( "%s", Global::ConfigManagerObj->ModuleConfig.c_str() );
+		for (size_t i = 0; i < Global::ConfigManagerObj->ModuleConfig.length(); ++i)
+		{
+			printf("%s", Global::ConfigManagerObj->ModuleConfig.at(i).chars());
+		}
 
 		char file[ 512 ];
 		char date[ 32 ];
@@ -1468,7 +1471,10 @@ void CommandOrpheu( void )
 		MF_BuildPathnameR( file, sizeof file - 1, "%s/orpheu-%s.log", MF_GetLocalInfo( "amxx_logs", "addons/amxmodx/logs" ), date );
 
 		FILE* h = fopen( file, "w" );
-		fputs( Global::ConfigManagerObj->ModuleConfig.c_str(), h );
+		for (size_t i = 0; i < Global::ConfigManagerObj->ModuleConfig.length(); ++i)
+		{
+			fputs(Global::ConfigManagerObj->ModuleConfig.at(i).chars(), h);
+		}
 		fclose( h );
 
 		return;
@@ -1505,7 +1511,7 @@ void OnAmxxAttach()
 
 void OnPluginsLoaded()
 {
-	Global::ConfigManagerObj->ModuleConfig.append( "\nOrpheu libraries search started.\n\n" );
+	Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\nOrpheu libraries search started.\n\n"));
 
 #ifdef __linux__
 	dl_iterate_phdr(addLibraryRecursive, NULL);
@@ -1513,7 +1519,7 @@ void OnPluginsLoaded()
 	addLibraries();
 #endif
 
-	Global::ConfigManagerObj->ModuleConfig.append( "\nOrpheu libraries search ended.\n" );
+	Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\nOrpheu libraries search ended.\n"));
 
 	Global::ConfigManagerObj->loadFunctions();
 	Global::ConfigManagerObj->loadVirtualFunctions();

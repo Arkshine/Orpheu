@@ -157,9 +157,6 @@
     <ClInclude Include="..\include\configManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CVector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\filesManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -330,9 +327,6 @@
     </ClInclude>
     <ClInclude Include="..\include\structuresDump\monsterevent.h">
       <Filter>Header Files\structuresDump</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\CString.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\moduleconfig.h">
       <Filter>Module SDK</Filter>

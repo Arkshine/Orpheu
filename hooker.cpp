@@ -43,7 +43,7 @@ namespace Hooker
 		}
 		else
 		{
-			Global::ConfigManagerObj->ModuleConfig.append("PATCHING FAILED\n");
+			Global::ConfigManagerObj->ModuleConfig.append(ke::AString("PATCHING FAILED\n"));
 		}
 	}
 	void HookerCvarRegister::undoPatch()

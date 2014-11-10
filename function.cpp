@@ -182,7 +182,7 @@ void Function::doPatch()
 		}
 		else
 		{
-			Global::ConfigManagerObj->ModuleConfig.append("Memory patching failed\n");
+			Global::ConfigManagerObj->ModuleConfig.append(ke::AString("Memory patching failed\n"));
 		}
 	}
 }
@@ -198,7 +198,7 @@ void Function::undoPatch()
 		}
 		else
 		{
-			Global::ConfigManagerObj->ModuleConfig.append("Memory patching failed\n");
+			Global::ConfigManagerObj->ModuleConfig.append(ke::AString("Memory patching failed\n"));
 		}
 	}
 }
