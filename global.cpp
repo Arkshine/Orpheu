@@ -127,7 +127,7 @@ namespace Global
 
 	int pev = 0;
 
-	KTrie<char*>* LibrariesCvarToName = NULL;
+	StringHashMap<char*>* LibrariesCvarToName = NULL;
 	Function* FunctionBeingHooked = NULL;
 }
 

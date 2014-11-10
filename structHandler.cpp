@@ -21,11 +21,11 @@ StructHandler::StructHandler(StructInfo structInfo):LongHandler()
 
 int StructHandler::getMemberID(char* memberName)
 {
-	int* IDPointer = memberNameToMember.retrieve(memberName);
+	int ID;
 
-	if(IDPointer)
+	if (memberNameToMember.retrieve(memberName, &ID))
 	{
-		return *IDPointer;
+		return ID;
 	}
 	
 	return -1;

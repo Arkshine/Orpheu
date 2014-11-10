@@ -8,11 +8,10 @@ namespace Hooker
 
 	void HookerCvarRegister::hooker(cvar_t *cvar)
 	{		
-		char **libraryNamePtr = Global::LibrariesCvarToName->retrieve(cvar->name);
+		char *libraryName;
 
-		if(libraryNamePtr)
+		if (Global::LibrariesCvarToName->retrieve(cvar->name, &libraryName))
 		{
-			char* libraryName = *libraryNamePtr;
 			LibrariesManager::addLibrary(libraryName,(void*)cvar);
 		}
 
@@ -35,6 +34,7 @@ namespace Hooker
 		patchedBytes[0] = 0xE9;
 		*((long*)(&patchedBytes[1])) = (char*)HookerCvarRegister::hooker - (char*)g_engfuncs.pfnCVarRegister - 5;
 	}
+
 	void HookerCvarRegister::doPatch()
 	{
 		if(Memory::ChangeMemoryProtection((void*) g_engfuncs.pfnCVarRegister,this->patchSize,PAGE_EXECUTE_READWRITE))
@@ -46,6 +46,7 @@ namespace Hooker
 			Global::ConfigManagerObj->ModuleConfig.append(ke::AString("PATCHING FAILED\n"));
 		}
 	}
+
 	void HookerCvarRegister::undoPatch()
 	{
 		memcpy((void*)g_engfuncs.pfnCVarRegister,(void*)originalBytes,this->patchSize);

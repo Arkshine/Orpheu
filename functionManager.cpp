@@ -3,8 +3,8 @@
 
 FunctionManager::FunctionManager()
 {
-	functionNameToTimestamp = new KTrie<time_t>;
-	functionNameToFunctionID = new KTrie<unsigned short int>;
+	functionNameToTimestamp = new StringHashMap<time_t>;
+	functionNameToFunctionID = new StringHashMap<unsigned short int>;
 	functions = new ke::Vector<Function*>;
 	functions->append(NULL);
 	currentHookID = 1;
@@ -12,20 +12,18 @@ FunctionManager::FunctionManager()
 
 time_t FunctionManager::getTimestamp(const char* functionName)
 {
-	time_t* timestampPointer = functionNameToTimestamp->retrieve(functionName);
-	time_t timestamp = timestampPointer ? *timestampPointer : 0;
-	return timestamp;
+	time_t timestamp;
+	functionNameToTimestamp->retrieve(functionName, &timestamp);
+
+	return timestamp ? timestamp : 0;
 }
 
 unsigned short int FunctionManager::addFunction(const char* functionName,Function* function,time_t timestamp)
 {
-	unsigned short int* idPointer;
-
 	unsigned short int id;
 
-	if(functionName[0] && (idPointer = functionNameToFunctionID->retrieve(functionName)))
+	if (functionName[0] && functionNameToFunctionID->retrieve(functionName, &id))
 	{
-		id = *idPointer;
 		//delete functions->at(id);
 		functions->at(id) = function;
 	}
@@ -55,11 +53,11 @@ Function* FunctionManager::getFunction(unsigned short int functionID)
 
 unsigned short int FunctionManager::getFunctionID(const char* functionName)
 {
-	unsigned short int* idPointer = functionNameToFunctionID->retrieve(functionName);
-
-	if(idPointer)
+	unsigned short int id;
+	
+	if (functionNameToFunctionID->retrieve(functionName, &id))
 	{
-		return *idPointer;
+		return id;
 	}
 
 	return 0;
@@ -120,12 +118,12 @@ void FunctionManager::removeAllHooks()
 
 void FunctionManager::tryToRemove(const char* functionName)
 {
-	unsigned short int* idPointer = functionNameToFunctionID->retrieve(functionName);
+	unsigned short int id;
 
-	if(idPointer)
+	if (functionNameToFunctionID->retrieve(functionName, &id))
 	{
 		functionNameToFunctionID->remove(functionName);
 		functionNameToTimestamp->remove(functionName);
-		this->functions->remove(*idPointer);
+		this->functions->remove(id);
 	}
 }

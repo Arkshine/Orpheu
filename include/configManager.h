@@ -5,7 +5,7 @@
 #include <orpheu.h>
 #include <am-vector.h>
 #include <am-string.h>
-#include <sm_trie_tpl.h>
+#include <sm_stringhashmap.h>
 #include <jansson.h>
 #include <memoryUtil.h>
 
@@ -29,8 +29,8 @@ class ConfigManager
 		Folders orpheuPaths;
 
 		void obtainPaths();
-		KTrie<char*>* parseExternalLibrariesInfo();		
-		KTrie<ke::Vector<char*>*>* parseTypeAliasesInfo(KTrie<long>& typeNameToVirtualTableOffset);
+		StringHashMap<char*>* parseExternalLibrariesInfo();		
+		StringHashMap<ke::Vector<char*>*>* parseTypeAliasesInfo(StringHashMap<long>& typeNameToVirtualTableOffset);
 		void parseFunctionsInfo();
 		void parseVirtualFunctionsInfo();
 		void parseModsInfo();

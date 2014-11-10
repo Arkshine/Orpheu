@@ -128,7 +128,7 @@ namespace detail {
 template <typename HashPolicy, typename AllocPolicy = SystemAllocatorPolicy>
 class HashTable : public AllocPolicy
 {
-  friend class iterator;
+  friend class Iterator;
 
   typedef typename HashPolicy::Payload Payload;
   typedef detail::HashTableEntry<Payload> Entry;

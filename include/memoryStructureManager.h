@@ -2,7 +2,7 @@
 #ifndef _INCLUDE_MEMORY_STRUCT_MANAGER_
 #define _INCLUDE_MEMORY_STRUCT_MANAGER_
 
-#include <sm_trie_tpl.h>
+#include <sm_stringhashmap.h>
 #include <am-vector.h>
 
 #include <ctime> 
@@ -12,7 +12,7 @@ class MemoryStructManager
 {
 	private:
 
-		KTrie<unsigned int> memoryStructureNameToMemoryStructureID;
+		StringHashMap<unsigned int> memoryStructureNameToMemoryStructureID;
 		ke::Vector<MemoryStructure*> memoryStructures;
 
 	public:

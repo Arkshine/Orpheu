@@ -2,7 +2,7 @@
 #ifndef _INCLUDE_FUNCTION_MANAGER_
 #define _INCLUDE_FUNCTION_MANAGER_
 
-#include <sm_trie_tpl.h>
+#include <sm_stringhashmap.h>
 #include <am-vector.h>
 
 #include <ctime> 
@@ -24,8 +24,8 @@ class FunctionManager
 	private:
 			
 		map<long,HookReferenceData*> hookReferences;
-		KTrie<time_t>* functionNameToTimestamp;
-		KTrie<unsigned short int>* functionNameToFunctionID;
+		StringHashMap<time_t>* functionNameToTimestamp;
+		StringHashMap<unsigned short int>* functionNameToFunctionID;
 		long currentHookID;
 		ke::Vector<Function*>* functions;
 		

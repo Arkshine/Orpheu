@@ -5,22 +5,20 @@
 
 time_t FunctionVirtualManager::getTimestamp(const char* functionName)
 {
-	time_t* timestampPointer = functionVirtualNameToTimestamp.retrieve(functionName);
-	time_t timestamp = timestampPointer ? *timestampPointer : 0;
-	return timestamp;
+	time_t timestamp;
+	functionVirtualNameToTimestamp.retrieve(functionName, &timestamp);
+
+	return timestamp ? timestamp : 0;;
 }
 
 void FunctionVirtualManager::add(FunctionStructure* functionStructure,time_t timestamp)
 {
 	char* functionName = (char*) functionStructure->name.chars();
 
-	unsigned int* idPointer = functionVirtualNameToFunctionStructureID.retrieve(functionName);
-
 	unsigned int id;
 
-	if(idPointer)
+	if (functionVirtualNameToFunctionStructureID.retrieve(functionName, &id))
 	{
-		id = *idPointer;
 		//delete functionsStructures->at(id);
 		functionStructures.at(id) = functionStructure;
 	}
@@ -71,11 +69,10 @@ unsigned short int FunctionVirtualManager::makeFunction(FunctionStructure* funct
 
 FunctionStructure* FunctionVirtualManager::get(const char* functionName)
 {
-	unsigned int* idPointer = functionVirtualNameToFunctionStructureID.retrieve(functionName);
+	unsigned int id;
 
-	if(idPointer)
+	if (functionVirtualNameToFunctionStructureID.retrieve(functionName, &id))
 	{
-		unsigned int id = *idPointer;
 		return functionStructures.at(id);
 	}
 

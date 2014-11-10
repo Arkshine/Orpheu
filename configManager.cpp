@@ -210,8 +210,8 @@ void ConfigManager::loadBaseData()
 
 	Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\n\tParsing type aliases started.\n\n"));
 
-	KTrie<long> typeNameToVirtualTableOffset;
-	KTrie<ke::Vector<char*>*>* typeAliasesInfo = parseTypeAliasesInfo(typeNameToVirtualTableOffset);
+	StringHashMap<long> typeNameToVirtualTableOffset;
+	StringHashMap<ke::Vector<char*>*>* typeAliasesInfo = parseTypeAliasesInfo(typeNameToVirtualTableOffset);
 
 	Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\n\tParsing type aliases ended.\n"));
 
@@ -221,11 +221,10 @@ void ConfigManager::loadBaseData()
 	{
 		Global::TypeHandlerManagerObj->registerTypeHandler(Global::Types[i]->getName(),Global::Types[i]);
 		
-		long* virtualTableOffsetPointer = typeNameToVirtualTableOffset.retrieve(Global::Types[i]->getName());
+		long virtualTableOffset;
 
-		if(virtualTableOffsetPointer)
+		if (typeNameToVirtualTableOffset.retrieve(Global::Types[i]->getName(), &virtualTableOffset))
 		{
-			long virtualTableOffset = *virtualTableOffsetPointer;
 			Global::Types[i]->setVirtualTableOffset(virtualTableOffset);
 		}
 	}
@@ -817,12 +816,12 @@ void ConfigManager::parseFunctionsInfo()
 	}
 }
 
-KTrie<ke::Vector<char*>*>* ConfigManager::parseTypeAliasesInfo(KTrie<long>& typeNameToVirtualTableOffset)
+StringHashMap<ke::Vector<char*>*>* ConfigManager::parseTypeAliasesInfo(StringHashMap<long>& typeNameToVirtualTableOffset)
 {
 	char msg[100];
 	char path[256];
 
-	KTrie<ke::Vector<char*>*>* typeAliasesInfo = new KTrie<ke::Vector<char*>*>();
+	StringHashMap<ke::Vector<char*>*>* typeAliasesInfo = new StringHashMap<ke::Vector<char*>*>();
 
 	ke::Vector<ke::AString>* folders = FilesManager::getFolders(orpheuPaths.typeAliases.chars());
 
@@ -1000,9 +999,9 @@ KTrie<ke::Vector<char*>*>* ConfigManager::parseTypeAliasesInfo(KTrie<long>& type
 
 	return typeAliasesInfo;
 }
-KTrie<char*>* ConfigManager::parseExternalLibrariesInfo()
+StringHashMap<char*>* ConfigManager::parseExternalLibrariesInfo()
 {
-	KTrie<char*>* externalLibrariesInfo = new KTrie<char*>();
+	StringHashMap<char*>* externalLibrariesInfo = new StringHashMap<char*>();
 
 	ke::Vector<ke::AString>* files = FilesManager::getFiles(orpheuPaths.libraries.chars());
 
@@ -1367,7 +1366,7 @@ void ConfigManager::parseMemoryObject(json_t *root)
 	}	
 }
 
-static KTrie<time_t> memoryStructureNameToTimestamp;
+static StringHashMap<time_t> memoryStructureNameToTimestamp;
 
 void ConfigManager::loadMemoryStructures()
 {
@@ -1387,14 +1386,13 @@ void ConfigManager::loadMemoryStructures()
 
 		UTIL_Format(path, sizeof(path) - 1, "%s%s", orpheuPaths.memory.chars(), files->at(i).chars());
 
-		time_t* timestampPointer = memoryStructureNameToTimestamp.retrieve((char*)files->at(i).chars());
-
 		struct stat tempStat; stat(path, &tempStat);
 		time_t newTimestamp = tempStat.st_mtime;
+		time_t timestamp;
 
-		if(timestampPointer)
+		if (memoryStructureNameToTimestamp.retrieve((char*)files->at(i).chars(), &timestamp))
 		{
-			if(*timestampPointer == newTimestamp)
+			if (timestamp == newTimestamp)
 			{
 				sprintf(msg,"\t\t\tFile \"%s\" is updated\n",files->at(i).chars());
 				Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));

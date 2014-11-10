@@ -2,7 +2,7 @@
 #ifndef _INCLUDE_FUNCTION_VIRTUAL_MANAGER_
 #define _INCLUDE_FUNCTION_VIRTUAL_MANAGER_
 
-#include <sm_trie_tpl.h>
+#include <sm_stringhashmap.h>
 #include <am-vector.h>
 
 #include <ctime> 
@@ -13,8 +13,8 @@ class FunctionVirtualManager
 {
 	private:
 
-		KTrie<time_t> functionVirtualNameToTimestamp;
-		KTrie<unsigned int> functionVirtualNameToFunctionStructureID;
+		StringHashMap<time_t> functionVirtualNameToTimestamp;
+		StringHashMap<unsigned int> functionVirtualNameToFunctionStructureID;
 		ke::Vector<FunctionStructure*> functionStructures;
 
 	public:

@@ -73,10 +73,9 @@ namespace Global
 	extern unsigned int StructuresCount;
 	extern ke::AString Modname;
 	extern int pev;
-	extern KTrie<char*>* LibrariesCvarToName;
+	extern StringHashMap<char*>* LibrariesCvarToName;
 	extern Function* FunctionBeingHooked;
 };
 
 
 #endif
-
