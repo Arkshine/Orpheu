@@ -116,6 +116,7 @@ namespace Global
 		new StructHandler( (new ItemInfo())->getStructInfo() ),
 		new StructHandler( (new Task())->getStructInfo() ),
 		new StructHandler( (new Schedule())->getStructInfo() ),
+		new StructHandler( (new KeyValueData_StructData())->getStructInfo() ),
 		new StructHandler( (new cvarStructData())->getStructInfo() )
 	};
 
