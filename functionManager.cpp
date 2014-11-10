@@ -5,8 +5,8 @@ FunctionManager::FunctionManager()
 {
 	functionNameToTimestamp = new KTrie<time_t>;
 	functionNameToFunctionID = new KTrie<unsigned short int>;
-	functions = new CVector<Function*>;
-	functions->push_back(NULL);
+	functions = new ke::Vector<Function*>;
+	functions->append(NULL);
 	currentHookID = 1;
 }
 
@@ -31,8 +31,8 @@ unsigned short int FunctionManager::addFunction(const char* functionName,Functio
 	}
 	else
 	{
-		id = functions->size();
-		functions->push_back(function);
+		id = functions->length();
+		functions->append(function);
 	}
 
 	function->setID(id);
@@ -45,7 +45,7 @@ unsigned short int FunctionManager::addFunction(const char* functionName,Functio
 
 Function* FunctionManager::getFunction(unsigned short int functionID)
 {
-	if(functionID >= 1 && functionID < (unsigned short int)functions->size())
+	if(functionID >= 1 && functionID < (unsigned short int)functions->length())
 	{
 		return functions->at(functionID);
 	}
@@ -126,6 +126,6 @@ void FunctionManager::tryToRemove(const char* functionName)
 	{
 		functionNameToFunctionID->remove(functionName);
 		functionNameToTimestamp->remove(functionName);
-		this->functions->erase(this->functions->iterAt(*idPointer));
+		this->functions->remove(*idPointer);
 	}
 }

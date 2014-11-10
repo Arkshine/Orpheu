@@ -9,7 +9,7 @@
 #undef max 
 
 #include <string>
-#include <CVector.h>
+#include <am-vector.h>
 
 using namespace std;
 

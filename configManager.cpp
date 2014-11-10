@@ -77,12 +77,12 @@ void ConfigManager::parseModsInfo()
 {
 	static char msg[100];
 
-	CVector<string>* files = FilesManager::getFiles(orpheuPaths.mods.c_str());
+	ke::Vector<string>* files = FilesManager::getFiles(orpheuPaths.mods.c_str());
 
 	sprintf(msg,"\t\tCurrent mod : \"%s\"\n\n", Global::Modname.c_str() );
 	Global::ConfigManagerObj->ModuleConfig.append(msg);
 
-	for(unsigned i=0;i<files->size();i++)
+	for(unsigned i=0;i<files->length();i++)
 	{
 		string path = orpheuPaths.mods + files->at(i);
 
@@ -196,7 +196,7 @@ void ConfigManager::loadBaseData()
 	Global::ConfigManagerObj->ModuleConfig.append("\n\tParsing type aliases started.\n\n");
 
 	KTrie<long> typeNameToVirtualTableOffset;
-	KTrie<CVector<char*>*>* typeAliasesInfo = parseTypeAliasesInfo(typeNameToVirtualTableOffset);
+	KTrie<ke::Vector<char*>*>* typeAliasesInfo = parseTypeAliasesInfo(typeNameToVirtualTableOffset);
 
 	Global::ConfigManagerObj->ModuleConfig.append("\n\tParsing type aliases ended.\n");
 
@@ -753,12 +753,12 @@ void parseFile(string folder,string filename,string classname="")
 
 void ConfigManager::parseFunctionsInfo()
 {
-	CVector<string>* files = FilesManager::getFiles(orpheuPaths.functions.c_str());
-	CVector<string>* folders = FilesManager::getFolders(orpheuPaths.functions.c_str());
+	ke::Vector<string>* files = FilesManager::getFiles(orpheuPaths.functions.c_str());
+	ke::Vector<string>* folders = FilesManager::getFolders(orpheuPaths.functions.c_str());
 
 	static char msg[100];
 
-	for(unsigned int i=0;i<files->size();i++)
+	for(unsigned int i=0;i<files->length();i++)
 	{	
 		sprintf(msg,"\t\tParsing file \"%s\" started\n",files->at(i).c_str());
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
@@ -768,7 +768,7 @@ void ConfigManager::parseFunctionsInfo()
 		sprintf(msg,"\t\tParsing file \"%s\" ended\n",files->at(i).c_str());
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
 	}
-	for(unsigned int i=0;i<folders->size();i++)
+	for(unsigned int i=0;i<folders->length();i++)
 	{
 		string classname = folders->at(i);
 		string folder = orpheuPaths.functions + classname + "/";
@@ -776,9 +776,9 @@ void ConfigManager::parseFunctionsInfo()
 		sprintf(msg,"\t\tParsing folder \"%s\" started\n",folders->at(i).c_str());
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
 
-		CVector<string>* filesInFolder = FilesManager::getFiles(folder.c_str());
+		ke::Vector<string>* filesInFolder = FilesManager::getFiles(folder.c_str());
 
-		for(unsigned int j=0;j<filesInFolder->size();j++)
+		for(unsigned int j=0;j<filesInFolder->length();j++)
 		{
 			sprintf(msg,"\t\t\tParsing file \"%s\" started\n",filesInFolder->at(j).c_str());
 			Global::ConfigManagerObj->ModuleConfig.append(msg);
@@ -794,15 +794,15 @@ void ConfigManager::parseFunctionsInfo()
 	}
 }
 
-KTrie<CVector<char*>*>* ConfigManager::parseTypeAliasesInfo(KTrie<long>& typeNameToVirtualTableOffset)
+KTrie<ke::Vector<char*>*>* ConfigManager::parseTypeAliasesInfo(KTrie<long>& typeNameToVirtualTableOffset)
 {
 	static char msg[100];
 
-	KTrie<CVector<char*>*>* typeAliasesInfo = new KTrie<CVector<char*>*>();
+	KTrie<ke::Vector<char*>*>* typeAliasesInfo = new KTrie<ke::Vector<char*>*>();
 
-	CVector<string>* folders = FilesManager::getFolders(orpheuPaths.typeAliases.c_str());
+	ke::Vector<string>* folders = FilesManager::getFolders(orpheuPaths.typeAliases.c_str());
 
-	for(unsigned int i=0;i<folders->size();i++)
+	for(unsigned int i=0;i<folders->length();i++)
 	{
 		sprintf(msg,"\t\tParsing folder \"%s\"\n",folders->at(i).c_str());
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
@@ -845,9 +845,9 @@ KTrie<CVector<char*>*>* ConfigManager::parseTypeAliasesInfo(KTrie<long>& typeNam
 
 					string modsDataPath = orpheuPaths.typeAliases + folders->at(i) + "/modsData/";
 
-					CVector<string>* files = FilesManager::getFiles(modsDataPath.c_str());
+					ke::Vector<string>* files = FilesManager::getFiles(modsDataPath.c_str());
 
-					for(unsigned int fileID=0;fileID < files->size();fileID++)
+					for(unsigned int fileID=0;fileID < files->length();fileID++)
 					{
 						string path = modsDataPath + files->at(fileID);
 
@@ -908,9 +908,9 @@ KTrie<CVector<char*>*>* ConfigManager::parseTypeAliasesInfo(KTrie<long>& typeNam
 
 					files = FilesManager::getFiles(aliasesPath.c_str());
 
-					CVector<char*>* aliasesForName = new CVector<char*>();
+					ke::Vector<char*>* aliasesForName = new ke::Vector<char*>();
 
-					for(unsigned int fileID=0;fileID < files->size();fileID++)
+					for(unsigned int fileID=0;fileID < files->length();fileID++)
 					{
 						string path = aliasesPath + files->at(fileID);
 
@@ -929,7 +929,7 @@ KTrie<CVector<char*>*>* ConfigManager::parseTypeAliasesInfo(KTrie<long>& typeNam
 								{
 									char* aliasAloc = new char[json_string_length(alias) + 1];
 									strcpy(aliasAloc, json_string_value(alias));
-									aliasesForName->push_back(aliasAloc);
+									aliasesForName->append(aliasAloc);
 								}
 								else
 								{
@@ -950,7 +950,7 @@ KTrie<CVector<char*>*>* ConfigManager::parseTypeAliasesInfo(KTrie<long>& typeNam
 						}	
 					}
 
-					if(aliasesForName->size())
+					if(aliasesForName->length())
 					{
 						sprintf(msg, "\t\t\tAdding alias\"%s\"\n", json_string_value(name));
 						Global::ConfigManagerObj->ModuleConfig.append(msg);
@@ -978,9 +978,9 @@ KTrie<char*>* ConfigManager::parseExternalLibrariesInfo()
 {
 	KTrie<char*>* externalLibrariesInfo = new KTrie<char*>();
 
-	CVector<string>* files = FilesManager::getFiles(orpheuPaths.libraries.c_str());
+	ke::Vector<string>* files = FilesManager::getFiles(orpheuPaths.libraries.c_str());
 
-	for(unsigned int i=0;i<files->size();i++)
+	for(unsigned int i=0;i<files->length();i++)
 	{
 		string path = orpheuPaths.libraries + files->at(i);
 
@@ -1034,11 +1034,11 @@ KTrie<char*>* ConfigManager::parseExternalLibrariesInfo()
 
 void ConfigManager::parseVirtualFunctionsInfo()
 {
-	CVector<string>* folders = FilesManager::getFolders(orpheuPaths.virtualFunctions.c_str());
+	ke::Vector<string>* folders = FilesManager::getFolders(orpheuPaths.virtualFunctions.c_str());
 
 	static char msg[100];
 
-	for(unsigned int i=0;i<folders->size();i++)
+	for(unsigned int i=0;i<folders->length();i++)
 	{
 		string classname = folders->at(i);
 		string folder = orpheuPaths.virtualFunctions + classname + "/";
@@ -1046,9 +1046,9 @@ void ConfigManager::parseVirtualFunctionsInfo()
 		sprintf(msg,"\t\tParsing folder \"%s\" started\n",folders->at(i).c_str());
 		Global::ConfigManagerObj->ModuleConfig.append(msg);
 
-		CVector<string>* filesInFolder = FilesManager::getFiles(folder.c_str());
+		ke::Vector<string>* filesInFolder = FilesManager::getFiles(folder.c_str());
 
-		for(unsigned int j=0;j<filesInFolder->size();j++)
+		for(unsigned int j=0;j<filesInFolder->length();j++)
 		{
 			sprintf(msg,"\t\t\tParsing file \"%s\" started\n",filesInFolder->at(j).c_str());
 			Global::ConfigManagerObj->ModuleConfig.append(msg);
@@ -1348,9 +1348,9 @@ void ConfigManager::loadMemoryStructures()
 
 	Global::ConfigManagerObj->ModuleConfig.append("\n\tParsing memory structures started.\n\n");
 
-	CVector<string>* files = FilesManager::getFiles(orpheuPaths.memory.c_str());
+	ke::Vector<string>* files = FilesManager::getFiles(orpheuPaths.memory.c_str());
 
-	for(unsigned int i=0;i<files->size();i++)
+	for(unsigned int i=0;i<files->length();i++)
 	{
 		sprintf(msg,"\t\tParsing memory file \"%s\"\n",files->at(i).c_str());
 		Global::ConfigManagerObj->ModuleConfig.append(msg);

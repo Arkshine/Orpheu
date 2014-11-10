@@ -5,7 +5,7 @@
 #include <memoryUtil.h>
 #include <amxxmodule.h>
 
-#include <CVector.h>
+#include <am-vector.h>
 
 typedef enum 
 {
@@ -18,7 +18,7 @@ class TypeHandler
 {
 	private:
 
-		CVector<void*>* allocatedMemoryPointers;
+		ke::Vector<void*>* allocatedMemoryPointers;
 
 	public:
 
@@ -49,7 +49,7 @@ class TypeHandler
  
 		TypeHandler()
 		{
-			allocatedMemoryPointers = new CVector<void*>();
+			allocatedMemoryPointers = new ke::Vector<void*>();
 			virtualTableOffsetSet = false;
 		}
 
@@ -89,14 +89,14 @@ class TypeHandler
 		template <class T> T* allocateMemory(int elements = 1)
 		{
 			void* pointer = malloc(sizeof(T) * elements);
-			allocatedMemoryPointers->push_back(pointer);
+			allocatedMemoryPointers->append(pointer);
 			return (T*) pointer;
 		}
 
 		void* allocateMemoryBySize(unsigned int size)
 		{
 			void* pointer = malloc(size);
-			allocatedMemoryPointers->push_back(pointer);
+			allocatedMemoryPointers->append(pointer);
 			return pointer;
 		}
 
@@ -104,7 +104,7 @@ class TypeHandler
 
 		void freeAllocatedMemory()
 		{
-			for(unsigned int i=0;i<allocatedMemoryPointers->size();i++)
+			for(unsigned int i=0;i<allocatedMemoryPointers->length();i++)
 			{
 				free(allocatedMemoryPointers->at(i));
 			}

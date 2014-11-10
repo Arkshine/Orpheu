@@ -28,8 +28,8 @@ void MemoryStructManager::add(MemoryStructure* memoryStructure)
 	}
 	else
 	{
-		id = memoryStructures.size();
-		memoryStructures.push_back(memoryStructure);
+		id = memoryStructures.length();
+		memoryStructures.append(memoryStructure);
 	}
 
 	this->memoryStructureNameToMemoryStructureID.replace(memoryStructureName,id);

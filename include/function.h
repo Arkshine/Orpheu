@@ -5,7 +5,7 @@
 #include <amxxmodule.h>
 #include <typeHandler.h>
 #include <memoryUtil.h>
-#include <CVector.h>
+#include <am-vector.h>
 
 #undef min
 #undef max

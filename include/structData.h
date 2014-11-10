@@ -7,7 +7,7 @@
 #include <string>
 using namespace std;
 
-#include <CVector.h>
+#include <am-vector.h>
 
 #include <structInfo.h>
 
@@ -18,7 +18,7 @@ template <typename T> class StructData
 {
 	private:
 
-		CVector<Member> membersVector;
+		ke::Vector<Member> membersVector;
 		StructInfo structInfo;
 		
 	protected:
@@ -32,7 +32,7 @@ template <typename T> class StructData
 			member.offset = (long) offset - (long) structure;
 			member.type = type;
 
-			membersVector.push_back(member);
+			membersVector.append(member);
 		}
 
 	public:
@@ -41,7 +41,7 @@ template <typename T> class StructData
 
 		StructInfo& getStructInfo()
 		{
-			unsigned int membersCount = membersVector.size();
+			unsigned int membersCount = membersVector.length();
 	
 			structInfo.membersCount = membersCount;
 			structInfo.members = new Member[membersCount];
