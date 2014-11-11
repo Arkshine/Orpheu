@@ -5,25 +5,25 @@
 #include <sm_stringhashmap.h>
 #include <am-vector.h>
 
-#include <ctime> 
+#include <ctime>
 #include <functionStructure.h>
 #include <function.h>
 
 class FunctionStructuresManager
 {
-	private:
+private:
 
-		StringHashMap<time_t> functionStructureNameToTimestamp;
-		StringHashMap<unsigned int> functionStructureNameToFunctionStructureID;
-		ke::Vector<FunctionStructure*> functionStructures;
+	StringHashMap<time_t> functionStructureNameToTimestamp;
+	StringHashMap<unsigned int> functionStructureNameToFunctionStructureID;
+	ke::Vector<FunctionStructure*> functionStructures;
 
-	public:
+public:
 
-		time_t getTimestamp(const char* functionStructureName);
+	time_t getTimestamp(const char* functionStructureName);
 
-		FunctionStructure* getFunctionStructure(const char* functionStructureName);
-		void addFunctionStructure(FunctionStructure* functionStructure,time_t timestamp);
-		unsigned short int makeFunction(FunctionStructure* functionStructure,void* address);
+	FunctionStructure* getFunctionStructure(const char* functionStructureName);
+	void addFunctionStructure(FunctionStructure* functionStructure, time_t timestamp);
+	unsigned short int makeFunction(FunctionStructure* functionStructure, void* address);
 };
 
 #endif

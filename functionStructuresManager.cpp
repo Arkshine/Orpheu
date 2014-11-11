@@ -11,7 +11,7 @@ time_t FunctionStructuresManager::getTimestamp(const char* functionName)
 	return timestamp ? timestamp : 0;
 }
 
-void FunctionStructuresManager::addFunctionStructure(FunctionStructure* functionStructure,time_t timestamp)
+void FunctionStructuresManager::addFunctionStructure(FunctionStructure* functionStructure, time_t timestamp)
 {
 	const char* functionName = functionStructure->name.chars();
 
@@ -30,15 +30,15 @@ void FunctionStructuresManager::addFunctionStructure(FunctionStructure* function
 		functionStructures.append(functionStructure);
 	}
 
-	functionStructureNameToFunctionStructureID.replace(functionName,id);
-	functionStructureNameToTimestamp.replace(functionName,timestamp);
+	functionStructureNameToFunctionStructureID.replace(functionName, id);
+	functionStructureNameToTimestamp.replace(functionName, timestamp);
 }
 
-unsigned short int FunctionStructuresManager::makeFunction(FunctionStructure* functionStructure,void* address)
+unsigned short int FunctionStructuresManager::makeFunction(FunctionStructure* functionStructure, void* address)
 {
-	Function* function = new Function(address,functionStructure->argumentsHandlers,functionStructure->argumentsCount,functionStructure->returnHandler,functionStructure->library,functionStructure->isMethod);
+	Function* function = new Function(address, functionStructure->argumentsHandlers, functionStructure->argumentsCount, functionStructure->returnHandler, functionStructure->library, functionStructure->isMethod);
 
-	return Global::FunctionManagerObj->addFunction(functionStructure->name.chars(),function,0);
+	return Global::FunctionManagerObj->addFunction(functionStructure->name.chars(), function, 0);
 }
 
 FunctionStructure* FunctionStructuresManager::getFunctionStructure(const char* functionName)

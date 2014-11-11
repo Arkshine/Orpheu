@@ -14,7 +14,7 @@ MemoryStructure* MemoryStructManager::get(char* name)
 }
 void MemoryStructManager::add(MemoryStructure* memoryStructure)
 {
-	char* memoryStructureName = (char*) memoryStructure->name.chars();
+	char* memoryStructureName = (char*)memoryStructure->name.chars();
 
 	unsigned int id;
 
@@ -29,7 +29,6 @@ void MemoryStructManager::add(MemoryStructure* memoryStructure)
 		memoryStructures.append(memoryStructure);
 	}
 
-	this->memoryStructureNameToMemoryStructureID.replace(memoryStructureName,id);
+	this->memoryStructureNameToMemoryStructureID.replace(memoryStructureName, id);
 }
-
 

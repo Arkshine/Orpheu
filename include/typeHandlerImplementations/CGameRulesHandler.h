@@ -4,8 +4,8 @@
 
 class CGameRulesHandler : public LongHandler
 {
-	public:
+public:
 
-		const char* getName() { return "CGameRules *"; }
+	const char* getName() { return "CGameRules *"; }
 };
 

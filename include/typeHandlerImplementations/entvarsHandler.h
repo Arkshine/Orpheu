@@ -7,17 +7,17 @@
 
 class EntvarsHandler : public LongHandler
 {
-	public:
+public:
 
-		void* convertFromAmx(AMX* amx,cell param);
-		void convertToAmx(cell& value,long standardReturn,ConvertMode convertMode);
+	void* convertFromAmx(AMX* amx, cell param);
+	void convertToAmx(cell& value, long standardReturn, ConvertMode convertMode);
 
-		int getSize(AMX* amx,cell param)
-		{
-			return sizeof(long);
-		}
-		
-		virtual const char* getName() { return "entvars_s *"; }
+	int getSize(AMX* amx, cell param)
+	{
+		return sizeof(long);
+	}
+
+	virtual const char* getName() { return "entvars_s *"; }
 };
 
 #endif

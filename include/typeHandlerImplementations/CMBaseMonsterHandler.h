@@ -3,10 +3,10 @@
 
 class CMBaseMonsterHandler : public CBaseEntityHandler
 {
-	public:
+public:
 
-		const char* getName() { return "CMBaseMonster *"; }
-		void* convertFromAmx(AMX* amx,cell param);
-		void convertToAmx(cell& value,long standardReturn,ConvertMode convertMode);
+	const char* getName() { return "CMBaseMonster *"; }
+	void* convertFromAmx(AMX* amx, cell param);
+	void convertToAmx(cell& value, long standardReturn, ConvertMode convertMode);
 };
 

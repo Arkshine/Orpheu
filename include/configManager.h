@@ -11,27 +11,27 @@
 
 class ConfigManager
 {
-	public:
+public:
 
-		ConfigManager();
-		void loadBaseData();
-		void loadFunctions();
-		void loadVirtualFunctions();
-		void loadMemoryStructures();
-		void parseMemoryObject(json_t *root);
+	ConfigManager();
+	void loadBaseData();
+	void loadFunctions();
+	void loadVirtualFunctions();
+	void loadMemoryStructures();
+	void parseMemoryObject(json_t *root);
 
-		ke::Vector<ke::AString> ModuleConfig;
+	ke::Vector<ke::AString> ModuleConfig;
 
-	private:
+private:
 
-		Folders orpheuPaths;
+	Folders orpheuPaths;
 
-		void obtainPaths();
-		StringHashMap<char*>* parseExternalLibrariesInfo();		
-		StringHashMap<ke::Vector<char*>*>* parseTypeAliasesInfo(StringHashMap<long>& typeNameToVirtualTableOffset);
-		void parseFunctionsInfo();
-		void parseVirtualFunctionsInfo();
-		void parseModsInfo();
+	void obtainPaths();
+	StringHashMap<char*>* parseExternalLibrariesInfo();
+	StringHashMap<ke::Vector<char*>*>* parseTypeAliasesInfo(StringHashMap<long>& typeNameToVirtualTableOffset);
+	void parseFunctionsInfo();
+	void parseVirtualFunctionsInfo();
+	void parseModsInfo();
 };
 
 #endif

@@ -6,7 +6,7 @@
 #include <function.h>
 
 #undef min
-#undef max 
+#undef max
 
 #include <am-string.h>
 #include <am-vector.h>

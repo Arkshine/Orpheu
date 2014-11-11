@@ -3,9 +3,9 @@
 
 FunctionManager::FunctionManager()
 {
-	functionNameToTimestamp = new StringHashMap<time_t>;
-	functionNameToFunctionID = new StringHashMap<unsigned short int>;
-	functions = new ke::Vector<Function*>;
+	functionNameToTimestamp = new StringHashMap < time_t > ;
+	functionNameToFunctionID = new StringHashMap < unsigned short int > ;
+	functions = new ke::Vector < Function* > ;
 	functions->append(NULL);
 	hookReferences.init();
 	currentHookID = 1;
@@ -19,7 +19,7 @@ time_t FunctionManager::getTimestamp(const char* functionName)
 	return timestamp ? timestamp : 0;
 }
 
-unsigned short int FunctionManager::addFunction(const char* functionName,Function* function,time_t timestamp)
+unsigned short int FunctionManager::addFunction(const char* functionName, Function* function, time_t timestamp)
 {
 	unsigned short int id;
 
@@ -35,16 +35,16 @@ unsigned short int FunctionManager::addFunction(const char* functionName,Functio
 	}
 
 	function->setID(id);
-	
-	functionNameToFunctionID->replace(functionName,id);
-	functionNameToTimestamp->replace(functionName,timestamp);
+
+	functionNameToFunctionID->replace(functionName, id);
+	functionNameToTimestamp->replace(functionName, timestamp);
 
 	return id;
 }
 
 Function* FunctionManager::getFunction(unsigned short int functionID)
 {
-	if(functionID >= 1 && functionID < (unsigned short int)functions->length())
+	if (functionID >= 1 && functionID < (unsigned short int)functions->length())
 	{
 		return functions->at(functionID);
 	}
@@ -55,7 +55,7 @@ Function* FunctionManager::getFunction(unsigned short int functionID)
 unsigned short int FunctionManager::getFunctionID(const char* functionName)
 {
 	unsigned short int id;
-	
+
 	if (functionNameToFunctionID->retrieve(functionName, &id))
 	{
 		return id;
@@ -64,13 +64,13 @@ unsigned short int FunctionManager::getFunctionID(const char* functionName)
 	return 0;
 }
 
-long FunctionManager::addHook(AMX* amx,const char* functionName,Function* function,OrpheuHookPhase phase)
+long FunctionManager::addHook(AMX* amx, const char* functionName, Function* function, OrpheuHookPhase phase)
 {
 	HookReferenceData* hookReferenceData = new HookReferenceData;
 
 	hookReferenceData->function = function;
 	hookReferenceData->phase = phase;
-	hookReferenceData->hookFunctionPhaseID = function->addHook(amx,functionName,hookReferenceData->phase);
+	hookReferenceData->hookFunctionPhaseID = function->addHook(amx, functionName, hookReferenceData->phase);
 
 	HookRefsTableMap::Insert i = hookReferences.findForAdd(currentHookID);
 	if (!i.found())
@@ -93,10 +93,10 @@ bool FunctionManager::removeHook(long hookID)
 	{
 		HookReferenceData* hookReferenceData = r->value;
 
-		hookReferenceData->function->removeHook(hookReferenceData->phase,hookReferenceData->hookFunctionPhaseID);
-		
+		hookReferenceData->function->removeHook(hookReferenceData->phase, hookReferenceData->hookFunctionPhaseID);
+
 		delete hookReferenceData;
-	
+
 		hookReferences.remove(r);
 
 		return true;
@@ -111,7 +111,7 @@ void FunctionManager::removeAllHooks()
 	{
 		HookReferenceData* hookReferenceData = iter->value;
 
-		hookReferenceData->function->removeHook(hookReferenceData->phase,hookReferenceData->hookFunctionPhaseID);
+		hookReferenceData->function->removeHook(hookReferenceData->phase, hookReferenceData->hookFunctionPhaseID);
 
 		delete hookReferenceData;
 	}

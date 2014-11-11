@@ -7,17 +7,17 @@ TypeHandlerManager::TypeHandlerManager(StringHashMap<ke::Vector<char*>*>* typeAl
 	this->typeAliases = typeAliases;
 }
 
-void TypeHandlerManager::registerTypeHandler(const char* label,TypeHandler* handler)
+void TypeHandlerManager::registerTypeHandler(const char* label, TypeHandler* handler)
 {
-	registeredTypeHandlers->insert(label,handler);
+	registeredTypeHandlers->insert(label, handler);
 
 	ke::Vector<char*>* aliases;
-	
+
 	if (typeAliases->retrieve(label, &aliases))
 	{
-		for(unsigned int i=0;i<aliases->length();i++)
+		for (unsigned int i=0; i < aliases->length(); i++)
 		{
-			registeredTypeHandlers->insert(aliases->at(i),handler);
+			registeredTypeHandlers->insert(aliases->at(i), handler);
 		}
 	}
 }
@@ -38,4 +38,3 @@ TypeHandler* TypeHandlerManager::getTypeHandler(const char* label)
 
 	return NULL;
 }
-

@@ -10,9 +10,9 @@ time_t FunctionVirtualManager::getTimestamp(const char* functionName)
 	return timestamp ? timestamp : 0;;
 }
 
-void FunctionVirtualManager::add(FunctionStructure* functionStructure,time_t timestamp)
+void FunctionVirtualManager::add(FunctionStructure* functionStructure, time_t timestamp)
 {
-	char* functionName = (char*) functionStructure->name.chars();
+	char* functionName = (char*)functionStructure->name.chars();
 
 	unsigned int id;
 
@@ -27,22 +27,22 @@ void FunctionVirtualManager::add(FunctionStructure* functionStructure,time_t tim
 		functionStructures.append(functionStructure);
 	}
 
-	functionVirtualNameToFunctionStructureID.replace(functionName,id);
-	functionVirtualNameToTimestamp.replace(functionName,timestamp);
+	functionVirtualNameToFunctionStructureID.replace(functionName, id);
+	functionVirtualNameToTimestamp.replace(functionName, timestamp);
 }
 
-unsigned short int FunctionVirtualManager::makeFunction(FunctionStructure* functionStructure,long object)
+unsigned short int FunctionVirtualManager::makeFunction(FunctionStructure* functionStructure, long object)
 {
 	TypeHandler* class_ = functionStructure->argumentsHandlers[0];
 
-	if(class_->hasVirtualTableOffset())
+	if (class_->hasVirtualTableOffset())
 	{
 		long offset = class_->getVirtualTableOffset();
 
-		void **vtable = *((void***)(((char*)object)+offset));
-		int **ivtable = (int**) vtable;
+		void **vtable = *((void***)(((char*)object) + offset));
+		int **ivtable = (int**)vtable;
 
-		void* address = (void*) ivtable[functionStructure->virtualTableIndex];
+		void* address = (void*)ivtable[functionStructure->virtualTableIndex];
 
 		FunctionStructure::VFuncTableMap::Insert i = functionStructure->virtualFunctionsCreated.findForAdd(address);
 
@@ -50,8 +50,8 @@ unsigned short int FunctionVirtualManager::makeFunction(FunctionStructure* funct
 
 		if (!i.found())
 		{
-			function = new Function(address,functionStructure->argumentsHandlers,functionStructure->argumentsCount,functionStructure->returnHandler,functionStructure->library,functionStructure->isMethod);
-			Global::FunctionManagerObj->addFunction("",function,0);
+			function = new Function(address, functionStructure->argumentsHandlers, functionStructure->argumentsCount, functionStructure->returnHandler, functionStructure->library, functionStructure->isMethod);
+			Global::FunctionManagerObj->addFunction("", function, 0);
 
 			if (functionStructure->virtualFunctionsCreated.add(i))
 			{

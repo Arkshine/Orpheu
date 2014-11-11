@@ -9,17 +9,17 @@
 
 class TypeHandlerManager
 {
-	public:
+public:
 
-		TypeHandlerManager(StringHashMap<ke::Vector<char*>*>* typeAliases);
-		void registerTypeHandler(const char* label,TypeHandler* handler);
-		bool typeHandlerExists(const char* label);
-		TypeHandler* getTypeHandler(const char *label);
-	
-	private:
-	
-		StringHashMap<TypeHandler*>* registeredTypeHandlers;
-		StringHashMap<ke::Vector<char*>*>* typeAliases;
+	TypeHandlerManager(StringHashMap<ke::Vector<char*>*>* typeAliases);
+	void registerTypeHandler(const char* label, TypeHandler* handler);
+	bool typeHandlerExists(const char* label);
+	TypeHandler* getTypeHandler(const char *label);
+
+private:
+
+	StringHashMap<TypeHandler*>* registeredTypeHandlers;
+	StringHashMap<ke::Vector<char*>*>* typeAliases;
 };
 
 #endif

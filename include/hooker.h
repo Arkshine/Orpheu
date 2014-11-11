@@ -8,23 +8,23 @@
 #include <memoryUtil.h>
 
 namespace Hooker
-{	
+{
 	class HookerCvarRegister
 	{
-		private:
-			
-			static const int patchSize = sizeof(unsigned char) + sizeof(long);
-			unsigned char originalBytes[patchSize / sizeof(unsigned char)];
-			unsigned char patchedBytes[patchSize / sizeof(unsigned char)];
+	private:
 
-			void createPatch();
-			void doPatch();
-			void undoPatch();
+		static const int patchSize = sizeof(unsigned char) + sizeof(long);
+		unsigned char originalBytes[patchSize / sizeof(unsigned char)];
+		unsigned char patchedBytes[patchSize / sizeof(unsigned char)];
 
-		public:
+		void createPatch();
+		void doPatch();
+		void undoPatch();
 
-			HookerCvarRegister();
-			static void hooker(cvar_t *cvar);
+	public:
+
+		HookerCvarRegister();
+		static void hooker(cvar_t *cvar);
 	};
 
 	extern HookerCvarRegister* hookerCvarRegister;
