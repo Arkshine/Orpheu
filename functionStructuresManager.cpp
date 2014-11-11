@@ -5,7 +5,7 @@
 
 time_t FunctionStructuresManager::getTimestamp(const char* functionName)
 {
-	time_t timestamp;
+	time_t timestamp = 0;
 	functionStructureNameToTimestamp.retrieve(functionName, &timestamp);
 
 	return timestamp ? timestamp : 0;

@@ -59,7 +59,7 @@ long StructHandler::allocate()
 	return structureAddress;
 }
 
-int StructHandler::getSize()
+int StructHandler::getStructSize()
 {
 	return structInfo.size;
 }

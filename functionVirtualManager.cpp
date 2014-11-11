@@ -4,10 +4,10 @@
 
 time_t FunctionVirtualManager::getTimestamp(const char* functionName)
 {
-	time_t timestamp;
+	time_t timestamp = 0;
 	functionVirtualNameToTimestamp.retrieve(functionName, &timestamp);
 
-	return timestamp ? timestamp : 0;;
+	return timestamp ? timestamp : 0;
 }
 
 void FunctionVirtualManager::add(FunctionStructure* functionStructure, time_t timestamp)

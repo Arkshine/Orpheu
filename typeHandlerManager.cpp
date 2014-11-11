@@ -24,7 +24,7 @@ void TypeHandlerManager::registerTypeHandler(const char* label, TypeHandler* han
 
 bool TypeHandlerManager::typeHandlerExists(const char* label)
 {
-	return registeredTypeHandlers->retrieve(label) != NULL;
+	return registeredTypeHandlers->retrieve(label);
 }
 
 TypeHandler* TypeHandlerManager::getTypeHandler(const char* label)

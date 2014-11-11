@@ -23,7 +23,7 @@ void CharPtrHandler::convertToAmx(cell& value, long standardReturn, ConvertMode 
 	}
 	else
 	{
-		value = MF_PrepareCharArray("", 1);
+		value = MF_PrepareCharArray((char *)"", 1);
 	}
 }
 

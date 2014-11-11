@@ -842,7 +842,7 @@ StringHashMap<ke::Vector<char*>*>* ConfigManager::parseTypeAliasesInfo(StringHas
 			if (json_is_object(root))
 			{
 				json_t *name = json_object_get(root, "name");
-				json_t *aliases = json_object_get(root, "aliases");
+				//json_t *aliases = json_object_get(root, "aliases");
 
 				if (json_is_string(name))
 				{
@@ -1292,7 +1292,7 @@ void ConfigManager::parseMemoryObject(json_t *root)
 								{
 									size_t entryValue = (size_t)json_integer_value(entry);
 
-									if ((entryValue >= 0) && (entryValue <= 0xFF))
+									if (entryValue <= 0xFF)
 									{
 										signatureEntryData[j] = SpecificByte;
 										signature[j] = (byte)entryValue;

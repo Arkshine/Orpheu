@@ -6,6 +6,10 @@
 #include <amxxmodule.h>
 #include <am-vector.h>
 
+#if defined(WIN32)
+	#pragma warning(disable:4800)
+#endif
+
 typedef enum
 {
 	Call,

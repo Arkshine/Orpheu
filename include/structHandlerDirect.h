@@ -12,7 +12,7 @@ public:
 
 	void convertFromAmxToStructure(AMX* amx, cell param, void* address)
 	{
-		memcpy(address, (void*)param, this->getSize());
+		memcpy(address, (void*)param, this->getStructSize());
 	}
 	cell convertToAmxFromStructure(AMX* amx, cell* params, void* address)
 	{

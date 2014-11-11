@@ -57,7 +57,7 @@ endif
 LINK += -m32 -lm -ldl
 
 CFLAGS += -DPAWN_CELL_SIZE=32 -DJIT -DASM32 -DHAVE_STDINT_H -fno-strict-aliasing -m32 -Wall
-#CPPFLAGS += -fno-exceptions -fno-rtti
+CPPFLAGS += -fno-exceptions -fno-rtti
 
 BINARY = $(PROJECT)$(LIB_SUFFIX).$(LIB_EXT)
 

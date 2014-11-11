@@ -13,7 +13,7 @@ FunctionManager::FunctionManager()
 
 time_t FunctionManager::getTimestamp(const char* functionName)
 {
-	time_t timestamp;
+	time_t timestamp = 0;
 	functionNameToTimestamp->retrieve(functionName, &timestamp);
 
 	return timestamp ? timestamp : 0;

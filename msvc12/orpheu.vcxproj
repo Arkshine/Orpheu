@@ -13,6 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{43B95C78-8D1A-4D12-B668-2520B38E1DA3}</ProjectGuid>
     <RootNamespace>fun_amx</RootNamespace>
+    <ProjectName>orpheu_amxx</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

@@ -45,7 +45,7 @@ namespace LibrariesManager
 
 	bool hasLibrary(const char *libraryName)
 	{
-		return LibraryNameToLibraryInfo->retrieve(libraryName) != NULL;
+		return LibraryNameToLibraryInfo->retrieve(libraryName);
 	}
 
 #if defined __linux__
