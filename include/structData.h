@@ -3,15 +3,11 @@
 #define _INCLUDE_STRUCT_DATA_
 
 #include <typeHandler.h>
-
 #include <am-string.h>
-using namespace std;
-
 #include <am-vector.h>
-
 #include <structInfo.h>
-
 #include <global.h>
+
 using namespace Global;
 
 template <typename T> class StructData

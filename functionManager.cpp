@@ -7,6 +7,7 @@ FunctionManager::FunctionManager()
 	functionNameToFunctionID = new StringHashMap<unsigned short int>;
 	functions = new ke::Vector<Function*>;
 	functions->append(NULL);
+	hookReferences.init();
 	currentHookID = 1;
 }
 
@@ -71,26 +72,32 @@ long FunctionManager::addHook(AMX* amx,const char* functionName,Function* functi
 	hookReferenceData->phase = phase;
 	hookReferenceData->hookFunctionPhaseID = function->addHook(amx,functionName,hookReferenceData->phase);
 
-	this->hookReferences[currentHookID] = hookReferenceData;
+	HookRefsTableMap::Insert i = hookReferences.findForAdd(currentHookID);
+	if (!i.found())
+	{
+		if (hookReferences.add(i))
+		{
+			i->key = currentHookID;
+		}
+	}
+	i->value = hookReferenceData;
 
 	return currentHookID++;
 }
 
 bool FunctionManager::removeHook(long hookID)
 {
-	map<long,HookReferenceData*>::iterator iterator = this->hookReferences.find(hookID);
+	HookRefsTableMap::Result r = hookReferences.find(hookID);
 
-	if(iterator != this->hookReferences.end())
+	if (r.found())
 	{
-		pair<long,HookReferenceData*> hookPair = *iterator;
-
-		HookReferenceData* hookReferenceData = hookPair.second;
+		HookReferenceData* hookReferenceData = r->value;
 
 		hookReferenceData->function->removeHook(hookReferenceData->phase,hookReferenceData->hookFunctionPhaseID);
 		
 		delete hookReferenceData;
 	
-		this->hookReferences.erase(iterator);
+		hookReferences.remove(r);
 
 		return true;
 	}
@@ -100,11 +107,9 @@ bool FunctionManager::removeHook(long hookID)
 
 void FunctionManager::removeAllHooks()
 {
-	for(map<long,HookReferenceData*>::iterator iterator = this->hookReferences.begin(); iterator != this->hookReferences.end(); iterator++)
+	for (HookRefsTableMap::iterator iter = hookReferences.iter(); !iter.empty(); iter.next())
 	{
-		pair<long,HookReferenceData*> hookPair = *iterator;
-
-		HookReferenceData* hookReferenceData = hookPair.second;
+		HookReferenceData* hookReferenceData = iter->value;
 
 		hookReferenceData->function->removeHook(hookReferenceData->phase,hookReferenceData->hookFunctionPhaseID);
 

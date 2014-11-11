@@ -10,10 +10,8 @@
 #undef min
 #undef max
 
-#include <map>
+#include <am-hashmap.h>
 #include <am-string.h>
-
-using namespace std;
 
 typedef enum 
 {
@@ -68,7 +66,8 @@ class Function
 
 		bool shouldCallHooks;
 
-		map<long,long>* hooks[OrpheuHookPost+1];
+		typedef ke::HashMap< long, long, ke::IntegerPolicy<long> > HooksDataMap;
+		HooksDataMap* hooks[OrpheuHookPost + 1];
 		long currentHookID[OrpheuHookPost+1];
 
 		OrpheuHookPhase hookPhase;

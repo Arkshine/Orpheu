@@ -9,8 +9,6 @@
 #include <jansson.h>
 #include <memoryUtil.h>
 
-using namespace std;
-
 class ConfigManager
 {
 	public:

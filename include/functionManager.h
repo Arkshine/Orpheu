@@ -8,10 +8,6 @@
 #include <ctime> 
 #include <function.h>
 
-#include <map>
- 
-using namespace std;
-
 typedef struct 
 {  
 	Function* function;
@@ -23,7 +19,8 @@ class FunctionManager
 {
 	private:
 			
-		map<long,HookReferenceData*> hookReferences;
+		typedef ke::HashMap< long, HookReferenceData*, ke::IntegerPolicy<long> > HookRefsTableMap;
+		HookRefsTableMap hookReferences;
 		StringHashMap<time_t>* functionNameToTimestamp;
 		StringHashMap<unsigned short int>* functionNameToFunctionID;
 		long currentHookID;

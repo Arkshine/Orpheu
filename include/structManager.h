@@ -4,20 +4,32 @@
 #undef min
 #undef max
 
-#include <map>
- 
-using namespace std;
-
 class StructManager
 {
-	map<long,StructHandler*> structAddressToHandler;
+	typedef ke::HashMap< long, StructHandler*, ke::IntegerPolicy<long> > StructTableMap;
+	StructTableMap structAddressToHandler;
 
 	public:
 
+		StructManager()
+		{
+			structAddressToHandler.init();
+		}
+
 		void add(long structureAddress,StructHandler* structureHandler)
 		{
-			structAddressToHandler[structureAddress] = structureHandler;
+			StructTableMap::Insert i = structAddressToHandler.findForAdd(structureAddress);
+
+			if (!i.found())
+			{
+				if (structAddressToHandler.add(i))
+				{
+					i->key = structureAddress;
+				}
+			}
+			i->value = structureHandler;
 		}
+
 		long clone(long structureAddress,StructHandler* structureHandler)
 		{
 			long newStructureAddress = createStructure(structureHandler);
@@ -28,17 +40,19 @@ class StructManager
 
 			return newStructureAddress;
 		}
+
 		StructHandler* getHandler(long structureAddress)
 		{
-			map<long,StructHandler*>::iterator iterator = structAddressToHandler.find(structureAddress);
+			StructTableMap::Result r = structAddressToHandler.find(structureAddress);
 
-			if(iterator != structAddressToHandler.end())
+			if (r.found())
 			{
-				return (*iterator).second;
+				return r->value;
 			}
 
 			return NULL;
 		}
+
 		long createStructure(StructHandler* structureHandler)
 		{
 			long structureAddress = structureHandler->allocate();

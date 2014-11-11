@@ -1,6 +1,5 @@
 
 #include <functionVirtualManager.h>
-
 #include <global.h>
 
 time_t FunctionVirtualManager::getTimestamp(const char* functionName)
@@ -45,20 +44,24 @@ unsigned short int FunctionVirtualManager::makeFunction(FunctionStructure* funct
 
 		void* address = (void*) ivtable[functionStructure->virtualTableIndex];
 
-		map<void*,Function*>::iterator iterator = functionStructure->virtualFunctionsCreated.find(address);
+		FunctionStructure::VFuncTableMap::Insert i = functionStructure->virtualFunctionsCreated.findForAdd(address);
 
 		Function* function;
 
-		if(iterator == functionStructure->virtualFunctionsCreated.end())
+		if (!i.found())
 		{
 			function = new Function(address,functionStructure->argumentsHandlers,functionStructure->argumentsCount,functionStructure->returnHandler,functionStructure->library,functionStructure->isMethod);
 			Global::FunctionManagerObj->addFunction("",function,0);
 
-			functionStructure->virtualFunctionsCreated[address] = function;
+			if (functionStructure->virtualFunctionsCreated.add(i))
+			{
+				i->key = address;
+			}
+			i->value = function;
 		}
 		else
 		{
-			function = (*iterator).second;
+			function = i->value;
 		}
 
 		return function->getID();

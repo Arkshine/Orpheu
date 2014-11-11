@@ -11,10 +11,13 @@
 #include <am-string.h>
 #include <am-vector.h>
 
-using namespace std;
-
 struct FunctionStructure
 {
+	FunctionStructure()
+	{
+		virtualFunctionsCreated.init();
+	}
+
 	void* address;
 	TypeHandler** argumentsHandlers;
 	unsigned int argumentsCount;
@@ -23,7 +26,8 @@ struct FunctionStructure
 	ke::AString library;
 	ke::AString name;
 	unsigned int virtualTableIndex;
-	map<void*,Function*> virtualFunctionsCreated;
+	typedef ke::HashMap< void*, Function*, ke::PointerPolicy<void> > VFuncTableMap;
+	VFuncTableMap virtualFunctionsCreated;
 };
 
 #endif

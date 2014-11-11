@@ -5,8 +5,6 @@
 #include <am-vector.h>
 #include <am-string.h>
 
-using namespace std;
-
 namespace FilesManager
 {
 	ke::Vector<ke::AString>* getFolders(const char *directory);

@@ -7,8 +7,6 @@
 
 #include <ctime> 
 
-using namespace std;
-
 #include <function.h>
 #include <hooker.h>
 

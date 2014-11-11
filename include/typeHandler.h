@@ -4,7 +4,6 @@
 
 #include <memoryUtil.h>
 #include <amxxmodule.h>
-
 #include <am-vector.h>
 
 typedef enum 

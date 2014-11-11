@@ -4,8 +4,6 @@
 
 #include <typeHandlerImplementations/longHandler.h>
 #include <am-string.h>
-using namespace std;
-
 #include <structInfo.h>
 #include <sm_stringhashmap.h>
 
