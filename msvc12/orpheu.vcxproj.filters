@@ -30,6 +30,9 @@
     <Filter Include="Jansson">
       <UniqueIdentifier>{4bd3d999-7d1a-481e-a3b5-26aa317e6104}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Versionlib">
+      <UniqueIdentifier>{7eb88f0c-6d9c-4f66-affd-65e117ff26a1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\configManager.cpp">
@@ -151,6 +154,9 @@
     </ClCompile>
     <ClCompile Include="..\jansson\value.c">
       <Filter>Jansson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\support\versionlib\versionlib.cpp">
+      <Filter>Versionlib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -322,9 +328,6 @@
     <ClInclude Include="..\include\structuresDump\monsterevent.h">
       <Filter>Header Files\structuresDump</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\moduleconfig.h">
-      <Filter>Module SDK</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\sdk\amxxmodule.h">
       <Filter>Module SDK\SDK Base</Filter>
     </ClInclude>
@@ -351,6 +354,12 @@
     </ClInclude>
     <ClInclude Include="..\jansson\utf.h">
       <Filter>Jansson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\includes\moduleconfig.h">
+      <Filter>Module SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\support\versionlib\versionlib.h">
+      <Filter>Versionlib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

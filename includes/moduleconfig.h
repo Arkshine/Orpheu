@@ -3,14 +3,19 @@
 #ifndef __MODULECONFIG_H__
 #define __MODULECONFIG_H__
 
+// Comment to disable versioning.
+// #define ORPHEU_GENERATED_BUILD
+
+#include <orpheu_version.h>
+
 // Module info
-#define MODULE_NAME "Orpheu"
-#define MODULE_VERSION "2.5.4"
-#define MODULE_AUTHOR "joaquimandrade & Arkshine"
-#define MODULE_URL "http://forums.alliedmods.net/showthread.php?t=116393"
-#define MODULE_LOGTAG "ORPHEU"
-#define MODULE_LIBRARY "orpheu"
-#define MODULE_LIBCLASS ""
+#define MODULE_NAME      "Orpheu"
+#define MODULE_VERSION   ORPHEU_VERSION
+#define MODULE_AUTHOR    "joaquimandrade & Arkshine"
+#define MODULE_URL       "http://forums.alliedmods.net/showthread.php?t=116393"
+#define MODULE_LOGTAG    "ORPHEU"
+#define MODULE_LIBRARY   "orpheu"
+#define MODULE_LIBCLASS  ""
 // If you want the module not to be reloaded on mapchange, remove / comment out the next line
 // #define MODULE_RELOAD_ON_MAPCHANGE
 

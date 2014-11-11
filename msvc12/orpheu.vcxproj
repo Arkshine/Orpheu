@@ -72,8 +72,8 @@
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>..\;..\jansson;..\include;..\public\sdk;..\public;..\public\amtl;$(METAMOD)\metamod;$(HLSDK)\common;$(HLSDK)\engine;$(HLSDK)\dlls;$(HLSDK)\pm_shared;$(HLSDK)\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;ORPHEU_EXPORTS;HAVE_STDINT_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\;..\jansson;..\includes;..\support\versionlib;..\public\sdk;..\public;..\public\amtl;$(METAMOD)\metamod;$(HLSDK)\common;$(HLSDK)\engine;$(HLSDK)\dlls;$(HLSDK)\pm_shared;$(HLSDK)\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;ORPHEU_EXPORTS;HAVE_STDINT_H;ORPHEU_USE_VERSIONLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -122,8 +122,8 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\;..\jansson;..\include;..\public;..\public\sdk;..\public\amtl;$(METAMOD)\metamod;$(HLSDK)\common;$(HLSDK)\engine;$(HLSDK)\dlls;$(HLSDK)\pm_shared;$(HLSDK)\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;ORPHEU_EXPORTS;HAVE_STDINT_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\;..\jansson;..\includes;..\support\versionlib;..\public;..\public\sdk;..\public\amtl;$(METAMOD)\metamod;$(HLSDK)\common;$(HLSDK)\engine;$(HLSDK)\dlls;$(HLSDK)\pm_shared;$(HLSDK)\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;ORPHEU_EXPORTS;HAVE_STDINT_H;ORPHEU_USE_VERSIONLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
@@ -183,6 +183,7 @@
     <ClCompile Include="..\memoryStructureManager.cpp" />
     <ClCompile Include="..\orpheu.cpp" />
     <ClCompile Include="..\structHandler.cpp" />
+    <ClCompile Include="..\support\versionlib\versionlib.cpp" />
     <ClCompile Include="..\typeHandlerManager.cpp" />
     <ClCompile Include="..\typeHandlerImplementations\boolHandler.cpp" />
     <ClCompile Include="..\typeHandlerImplementations\byteHandler.cpp" />
@@ -265,8 +266,9 @@
     <ClInclude Include="..\include\structures\usercmdStruct.h" />
     <ClInclude Include="..\include\structures\weapon_data.h" />
     <ClInclude Include="..\include\structuresDump\monsterevent.h" />
-    <ClInclude Include="..\include\moduleconfig.h" />
+    <ClInclude Include="..\includes\moduleconfig.h" />
     <ClInclude Include="..\public\sdk\amxxmodule.h" />
+    <ClInclude Include="..\support\versionlib\versionlib.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\jansson\jansson_config.h.in" />

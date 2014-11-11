@@ -21,7 +21,7 @@ OBJECTS = public/sdk/amxxmodule.cpp orpheu.cpp memoryUtil.cpp memoryStructureMan
 ### CONFIGURE ANY OTHER FLAGS/OPTIONS HERE ###
 ##############################################
 
-C_OPT_FLAGS     = -DNDEBUG -O2 -funroll-loops -fomit-frame-pointer -pipe
+C_OPT_FLAGS     = -DNDEBUG -O2 -funroll-loops -fomit-frame-pointer -pipe 
 C_DEBUG_FLAGS   = -D_DEBUG -DDEBUG -g -ggdb3
 C_GCC4_FLAGS    = -fvisibility=hidden
 CPP_GCC4_FLAGS  = -fvisibility-inlines-hidden
@@ -30,7 +30,7 @@ CPP_OSX         = clang
 
 LINK =
 
-INCLUDE =   -I. -Isdk -Iinclude -Ijansson \
+INCLUDE =   -I. -Isdk -Iincludes -Ijansson \
 			-Ipublic -Ipublic/sdk -Ipublic/amtl \
 			-I$(HLSDK) -I$(HLSDK)/public -I$(HLSDK)/common -I$(HLSDK)/dlls -I$(HLSDK)/engine -I$(HLSDK)/game_shared -I$(HLSDK)/pm_shared \
 			-I$(MM_ROOT)
@@ -45,19 +45,19 @@ ifeq "$(OS)" "Darwin"
 	CPP = $(CPP_OSX)
 	LIB_EXT = dylib
 	LIB_SUFFIX = _amxx
-	CFLAGS += -DOSX
-	LINK += -dynamiclib -lstdc++ -mmacosx-version-min=10.5
+	CFLAGS += -DOSX -D_OSX -DPOSIX
+	LINK += -dynamiclib -lstdc++ -mmacosx-version-min=10.5 -arch=i386
 else
 	LIB_EXT = so
 	LIB_SUFFIX = _amxx_i386
-	CFLAGS += -DLINUX
+	CFLAGS += -DLINUX -D_LINUX -DPOSIX
 	LINK += -shared
 endif
 
 LINK += -m32 -lm -ldl
 
-CFLAGS += -DPAWN_CELL_SIZE=32 -DJIT -DASM32 -DHAVE_STDINT_H -fno-strict-aliasing -m32 -Wall
-CPPFLAGS += -fno-exceptions -fno-rtti
+CFLAGS += -DORPHEU_BUILD -DORPHEU_USE_VERSIONLIB -DPAWN_CELL_SIZE=32 -DJIT -DASM32 -DHAVE_STDINT_H -fno-strict-aliasing -m32 -Wall  -Werror -Wno-uninitialized -Wno-unused -Wno-switch
+CPPFLAGS += -Wno-invalid-offsetof -fno-exceptions -fno-rtti
 
 BINARY = $(PROJECT)$(LIB_SUFFIX).$(LIB_EXT)
 
@@ -86,6 +86,12 @@ ifeq "$(shell expr $(IS_CLANG) \| $(CPP_MAJOR) \>= 4)" "1"
 	CPPFLAGS += $(CPP_GCC4_FLAGS)
 endif
 
+ifeq "$(IS_CLANG)" "1"
+	CFLAGS += -Wno-logical-op-parentheses
+else
+	CFLAGS += -Wno-parentheses
+endif
+
 # Clang >= 3 || GCC >= 4.7
 ifeq "$(shell expr $(IS_CLANG) \& $(CPP_MAJOR) \>= 3 \| $(CPP_MAJOR) \>= 4 \& $(CPP_MINOR) \>= 7)" "1"
 	CFLAGS += -Wno-delete-non-virtual-dtor
@@ -94,6 +100,11 @@ endif
 # OS is Linux and not using clang
 ifeq "$(shell expr $(OS) \= Linux \& $(IS_CLANG) \= 0)" "1"
 	LINK += -static-libgcc
+endif
+
+# OS is Linux and using clang
+ifeq "$(shell expr $(OS) \= Linux \& $(IS_CLANG) \= 1)" "1"
+	LINK += -lgcc_eh
 endif
 
 OBJ_BIN := $(OBJECTS:%.cpp=$(BIN_DIR)/%.o)

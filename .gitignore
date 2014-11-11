@@ -12,6 +12,7 @@
 *.sln.docstates
 
 # Build results
+build/
 [Dd]ebug/
 [Rr]elease/
 *_i.c

@@ -1,17 +1,12 @@
 
 
 #include <orpheu.h>
-
 #include <global.h>
 #include <librariesManager.h>
 #include <hooker.h>
-
 #include <function.h>
-
 #include <am-string.h>
-
 #include <eiface.h>
-
 #include <typeHandlerImplementations/CBaseEntityHandler.h>
 
 cell AMX_NATIVE_CALL Orpheu::GetFunction(AMX* amx, cell* params)
@@ -1479,10 +1474,15 @@ void CommandOrpheu(void)
 
 	if (!strcasecmp(cmd, "version"))
 	{
-		printf("\n %s %s\n -\n", Plugin_info.name, Plugin_info.version);
-		printf(" Support  : %s\n", Plugin_info.url);
-		printf(" Author   : %s\n", Plugin_info.author);
-		printf(" Compiled : %s\n\n", __DATE__ ", " __TIME__);
+		printf("\n %s %s\n -\n", Plugin_info.name, ORPHEU_VERSION);
+		printf(" Support      : %s\n", Plugin_info.url);
+		printf(" Author       : %s\n", Plugin_info.author);
+		printf(" Compiled on: : %s\n", ORPHEU_BUILD_TIME);
+#if defined(ORPHEU_GENERATED_BUILD)
+		printf(" Built from   : https://github.com/Arkshine/Orpheu/commit/%s\n", ORPHEU_SHA);
+		printf(" Build ID     : %s:%s\n", ORPHEU_LOCAL_REV, ORPHEU_SHA);
+#endif
+		printf("\n");
 		return;
 	}
 	else if (!strcasecmp(cmd, "config"))
