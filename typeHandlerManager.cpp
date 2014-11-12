@@ -1,39 +1,40 @@
 
 #include "typeHandlerManager.h"
 
-TypeHandlerManager::TypeHandlerManager(KTrie<CVector<char*>*>* typeAliases)
+TypeHandlerManager::TypeHandlerManager(StringHashMap<ke::Vector<char*>*>* typeAliases)
 {
-	registeredTypeHandlers = new KTrie<TypeHandler*>();
+	registeredTypeHandlers = new StringHashMap<TypeHandler*>();
 	this->typeAliases = typeAliases;
 }
 
-void TypeHandlerManager::registerTypeHandler(const char* label,TypeHandler* handler)
+void TypeHandlerManager::registerTypeHandler(const char* label, TypeHandler* handler)
 {
-	registeredTypeHandlers->insert(label,handler);
+	registeredTypeHandlers->insert(label, handler);
 
-	CVector<char*>** aliasesPointer = typeAliases->retrieve(label);
+	ke::Vector<char*>* aliases;
 
-	if(aliasesPointer)
+	if (typeAliases->retrieve(label, &aliases))
 	{
-		CVector<char*>* aliases = *aliasesPointer;
-
-		for(unsigned int i=0;i<aliases->size();i++)
+		for (unsigned int i=0; i < aliases->length(); i++)
 		{
-			registeredTypeHandlers->insert(aliases->at(i),handler);
+			registeredTypeHandlers->insert(aliases->at(i), handler);
 		}
 	}
 }
-bool TypeHandlerManager::typeHandlerExists(char* label)
+
+bool TypeHandlerManager::typeHandlerExists(const char* label)
 {
-	return registeredTypeHandlers->retrieve(label) != NULL;
-}
-TypeHandler* TypeHandlerManager::getTypeHandler(char* label)
-{
-	TypeHandler** handlerPointer = registeredTypeHandlers->retrieve(label);
-	
-	if(handlerPointer)
-		return *handlerPointer;
-	
-	return NULL;
+	return registeredTypeHandlers->retrieve(label);
 }
 
+TypeHandler* TypeHandlerManager::getTypeHandler(const char* label)
+{
+	TypeHandler* handler;
+
+	if (registeredTypeHandlers->retrieve(label, &handler))
+	{
+		return handler;
+	}
+
+	return NULL;
+}

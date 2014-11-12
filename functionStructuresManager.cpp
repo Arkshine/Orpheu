@@ -3,24 +3,22 @@
 
 #include <global.h>
 
-time_t FunctionStructuresManager::getTimestamp(char* functionName)
+time_t FunctionStructuresManager::getTimestamp(const char* functionName)
 {
-	time_t* timestampPointer = functionStructureNameToTimestamp.retrieve(functionName);
-	time_t timestamp = timestampPointer ? *timestampPointer : 0;
-	return timestamp;
+	time_t timestamp = 0;
+	functionStructureNameToTimestamp.retrieve(functionName, &timestamp);
+
+	return timestamp ? timestamp : 0;
 }
 
-void FunctionStructuresManager::addFunctionStructure(FunctionStructure* functionStructure,time_t timestamp)
+void FunctionStructuresManager::addFunctionStructure(FunctionStructure* functionStructure, time_t timestamp)
 {
-	char* functionName = (char*) functionStructure->name.c_str();
-
-	unsigned int* idPointer = functionStructureNameToFunctionStructureID.retrieve(functionName);
+	const char* functionName = functionStructure->name.chars();
 
 	unsigned int id;
 
-	if(idPointer)
+	if (functionStructureNameToFunctionStructureID.retrieve(functionName, &id))
 	{
-		id = *idPointer;
 		//delete functionsStructures->at(id);
 		functionStructures.at(id) = functionStructure;
 
@@ -28,28 +26,27 @@ void FunctionStructuresManager::addFunctionStructure(FunctionStructure* function
 	}
 	else
 	{
-		id = functionStructures.size();
-		functionStructures.push_back(functionStructure);
+		id = functionStructures.length();
+		functionStructures.append(functionStructure);
 	}
 
-	functionStructureNameToFunctionStructureID.replace(functionName,id);
-	functionStructureNameToTimestamp.replace(functionName,timestamp);
+	functionStructureNameToFunctionStructureID.replace(functionName, id);
+	functionStructureNameToTimestamp.replace(functionName, timestamp);
 }
 
-unsigned short int FunctionStructuresManager::makeFunction(FunctionStructure* functionStructure,void* address)
+unsigned short int FunctionStructuresManager::makeFunction(FunctionStructure* functionStructure, void* address)
 {
-	Function* function = new Function(address,functionStructure->argumentsHandlers,functionStructure->argumentsCount,functionStructure->returnHandler,functionStructure->library,functionStructure->isMethod);
+	Function* function = new Function(address, functionStructure->argumentsHandlers, functionStructure->argumentsCount, functionStructure->returnHandler, functionStructure->library, functionStructure->isMethod);
 
-	return Global::FunctionManagerObj->addFunction((char*)functionStructure->name.c_str(),function,0);
+	return Global::FunctionManagerObj->addFunction(functionStructure->name.chars(), function, 0);
 }
 
-FunctionStructure* FunctionStructuresManager::getFunctionStructure(char* functionName)
+FunctionStructure* FunctionStructuresManager::getFunctionStructure(const char* functionName)
 {
-	unsigned int* idPointer = functionStructureNameToFunctionStructureID.retrieve(functionName);
+	unsigned int id;
 
-	if(idPointer)
+	if (functionStructureNameToFunctionStructureID.retrieve(functionName, &id))
 	{
-		unsigned int id = *idPointer;
 		return functionStructures.at(id);
 	}
 

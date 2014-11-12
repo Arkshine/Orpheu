@@ -1,45 +1,168 @@
 
 #include <filesManager.h>
+#include <configManager.h>
+
+#if defined(WIN32)
+#include <Windows.h>
+#else
+#include <sys/types.h>
+#include <dirent.h>
+#endif
 
 namespace FilesManager
 {
-	CVector<string>* getFolders(const path& directory)
+	bool dirExists(const char *dir)
 	{
-		CVector<string>* folders = new CVector<string>();
+#if defined WIN32 || defined _WIN32
+		DWORD attr = GetFileAttributes(dir);
 
-		if(exists(directory))
+		if (attr == INVALID_FILE_ATTRIBUTES)
+			return false;
+
+		if (attr & FILE_ATTRIBUTE_DIRECTORY)
+			return true;
+
+#else
+		struct stat s;
+
+		if (stat(dir, &s) != 0)
+			return false;
+
+		if (S_ISDIR(s.st_mode))
+			return true;
+#endif
+
+		return false;
+	}
+
+	ke::Vector<ke::AString>* getFolders(const char* directory)
+	{
+		ke::Vector<ke::AString>* folders = new ke::Vector<ke::AString>();
+
+		if (dirExists(directory))
 		{
-			directory_iterator end;
-			for(directory_iterator iter(directory); iter != end ; ++iter)
+#if defined WIN32 || defined _WIN32
+			char path[256];
+			UTIL_Format(path, sizeof(path) - 1, "%s*", directory);
+
+			WIN32_FIND_DATA fd;
+			HANDLE hFile = FindFirstFile(path, &fd);
+
+			if (hFile != INVALID_HANDLE_VALUE)
 			{
-				if(is_directory(*iter))
+				do
 				{
-					folders->push_back( iter->path().filename().string() );
-				}
+					if (fd.cFileName[0] == '.')
+					{
+						continue;
+					}
+
+					UTIL_Format(path, sizeof(path) - 1, "%s%s", directory, fd.cFileName);
+
+					if (dirExists(path))
+					{
+						folders->append(ke::AString(fd.cFileName));
+					}
+				} while (FindNextFile(hFile, &fd));
+
+				FindClose(hFile);
 			}
+#else
+			char path[256];
+			UTIL_Format(path, sizeof(path) - 1, "%s", directory);
+
+			DIR *dp = opendir(path);
+
+			if (dp != 0)
+			{
+				struct dirent *ep;
+
+				while ((ep = readdir(dp)))
+				{
+					if (ep->d_name[0] == '.')
+					{
+						continue;
+					}
+
+					UTIL_Format(path, sizeof(path) - 1, "%s%s", directory, ep->d_name);
+
+					if (dirExists(path))
+					{
+						folders->append(ke::AString(ep->d_name));
+					}
+				}
+
+				closedir(dp);
+			}
+#endif
 		}
 
 		return folders;
 	}
-	CVector<string>* getFiles(const path& directory)
+
+	ke::Vector<ke::AString>* getFiles(const char* directory)
 	{
-		CVector<string>* files = new CVector<string>();
+		ke::Vector<ke::AString>* files = new ke::Vector<ke::AString>();
 
-		if(exists(directory))
+		if (dirExists(directory))
 		{
-			directory_iterator end;
-			for(directory_iterator iter(directory); iter != end ; ++iter)
-			{
-				if(is_regular_file(*iter))
-				{
-					files->push_back( iter->path().filename().string() );
-				}
-			}
+#if defined WIN32 || defined _WIN32
+			char path[256];
+			UTIL_Format(path, sizeof(path) - 1, "%s*", directory);
 
+			WIN32_FIND_DATA fd;
+			HANDLE hFile = FindFirstFile(path, &fd);
+
+			if (hFile != INVALID_HANDLE_VALUE)
+			{
+				do
+				{
+					if (fd.cFileName[0] == '.')
+					{
+						continue;
+					}
+
+					UTIL_Format(path, sizeof(path) - 1, "%s%s", directory, fd.cFileName);
+
+					if (!dirExists(path))
+					{
+						files->append(ke::AString(fd.cFileName));
+					}
+				} while (FindNextFile(hFile, &fd));
+
+				FindClose(hFile);
+			}
+#else
+			char path[256];
+			UTIL_Format(path, sizeof(path) - 1, "%s", directory);
+
+			DIR *dp = opendir(path);
+
+			if (dp != 0)
+			{
+				struct dirent *ep;
+
+				while ((ep = readdir(dp)))
+				{
+					if (ep->d_name[0] == '.')
+					{
+						continue;
+					}
+
+					UTIL_Format(path, sizeof(path) - 1, "%s%s", directory, ep->d_name);
+
+					if (!dirExists(path))
+					{
+						files->append(ke::AString(ep->d_name));
+					}
+				}
+
+				closedir(dp);
+			}
+#endif
 		}
 
 		return files;
 	}
 }
-
 

@@ -3,49 +3,48 @@
 
 FunctionManager::FunctionManager()
 {
-	functionNameToTimestamp = new KTrie<time_t>;
-	functionNameToFunctionID = new KTrie<unsigned short int>;
-	functions = new CVector<Function*>;
-	functions->push_back(NULL);
+	functionNameToTimestamp = new StringHashMap < time_t > ;
+	functionNameToFunctionID = new StringHashMap < unsigned short int > ;
+	functions = new ke::Vector < Function* > ;
+	functions->append(NULL);
+	hookReferences.init();
 	currentHookID = 1;
 }
 
 time_t FunctionManager::getTimestamp(const char* functionName)
 {
-	time_t* timestampPointer = functionNameToTimestamp->retrieve(functionName);
-	time_t timestamp = timestampPointer ? *timestampPointer : 0;
-	return timestamp;
+	time_t timestamp = 0;
+	functionNameToTimestamp->retrieve(functionName, &timestamp);
+
+	return timestamp ? timestamp : 0;
 }
 
-unsigned short int FunctionManager::addFunction(const char* functionName,Function* function,time_t timestamp)
+unsigned short int FunctionManager::addFunction(const char* functionName, Function* function, time_t timestamp)
 {
-	unsigned short int* idPointer;
-
 	unsigned short int id;
 
-	if(functionName[0] && (idPointer = functionNameToFunctionID->retrieve(functionName)))
+	if (functionName[0] && functionNameToFunctionID->retrieve(functionName, &id))
 	{
-		id = *idPointer;
 		//delete functions->at(id);
 		functions->at(id) = function;
 	}
 	else
 	{
-		id = functions->size();
-		functions->push_back(function);
+		id = functions->length();
+		functions->append(function);
 	}
 
 	function->setID(id);
-	
-	functionNameToFunctionID->replace(functionName,id);
-	functionNameToTimestamp->replace(functionName,timestamp);
+
+	functionNameToFunctionID->replace(functionName, id);
+	functionNameToTimestamp->replace(functionName, timestamp);
 
 	return id;
 }
 
 Function* FunctionManager::getFunction(unsigned short int functionID)
 {
-	if(functionID >= 1 && functionID < (unsigned short int)functions->size())
+	if (functionID >= 1 && functionID < (unsigned short int)functions->length())
 	{
 		return functions->at(functionID);
 	}
@@ -55,44 +54,50 @@ Function* FunctionManager::getFunction(unsigned short int functionID)
 
 unsigned short int FunctionManager::getFunctionID(const char* functionName)
 {
-	unsigned short int* idPointer = functionNameToFunctionID->retrieve(functionName);
+	unsigned short int id;
 
-	if(idPointer)
+	if (functionNameToFunctionID->retrieve(functionName, &id))
 	{
-		return *idPointer;
+		return id;
 	}
 
 	return 0;
 }
 
-long FunctionManager::addHook(AMX* amx,const char* functionName,Function* function,OrpheuHookPhase phase)
+long FunctionManager::addHook(AMX* amx, const char* functionName, Function* function, OrpheuHookPhase phase)
 {
 	HookReferenceData* hookReferenceData = new HookReferenceData;
 
 	hookReferenceData->function = function;
 	hookReferenceData->phase = phase;
-	hookReferenceData->hookFunctionPhaseID = function->addHook(amx,functionName,hookReferenceData->phase);
+	hookReferenceData->hookFunctionPhaseID = function->addHook(amx, functionName, hookReferenceData->phase);
 
-	this->hookReferences[currentHookID] = hookReferenceData;
+	HookRefsTableMap::Insert i = hookReferences.findForAdd(currentHookID);
+	if (!i.found())
+	{
+		if (hookReferences.add(i))
+		{
+			i->key = currentHookID;
+		}
+	}
+	i->value = hookReferenceData;
 
 	return currentHookID++;
 }
 
 bool FunctionManager::removeHook(long hookID)
 {
-	map<long,HookReferenceData*>::iterator iterator = this->hookReferences.find(hookID);
+	HookRefsTableMap::Result r = hookReferences.find(hookID);
 
-	if(iterator != this->hookReferences.end())
+	if (r.found())
 	{
-		pair<long,HookReferenceData*> hookPair = *iterator;
+		HookReferenceData* hookReferenceData = r->value;
 
-		HookReferenceData* hookReferenceData = hookPair.second;
+		hookReferenceData->function->removeHook(hookReferenceData->phase, hookReferenceData->hookFunctionPhaseID);
 
-		hookReferenceData->function->removeHook(hookReferenceData->phase,hookReferenceData->hookFunctionPhaseID);
-		
 		delete hookReferenceData;
-	
-		this->hookReferences.erase(iterator);
+
+		hookReferences.remove(r);
 
 		return true;
 	}
@@ -102,13 +107,11 @@ bool FunctionManager::removeHook(long hookID)
 
 void FunctionManager::removeAllHooks()
 {
-	for(map<long,HookReferenceData*>::iterator iterator = this->hookReferences.begin(); iterator != this->hookReferences.end(); iterator++)
+	for (HookRefsTableMap::iterator iter = hookReferences.iter(); !iter.empty(); iter.next())
 	{
-		pair<long,HookReferenceData*> hookPair = *iterator;
+		HookReferenceData* hookReferenceData = iter->value;
 
-		HookReferenceData* hookReferenceData = hookPair.second;
-
-		hookReferenceData->function->removeHook(hookReferenceData->phase,hookReferenceData->hookFunctionPhaseID);
+		hookReferenceData->function->removeHook(hookReferenceData->phase, hookReferenceData->hookFunctionPhaseID);
 
 		delete hookReferenceData;
 	}
@@ -120,12 +123,12 @@ void FunctionManager::removeAllHooks()
 
 void FunctionManager::tryToRemove(const char* functionName)
 {
-	unsigned short int* idPointer = functionNameToFunctionID->retrieve(functionName);
+	unsigned short int id;
 
-	if(idPointer)
+	if (functionNameToFunctionID->retrieve(functionName, &id))
 	{
 		functionNameToFunctionID->remove(functionName);
 		functionNameToTimestamp->remove(functionName);
-		this->functions->erase(this->functions->iterAt(*idPointer));
+		this->functions->remove(id);
 	}
 }

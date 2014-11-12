@@ -1,66 +1,67 @@
 
 #include <functionVirtualManager.h>
-
 #include <global.h>
 
-time_t FunctionVirtualManager::getTimestamp(char* functionName)
+time_t FunctionVirtualManager::getTimestamp(const char* functionName)
 {
-	time_t* timestampPointer = functionVirtualNameToTimestamp.retrieve(functionName);
-	time_t timestamp = timestampPointer ? *timestampPointer : 0;
-	return timestamp;
+	time_t timestamp = 0;
+	functionVirtualNameToTimestamp.retrieve(functionName, &timestamp);
+
+	return timestamp ? timestamp : 0;
 }
 
-void FunctionVirtualManager::add(FunctionStructure* functionStructure,time_t timestamp)
+void FunctionVirtualManager::add(FunctionStructure* functionStructure, time_t timestamp)
 {
-	char* functionName = (char*) functionStructure->name.c_str();
-
-	unsigned int* idPointer = functionVirtualNameToFunctionStructureID.retrieve(functionName);
+	char* functionName = (char*)functionStructure->name.chars();
 
 	unsigned int id;
 
-	if(idPointer)
+	if (functionVirtualNameToFunctionStructureID.retrieve(functionName, &id))
 	{
-		id = *idPointer;
 		//delete functionsStructures->at(id);
 		functionStructures.at(id) = functionStructure;
 	}
 	else
 	{
-		id = functionStructures.size();
-		functionStructures.push_back(functionStructure);
+		id = functionStructures.length();
+		functionStructures.append(functionStructure);
 	}
 
-	functionVirtualNameToFunctionStructureID.replace(functionName,id);
-	functionVirtualNameToTimestamp.replace(functionName,timestamp);
+	functionVirtualNameToFunctionStructureID.replace(functionName, id);
+	functionVirtualNameToTimestamp.replace(functionName, timestamp);
 }
 
-unsigned short int FunctionVirtualManager::makeFunction(FunctionStructure* functionStructure,long object)
+unsigned short int FunctionVirtualManager::makeFunction(FunctionStructure* functionStructure, long object)
 {
 	TypeHandler* class_ = functionStructure->argumentsHandlers[0];
 
-	if(class_->hasVirtualTableOffset())
+	if (class_->hasVirtualTableOffset())
 	{
 		long offset = class_->getVirtualTableOffset();
 
-		void **vtable = *((void***)(((char*)object)+offset));
-		int **ivtable = (int**) vtable;
+		void **vtable = *((void***)(((char*)object) + offset));
+		int **ivtable = (int**)vtable;
 
-		void* address = (void*) ivtable[functionStructure->virtualTableIndex];
+		void* address = (void*)ivtable[functionStructure->virtualTableIndex];
 
-		map<void*,Function*>::iterator iterator = functionStructure->virtualFunctionsCreated.find(address);
+		FunctionStructure::VFuncTableMap::Insert i = functionStructure->virtualFunctionsCreated.findForAdd(address);
 
 		Function* function;
 
-		if(iterator == functionStructure->virtualFunctionsCreated.end())
+		if (!i.found())
 		{
-			function = new Function(address,functionStructure->argumentsHandlers,functionStructure->argumentsCount,functionStructure->returnHandler,functionStructure->library,functionStructure->isMethod);
-			Global::FunctionManagerObj->addFunction("",function,0);
+			function = new Function(address, functionStructure->argumentsHandlers, functionStructure->argumentsCount, functionStructure->returnHandler, functionStructure->library, functionStructure->isMethod);
+			Global::FunctionManagerObj->addFunction("", function, 0);
 
-			functionStructure->virtualFunctionsCreated[address] = function;
+			if (functionStructure->virtualFunctionsCreated.add(i))
+			{
+				i->key = address;
+			}
+			i->value = function;
 		}
 		else
 		{
-			function = (*iterator).second;
+			function = i->value;
 		}
 
 		return function->getID();
@@ -69,13 +70,12 @@ unsigned short int FunctionVirtualManager::makeFunction(FunctionStructure* funct
 	return 0;
 }
 
-FunctionStructure* FunctionVirtualManager::get(char* functionName)
+FunctionStructure* FunctionVirtualManager::get(const char* functionName)
 {
-	unsigned int* idPointer = functionVirtualNameToFunctionStructureID.retrieve(functionName);
+	unsigned int id;
 
-	if(idPointer)
+	if (functionVirtualNameToFunctionStructureID.retrieve(functionName, &id))
 	{
-		unsigned int id = *idPointer;
 		return functionStructures.at(id);
 	}
 
