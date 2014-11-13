@@ -106,7 +106,7 @@ class OrpheuConfig(object):
         '-Wno-unused',
         '-Wno-switch',
         '-m32',
-        #'--coverage',
+        '--coverage',
       ]
       cfg.cxxflags += [
         '-Wno-invalid-offsetof',

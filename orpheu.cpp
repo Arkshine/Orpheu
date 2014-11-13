@@ -1468,28 +1468,40 @@ void addLibraries() // IM THE KING OF EXAMPLE COPYPASTING!
 }
 #endif
 
+void print_srvconsole(const char *fmt, ...)
+{
+	va_list argptr;
+	static char string[384];
+	va_start(argptr, fmt);
+	vsnprintf(string, sizeof(string) - 1, fmt, argptr);
+	string[sizeof(string) - 1] = '\0';
+	va_end(argptr);
+
+	SERVER_PRINT(string);
+}
+
 void CommandOrpheu(void)
 {
 	const char *cmd = CMD_ARGV(1);
 
 	if (!strcasecmp(cmd, "version"))
 	{
-		printf("\n %s %s\n -\n", Plugin_info.name, ORPHEU_VERSION);
-		printf(" Support      : %s\n", Plugin_info.url);
-		printf(" Author       : %s\n", Plugin_info.author);
-		printf(" Compiled on: : %s\n", ORPHEU_BUILD_TIME);
+		print_srvconsole("\n %s %s\n -\n", Plugin_info.name, ORPHEU_VERSION);
+		print_srvconsole(" Support      : %s\n", Plugin_info.url);
+		print_srvconsole(" Author       : %s\n", Plugin_info.author);
+		print_srvconsole(" Compiled on: : %s\n", ORPHEU_BUILD_TIME);
 #if defined(ORPHEU_GENERATED_BUILD)
-		printf(" Built from   : https://github.com/Arkshine/Orpheu/commit/%s\n", ORPHEU_SHA);
-		printf(" Build ID     : %s:%s\n", ORPHEU_LOCAL_REV, ORPHEU_SHA);
+		print_srvconsole(" Built from   : https://github.com/Arkshine/Orpheu/commit/%s\n", ORPHEU_SHA);
+		print_srvconsole(" Build ID     : %s:%s\n", ORPHEU_LOCAL_REV, ORPHEU_SHA);
 #endif
-		printf("\n");
+		print_srvconsole("\n");
 		return;
 	}
 	else if (!strcasecmp(cmd, "config"))
 	{
 		for (size_t i = 0; i < Global::ConfigManagerObj->ModuleConfig.length(); ++i)
 		{
-			printf("%s", Global::ConfigManagerObj->ModuleConfig.at(i).chars());
+			print_srvconsole("%s", Global::ConfigManagerObj->ModuleConfig.at(i).chars());
 		}
 
 		char file[512];
@@ -1500,19 +1512,22 @@ void CommandOrpheu(void)
 		MF_BuildPathnameR(file, sizeof file - 1, "%s/orpheu-%s.log", MF_GetLocalInfo("amxx_logs", "addons/amxmodx/logs"), date);
 
 		FILE* h = fopen(file, "w");
-		for (size_t i = 0; i < Global::ConfigManagerObj->ModuleConfig.length(); ++i)
+		if (h)
 		{
-			fputs(Global::ConfigManagerObj->ModuleConfig.at(i).chars(), h);
+			for (size_t i = 0; i < Global::ConfigManagerObj->ModuleConfig.length(); ++i)
+			{
+				fputs(Global::ConfigManagerObj->ModuleConfig.at(i).chars(), h);
+			}
+			fclose(h);
 		}
-		fclose(h);
 
 		return;
 	}
 
-	printf("\n Usage: orpheu < command >\n");
-	printf(" Commands:\n");
-	printf("   version    - Display some informations about the module and where to get a support.\n");
-	printf("   config     - Display module status.\n\n");
+	print_srvconsole("\n Usage: orpheu < command >\n");
+	print_srvconsole(" Commands:\n");
+	print_srvconsole("   version    - Display some informations about the module and where to get a support.\n");
+	print_srvconsole("   config     - Display module status.\n\n");
 }
 
 void OnMetaAttach()
