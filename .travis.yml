@@ -12,6 +12,3 @@ script:
   - mkdir build && cd build
   - python ../configure.py --enable-optimize
   - ambuild
-after_success:
-  - cd orpheu_amxx_i386
-  - coveralls --gcov-options '\-lp'
