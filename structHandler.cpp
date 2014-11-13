@@ -13,7 +13,7 @@ StructHandler::StructHandler(StructInfo structInfo) :LongHandler()
 	this->structInfo = structInfo;
 	this->name = structInfo.type;
 
-	for (int i=0; i < structInfo.membersCount; i++)
+	for (int i=0; i < structInfo.membersCount; ++i)
 	{
 		memberNameToMember.insert(structInfo.members[i].name.chars(), i);
 	}

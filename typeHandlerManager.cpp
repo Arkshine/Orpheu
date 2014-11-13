@@ -15,7 +15,7 @@ void TypeHandlerManager::registerTypeHandler(const char* label, TypeHandler* han
 
 	if (typeAliases->retrieve(label, &aliases))
 	{
-		for (unsigned int i=0; i < aliases->length(); i++)
+		for (size_t i = 0; i < aliases->length(); ++i)
 		{
 			registeredTypeHandlers->insert(aliases->at(i), handler);
 		}

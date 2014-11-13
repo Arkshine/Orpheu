@@ -95,7 +95,7 @@ void ConfigManager::parseModsInfo()
 	UTIL_Format(msg, sizeof(msg) - 1, "\t\tCurrent mod : \"%s\"\n\n", Global::Modname.chars());
 	Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 
-	for (unsigned i=0; i < files->length(); i++)
+	for (unsigned i=0; i < files->length(); ++i)
 	{
 		UTIL_Format(path, sizeof(path) - 1, "%s/%s", orpheuPaths.mods.chars(), files->at(i).chars());
 
@@ -215,7 +215,7 @@ void ConfigManager::loadBaseData()
 
 	Global::TypeHandlerManagerObj = new TypeHandlerManager(typeAliasesInfo);
 
-	for (unsigned int i=0; i < Global::TypesCount; i++)
+	for (size_t i = 0; i < Global::TypesCount; ++i)
 	{
 		Global::TypeHandlerManagerObj->registerTypeHandler(Global::Types[i]->getName(), Global::Types[i]);
 
@@ -227,7 +227,7 @@ void ConfigManager::loadBaseData()
 		}
 	}
 
-	for (unsigned int i=0; i < Global::StructuresCount; i++)
+	for (size_t i = 0; i < Global::StructuresCount; ++i)
 		Global::TypeHandlerManagerObj->registerTypeHandler(Global::Structures[i]->getName(), Global::Structures[i]);
 
 	Global::ConfigManagerObj->ModuleConfig.append(ke::AString("\nOrpheu configuration ended.\n"));
@@ -543,7 +543,7 @@ void parseFile(ke::AString folder, ke::AString filename, ke::AString classname =
 
 			bool isMethod = classname.length() > 0;
 
-			unsigned int size = json_object_size(argumentsJson) + (int)isMethod;
+			unsigned int size = json_array_size(argumentsJson) + (int)isMethod;
 
 			TypeHandler** arguments = (TypeHandler**)malloc(sizeof(TypeHandler*) * (size));
 
@@ -562,7 +562,7 @@ void parseFile(ke::AString folder, ke::AString filename, ke::AString classname =
 
 			TypeHandler* returnValue = NULL;
 
-			if (returnJson && json_object_size(returnJson) != 0)
+			if (json_object_size(returnJson) != 0)
 			{
 				returnValue = Global::TypeHandlerManagerObj->getTypeHandler((char*)json_string_value(json_object_get(returnJson, "type")));
 			}
@@ -670,7 +670,7 @@ void parseFile(ke::AString folder, ke::AString filename, ke::AString classname =
 						UTIL_Format(msg, sizeof(msg) - 1, "\t\t\t\tSearching for signature \"");
 						Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 
-						for (unsigned int j=0; j < min; j++)
+						for (size_t j = 0; j < min; ++j)
 						{
 							if (signatureData[j] == AnyByte)
 							{
@@ -724,7 +724,7 @@ void parseFile(ke::AString folder, ke::AString filename, ke::AString classname =
 
 						bool isMethod = classname.length() > 0;
 
-						unsigned int size = json_object_size(argumentsJson) + (int)isMethod;
+						unsigned int size = json_array_size(argumentsJson) + (int)isMethod;
 
 						TypeHandler** arguments = (TypeHandler**)malloc(sizeof(TypeHandler*) * (size));
 
@@ -743,7 +743,7 @@ void parseFile(ke::AString folder, ke::AString filename, ke::AString classname =
 
 						TypeHandler* returnValue = NULL;
 
-						if (returnJson && json_object_size(returnJson) != 0)
+						if (json_object_size(returnJson) != 0)
 						{
 							returnValue = Global::TypeHandlerManagerObj->getTypeHandler((char*)json_string_value(json_object_get(returnJson, "type")));
 						}
@@ -778,7 +778,7 @@ void ConfigManager::parseFunctionsInfo()
 	char msg[100];
 	char path[256];
 
-	for (unsigned int i=0; i < files->length(); i++)
+	for (size_t i = 0; i < files->length(); ++i)
 	{
 		UTIL_Format(msg, sizeof(msg) - 1, "\t\tParsing file \"%s\" started\n", files->at(i).chars());
 		Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
@@ -789,7 +789,7 @@ void ConfigManager::parseFunctionsInfo()
 		Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
 	}
 
-	for (unsigned int i=0; i < folders->length(); i++)
+	for (size_t i = 0; i < folders->length(); ++i)
 	{
 		ke::AString classname = folders->at(i);
 		UTIL_Format(path, sizeof(path) - 1, "%s%s/", orpheuPaths.functions.chars(), classname.chars());
@@ -799,7 +799,7 @@ void ConfigManager::parseFunctionsInfo()
 
 		ke::Vector<ke::AString>* filesInFolder = FilesManager::getFiles(path);
 
-		for (unsigned int j=0; j < filesInFolder->length(); j++)
+		for (size_t j = 0; j < filesInFolder->length(); ++j)
 		{
 			UTIL_Format(msg, sizeof(msg) - 1, "\t\t\tParsing file \"%s\" started\n", filesInFolder->at(j).chars());
 			Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
@@ -824,7 +824,7 @@ StringHashMap<ke::Vector<char*>*>* ConfigManager::parseTypeAliasesInfo(StringHas
 
 	ke::Vector<ke::AString>* folders = FilesManager::getFolders(orpheuPaths.typeAliases.chars());
 
-	for (unsigned int i=0; i < folders->length(); i++)
+	for (size_t i = 0; i < folders->length(); ++i)
 	{
 		UTIL_Format(msg, sizeof(msg) - 1, "\t\tParsing folder \"%s\"\n", folders->at(i).chars());
 		Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
@@ -1006,7 +1006,7 @@ StringHashMap<char*>* ConfigManager::parseExternalLibrariesInfo()
 	char msg[100];
 	char path[256];
 
-	for (unsigned int i=0; i < files->length(); i++)
+	for (size_t i = 0; i < files->length(); ++i)
 	{
 		UTIL_Format(path, sizeof(path) - 1, "%s%s", orpheuPaths.libraries.chars(), files->at(i).chars());
 
@@ -1064,7 +1064,7 @@ void ConfigManager::parseVirtualFunctionsInfo()
 	char path[256];
 	char msg[100];
 
-	for (unsigned int i=0; i < folders->length(); i++)
+	for (size_t i = 0; i < folders->length(); ++i)
 	{
 		ke::AString classname = folders->at(i);
 		UTIL_Format(path, sizeof(path) - 1, "%s%s/", orpheuPaths.virtualFunctions.chars(), classname.chars());
@@ -1074,7 +1074,7 @@ void ConfigManager::parseVirtualFunctionsInfo()
 
 		ke::Vector<ke::AString>* filesInFolder = FilesManager::getFiles(path);
 
-		for (unsigned int j=0; j < filesInFolder->length(); j++)
+		for (size_t j = 0; j < filesInFolder->length(); ++j)
 		{
 			UTIL_Format(msg, sizeof(msg) - 1, "\t\t\tParsing file \"%s\" started\n", filesInFolder->at(j).chars());
 			Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));
@@ -1149,7 +1149,7 @@ void ConfigManager::parseMemoryObject(json_t *root)
 		{
 			bool valid = false;
 
-			for (int i=0; i < 3; i++)
+			for (int i=0; i < 3; ++i)
 			{
 				if (!strcmp(json_string_value(memoryType), memoryTypes[i]))
 				{
@@ -1376,7 +1376,7 @@ void ConfigManager::loadMemoryStructures()
 
 	ke::Vector<ke::AString>* files = FilesManager::getFiles(orpheuPaths.memory.chars());
 
-	for (unsigned int i=0; i < files->length(); i++)
+	for (size_t i = 0; i < files->length(); ++i)
 	{
 		UTIL_Format(msg, sizeof(msg) - 1, "\t\tParsing memory file \"%s\"\n", files->at(i).chars());
 		Global::ConfigManagerObj->ModuleConfig.append(ke::AString(msg));

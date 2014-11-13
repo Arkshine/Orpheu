@@ -664,7 +664,7 @@ cell AMX_NATIVE_CALL Orpheu::GetBytesAtAddress(AMX* amx, cell* params)
 	unsigned char* address = (unsigned char*)params[1];
 	cell *bytes = MF_GetAmxAddr(amx, params[2]);
 
-	for (int i=0; i < params[3]; i++)
+	for (int i=0; i < params[3]; ++i)
 	{
 		bytes[i] = address[i];
 	}
@@ -895,7 +895,7 @@ cell MemoryReplace_(AMX* amx, cell* params, long address)
 
 				long lastAddress = 0;
 
-				for (long i=start; i < end; i++)
+				for (long i=start; i < end; ++i)
 				{
 					if (typeHandler->isPointer())
 					{
@@ -1337,43 +1337,43 @@ cell AMX_NATIVE_CALL Orpheu::MemorySetAtAddress(AMX* amx, cell* params)
 
 AMX_NATIVE_INFO OrpheuNatives[] =
 {
-	{ "OrpheuCall", Orpheu::Call },
-	{ "OrpheuCallSuper", Orpheu::CallSuper },
-	{ "OrpheuGetFunction", Orpheu::GetFunction },
-	{ "OrpheuTryGetFunction", Orpheu::TryGetFunction },
-	{ "OrpheuRegisterHook", Orpheu::RegisterHook },
-	{ "OrpheuUnregisterHook", Orpheu::UnregisterHook },
-	{ "OrpheuGetReturn", Orpheu::GetReturn },
-	{ "OrpheuSetReturn", Orpheu::SetReturn },
-	{ "OrpheuGetReturnStatus", Orpheu::GetReturnStatus },
-	{ "OrpheuSetParam", Orpheu::SetParam },
-	{ "OrpheuSetParamStructMember", Orpheu::SetParamStructMember },
-	{ "OrpheuGetParamStructMember", Orpheu::GetParamStructMember },
-	{ "OrpheuCreateStruct", Orpheu::CreateStruct },
-	{ "OrpheuGetStructFromAddress", Orpheu::GetStructFromAddress },
-	{ "OrpheuSetStructMember", Orpheu::SetStructMember },
-	{ "OrpheuGetStructMember", Orpheu::GetStructMember },
-	{ "OrpheuGetStructFromParam", Orpheu::GetStructFromParam },
-	{ "OrpheuCloneStructFromParam", Orpheu::CloneStructFromParam },
-	{ "OrpheuCreateFunction", Orpheu::CreateFunction },
+	{ "OrpheuCall"                    , Orpheu::Call                     },
+	{ "OrpheuCallSuper"               , Orpheu::CallSuper                },
+	{ "OrpheuGetFunction"             , Orpheu::GetFunction              },
+	{ "OrpheuTryGetFunction"          , Orpheu::TryGetFunction           },
+	{ "OrpheuRegisterHook"            , Orpheu::RegisterHook             },
+	{ "OrpheuUnregisterHook"          , Orpheu::UnregisterHook           },
+	{ "OrpheuGetReturn"               , Orpheu::GetReturn                },
+	{ "OrpheuSetReturn"               , Orpheu::SetReturn                },
+	{ "OrpheuGetReturnStatus"         , Orpheu::GetReturnStatus          },
+	{ "OrpheuSetParam"                , Orpheu::SetParam                 },
+	{ "OrpheuSetParamStructMember"    , Orpheu::SetParamStructMember     },
+	{ "OrpheuGetParamStructMember"    , Orpheu::GetParamStructMember     },
+	{ "OrpheuCreateStruct"            , Orpheu::CreateStruct             },
+	{ "OrpheuGetStructFromAddress"    , Orpheu::GetStructFromAddress     },
+	{ "OrpheuSetStructMember"         , Orpheu::SetStructMember          },
+	{ "OrpheuGetStructMember"         , Orpheu::GetStructMember          },
+	{ "OrpheuGetStructFromParam"      , Orpheu::GetStructFromParam       },
+	{ "OrpheuCloneStructFromParam"    , Orpheu::CloneStructFromParam     },
+	{ "OrpheuCreateFunction"          , Orpheu::CreateFunction           },
 	{ "OrpheuGetEngineFunctionsStruct", Orpheu::GetEngineFunctionsStruct },
-	{ "OrpheuGetDLLFunctionsStruct", Orpheu::GetDLLFunctionsStruct },
-	{ "OrpheuGetFunctionOffset", Orpheu::GetFunctionOffset },
-	{ "OrpheuGetBytesAtAddress", Orpheu::GetBytesAtAddress },
-	{ "OrpheuGetFunctionAddress", Orpheu::GetFunctionAddress },
-	{ "OrpheuGetNextCallAtAddress", Orpheu::GetNextCallAtAddress },
-	{ "OrpheuGetFunctionFromClass", Orpheu::GetFunctionFromClass },
-	{ "OrpheuGetFunctionFromEntity", Orpheu::GetFunctionFromEntity },
-	{ "OrpheuGetFunctionFromObject", Orpheu::GetFunctionFromObject },
-	{ "OrpheuGetFunctionFromMonster", Orpheu::GetFunctionFromMonster },
-	{ "OrpheuGetLibraryAddress", Orpheu::GetLibraryAddress },
-	{ "OrpheuMemoryReplace", Orpheu::MemoryReplace },
-	{ "OrpheuMemoryReplaceAtAddress", Orpheu::MemoryReplaceAtAddress },
-	{ "OrpheuMemorySet", Orpheu::MemorySet },
-	{ "OrpheuMemorySetAtAddress", Orpheu::MemorySetAtAddress },
-	{ "OrpheuMemoryGet", Orpheu::MemoryGet },
-	{ "OrpheuMemoryGetAtAddress", Orpheu::MemoryGetAtAddress },
-	{ NULL, NULL }
+	{ "OrpheuGetDLLFunctionsStruct"   , Orpheu::GetDLLFunctionsStruct    },
+	{ "OrpheuGetFunctionOffset"       , Orpheu::GetFunctionOffset        },
+	{ "OrpheuGetBytesAtAddress"       , Orpheu::GetBytesAtAddress        },
+	{ "OrpheuGetFunctionAddress"      , Orpheu::GetFunctionAddress       },
+	{ "OrpheuGetNextCallAtAddress"    , Orpheu::GetNextCallAtAddress     },
+	{ "OrpheuGetFunctionFromClass"    , Orpheu::GetFunctionFromClass     },
+	{ "OrpheuGetFunctionFromEntity"   , Orpheu::GetFunctionFromEntity    },
+	{ "OrpheuGetFunctionFromObject"   , Orpheu::GetFunctionFromObject    },
+	{ "OrpheuGetFunctionFromMonster"  , Orpheu::GetFunctionFromMonster   },
+	{ "OrpheuGetLibraryAddress"       , Orpheu::GetLibraryAddress        },
+	{ "OrpheuMemoryReplace"           , Orpheu::MemoryReplace            },
+	{ "OrpheuMemoryReplaceAtAddress"  , Orpheu::MemoryReplaceAtAddress   },
+	{ "OrpheuMemorySet"               , Orpheu::MemorySet                },
+	{ "OrpheuMemorySetAtAddress"      , Orpheu::MemorySetAtAddress       },
+	{ "OrpheuMemoryGet"               , Orpheu::MemoryGet                },
+	{ "OrpheuMemoryGetAtAddress"      , Orpheu::MemoryGetAtAddress       },
+	{ NULL                            , NULL }
 };
 
 #ifdef __linux__
@@ -1434,7 +1434,7 @@ void addLibraries() // IM THE KING OF EXAMPLE COPYPASTING!
 		TCHAR process[MAX_PATH];
 		char library[32];
 
-		for (i = 0; i < (cbNeeded / sizeof(HMODULE)); i++)
+		for (i = 0; i < (cbNeeded / sizeof(HMODULE)); ++i)
 		{
 			if (GetModuleFileNameEx(hProcess, hMods[i], process, sizeof(process) / sizeof(TCHAR)))
 			{
@@ -1559,10 +1559,10 @@ void OnPluginsUnloaded()
 {
 	Global::FunctionManagerObj->removeAllHooks();
 
-	for (unsigned int i=0; i < Global::TypesCount; i++)
+	for (size_t i = 0; i < Global::TypesCount; ++i)
 		Global::Types[i]->freeAllocatedMemory();
 
-	for (unsigned int i=0; i < Global::StructuresCount; i++)
+	for (size_t i = 0; i < Global::StructuresCount; ++i)
 		Global::Structures[i]->freeAllocatedMemory();
 
 	Global::ConfigManagerObj->ModuleConfig.clear();

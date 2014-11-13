@@ -78,7 +78,7 @@ namespace LibrariesManager
 			else
 				BaseAddress = (char *)info->dlpi_addr;
 
-			for (i = 0; i < info->dlpi_phnum; i++)
+			for (i = 0; i < info->dlpi_phnum; ++i)
 			{
 				if (info->dlpi_phdr[i].p_memsz && IAlign(info->dlpi_phdr[i].p_vaddr))
 				{
@@ -227,7 +227,7 @@ namespace LibrariesManager
 
 		if (LibraryNameToLibraryInfo->retrieve(libraryName, &libraryInfo))
 		{
-			for (unsigned int i=0; i <= libraryInfo->length - length; i++)
+			for (size_t i = 0; i <= libraryInfo->length - length; ++i)
 			{
 				if (compareSignature((unsigned char *)libraryInfo->baseAddress + i, signature, signatureData, length))
 				{
@@ -245,7 +245,7 @@ namespace LibrariesManager
 
 		if (LibraryNameToLibraryInfo->retrieve(libraryName, &libraryInfo))
 		{
-			for (unsigned int i = start - (unsigned int)libraryInfo->baseAddress; i <= libraryInfo->length - length; i++)
+			for (unsigned int i = start - (unsigned int)libraryInfo->baseAddress; i <= libraryInfo->length - length; ++i)
 			{
 				if (compareSignature((unsigned char *)libraryInfo->baseAddress + i, signature, signatureData, length))
 				{

@@ -27,7 +27,7 @@ long Hook(long argument, ...)
 	va_list arguments;
 	va_start(arguments, argument);
 
-	for (unsigned int i=0; i < function->getArgumentsCount(); i++)
+	for (size_t i = 0; i < function->getArgumentsCount(); ++i)
 	{
 		argumentsHolder[i] = argument;
 		argument = va_arg(arguments, long);
@@ -50,7 +50,7 @@ long HookMethod(long object, long argument, ...)
 	va_list arguments;
 	va_start(arguments, argument);
 
-	for (unsigned int i=1; i < function->getArgumentsCount(); i++)
+	for (unsigned int i=1; i < function->getArgumentsCount(); ++i)
 	{
 		argumentsHolder[i] = argument;
 		argument = va_arg(arguments, long);
@@ -107,7 +107,7 @@ Function::Function(void* address, TypeHandler** argumentsHandlers, unsigned int 
 	parameters = new ForwardParam[argumentsCount];
 	argumentsToAmx = new cell[argumentsCount];
 
-	for (unsigned int i=0; i < argumentsCount; i++)
+	for (size_t i = 0; i < argumentsCount; ++i)
 	{
 		parameters[i] = argumentsHandlers[i]->getParamType();
 
@@ -207,7 +207,7 @@ void Function::undoPatch()
 
 cell Function::call(AMX* amx, cell* params)
 {
-	for (unsigned int i=0; i < argumentsCount; i++)
+	for (size_t i = 0; i < argumentsCount; ++i)
 	{
 		normalArguments[i] = (long)argumentsHandlers[i]->convertFromAmx(amx, params[i]);
 	}
@@ -262,7 +262,7 @@ cell Function::call(AMX* amx, cell* params)
 		returnHandler->convertToAmxByRef(amx, &params[argumentsCount], returnValue);
 	}
 
-	for (unsigned int i=0; i < argumentsByRefCount; i++)
+	for (size_t i = 0; i < argumentsByRefCount; ++i)
 	{
 		unsigned int argumentPositionInFunction = argumentsByRefPosition[i];
 		argumentsByRef[i]->convertToAmxByRef(amx, &params[argumentPositionInFunction], normalArguments[argumentPositionInFunction]);
@@ -437,7 +437,7 @@ long Function::addHook(AMX* amx, const char* functionName, OrpheuHookPhase phase
 
 void Function::removeAllHooks()
 {
-	for (int i=0; i <= 1; i++)
+	for (int i=0; i <= 1; ++i)
 	{
 		for (Function::HooksDataMap::iterator iter = hooks[i]->iter(); !iter.empty(); iter.next())
 		{
@@ -474,7 +474,7 @@ void Function::removeHook(OrpheuHookPhase phase, long functionHookPhaseID)
 
 void Function::convertArgumentsToAmx()
 {
-	for (unsigned int i=0; i < argumentsCount; i++)
+	for (size_t i = 0; i < argumentsCount; ++i)
 	{
 		argumentsHandlers[i]->convertToAmx(argumentsToAmx[i], normalArguments[i], Pass);
 	}
