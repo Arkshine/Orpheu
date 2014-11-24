@@ -68,5 +68,7 @@ public:
 	static cell AMX_NATIVE_CALL MemoryGetAtAddress(AMX* amx, cell* params);
 };
 
+extern "C" void __cxa_pure_virtual();
+
 #endif
 
