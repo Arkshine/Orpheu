@@ -1019,7 +1019,7 @@ void FN_ParticleEffect(const float *org, const float *dir, float color, float co
 #endif // FN_ParticleEffect
 
 #ifdef FN_LightStyle
-void FN_LightStyle(int style, const char *val);
+void FN_LightStyle(int style, char *val);
 #endif // FN_LightStyle
 
 #ifdef FN_DecalIndex
@@ -1227,7 +1227,7 @@ void FN_CrosshairAngle(const edict_t *pClient, float pitch, float yaw);
 #endif // FN_CrosshairAngle
 
 #ifdef FN_LoadFileForMe
-byte *FN_LoadFileForMe(const char *filename, int *pLength);
+byte *FN_LoadFileForMe(char *filename, int *pLength);
 #endif // FN_LoadFileForMe
 
 #ifdef FN_FreeFile
@@ -1363,7 +1363,7 @@ void FN_DeltaUnsetField(struct delta_s *pFields, const char *fieldname);
 #endif // FN_DeltaUnsetField
 
 #ifdef FN_DeltaAddEncoder
-void FN_DeltaAddEncoder(const char *name, void (*conditionalencode)( struct delta_s *pFields, const unsigned char *from, const unsigned char *to ) );
+void FN_DeltaAddEncoder(char *name, void (*conditionalencode)( struct delta_s *pFields, const unsigned char *from, const unsigned char *to ) );
 #endif // FN_DeltaAddEncoder
 
 #ifdef FN_GetCurrentPlayer
@@ -1395,7 +1395,7 @@ int FN_engCreateInstancedBaseline(int classname, struct entity_state_s *baseline
 #endif // FN_engCreateInstancedBaseline
 
 #ifdef FN_Cvar_DirectSet
-void FN_Cvar_DirectSet(struct cvar_s *var, const char *value);
+void FN_Cvar_DirectSet(struct cvar_s *var, char *value);
 #endif // FN_Cvar_DirectSet
 
 #ifdef FN_ForceUnmodified
@@ -1600,7 +1600,7 @@ void FN_ParticleEffect_Post(const float *org, const float *dir, float color, flo
 #endif // FN_ParticleEffect_Post
 
 #ifdef FN_LightStyle_Post
-void FN_LightStyle_Post(int style, const char *val);
+void FN_LightStyle_Post(int style, char *val);
 #endif // FN_LightStyle_Post
 
 #ifdef FN_DecalIndex_Post
@@ -1808,7 +1808,7 @@ void FN_CrosshairAngle_Post(const edict_t *pClient, float pitch, float yaw);
 #endif // FN_CrosshairAngle_Post
 
 #ifdef FN_LoadFileForMe_Post
-byte *FN_LoadFileForMe_Post(const char *filename, int *pLength);
+byte *FN_LoadFileForMe_Post(char *filename, int *pLength);
 #endif // FN_LoadFileForMe_Post
 
 #ifdef FN_FreeFile_Post
@@ -1944,7 +1944,7 @@ void FN_DeltaUnsetField_Post(struct delta_s *pFields, const char *fieldname);
 #endif // FN_DeltaUnsetField_Post
 
 #ifdef FN_DeltaAddEncoder_Post
-void FN_DeltaAddEncoder_Post(const char *name, void (*conditionalencode)( struct delta_s *pFields, const unsigned char *from, const unsigned char *to ) );
+void FN_DeltaAddEncoder_Post(char *name, void (*conditionalencode)( struct delta_s *pFields, const unsigned char *from, const unsigned char *to ) );
 #endif // FN_DeltaAddEncoder_Post
 
 #ifdef FN_GetCurrentPlayer_Post
@@ -1976,7 +1976,7 @@ int FN_engCreateInstancedBaseline_Post(int classname, struct entity_state_s *bas
 #endif // FN_engCreateInstancedBaseline_Post
 
 #ifdef FN_Cvar_DirectSet_Post
-void FN_Cvar_DirectSet_Post(struct cvar_s *var, const char *value);
+void FN_Cvar_DirectSet_Post(struct cvar_s *var, char *value);
 #endif // FN_Cvar_DirectSet_Post
 
 #ifdef FN_ForceUnmodified_Post
@@ -2137,8 +2137,6 @@ typedef AMX *			(*PFN_GET_AMXSCRIPT)			(int /*id*/);
 typedef int				(*PFN_FIND_AMXSCRIPT_BYAMX)		(const AMX * /*amx*/);
 typedef int				(*PFN_FIND_AMXSCRIPT_BYNAME)	(const char * /*name*/);
 typedef int				(*PFN_SET_AMXSTRING)			(AMX * /*amx*/, cell /*amx_addr*/, const char * /* source */, int /* max */);
-typedef int				(*PFN_SET_AMXSTRING_UTF8_CHAR)	(AMX *amx, cell amx_addr, const char *source, size_t sourcelen, size_t maxlen);
-typedef int				(*PFN_SET_AMXSTRING_UTF8_CELL)	(AMX *amx, cell amx_addr, const cell *source, size_t sourcelen, size_t maxlen);
 typedef char *			(*PFN_GET_AMXSTRING)			(AMX * /*amx*/, cell /*amx_addr*/, int /*bufferId*/, int * /*pLen*/);
 typedef int				(*PFN_GET_AMXSTRINGLEN)			(const cell *ptr);
 typedef char *			(*PFN_FORMAT_AMXSTRING)			(AMX * /*amx*/, cell * /*params*/, int /*startParam*/, int * /*pLen*/);
@@ -2228,8 +2226,6 @@ extern PFN_GET_AMXSCRIPT			g_fn_GetAmxScript;
 extern PFN_FIND_AMXSCRIPT_BYAMX		g_fn_FindAmxScriptByAmx;
 extern PFN_FIND_AMXSCRIPT_BYNAME	g_fn_FindAmxScriptByName;
 extern PFN_SET_AMXSTRING			g_fn_SetAmxString;
-extern PFN_SET_AMXSTRING_UTF8_CHAR	g_fn_SetAmxStringUTF8Char;
-extern PFN_SET_AMXSTRING_UTF8_CELL	g_fn_SetAmxStringUTF8Cell;
 extern PFN_GET_AMXSTRING			g_fn_GetAmxString;
 extern PFN_GET_AMXSTRINGLEN			g_fn_GetAmxStringLen;
 extern PFN_FORMAT_AMXSTRING			g_fn_FormatAmxString;
@@ -2309,8 +2305,6 @@ AMX *			MF_GetScriptAmx				(int id) { }
 int				MF_FindScriptByAmx			(const AMX * amx) { }
 int				MF_FindScriptByAmx			(const char * name) { }
 int				MF_SetAmxString				(AMX * amx, cell amx_addr, const char *  source , int  max ) { }
-int				MF_SetAmxStringUTF8Char		(AMX *amx, cell amx_addr, const char *source, size_t sourcelen, size_t maxlen) { }
-int				MF_SetAmxStringUTF8Cell		(AMX *amx, cell amx_addr, const cell *source, size_t sourcelen, size_t maxlen) { }
 char *			MF_GetAmxString				(AMX * amx, cell amx_addr, int bufferId, int * pLen) { }
 int				MF_GetAmxStringLen			(const cell *ptr) { }
 char *			MF_FormatAmxString			(AMX * amx, cell * params, int startParam, int * pLen) { }
@@ -2383,8 +2377,6 @@ void *			MF_MessageBlock				(int mode, int msg, int *opt) { }
 #define MF_FindScriptByAmx g_fn_FindAmxScriptByAmx
 #define MF_FindScriptByName g_fn_FindAmxScriptByName
 #define MF_SetAmxString g_fn_SetAmxString
-#define MF_SetAmxStringUTF8Char g_fn_SetAmxStringUTF8Char
-#define MF_SetAmxStringUTF8Cell g_fn_SetAmxStringUTF8Cell
 #define MF_GetAmxString g_fn_GetAmxString
 #define MF_GetAmxStringLen g_fn_GetAmxStringLen
 #define MF_CopyAmxMemory g_fn_CopyAmxMemory
